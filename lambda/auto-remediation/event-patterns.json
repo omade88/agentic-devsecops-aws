@@ -1,0 +1,35 @@
+{
+  "EventPatterns": {
+    "SecurityGroupChange": {
+      "source": ["aws.ec2"],
+      "detail-type": ["AWS API Call via CloudTrail"],
+      "detail": {
+        "eventName": [
+          "AuthorizeSecurityGroupIngress",
+          "AuthorizeSecurityGroupEgress",
+          "RevokeSecurityGroupIngress",
+          "RevokeSecurityGroupEgress",
+          "CreateSecurityGroup"
+        ]
+      }
+    },
+    "EC2InstanceChange": {
+      "source": ["aws.ec2"],
+      "detail-type": ["EC2 Instance State-change Notification"],
+      "detail": {
+        "state": ["running", "pending"]
+      }
+    },
+    "S3BucketChange": {
+      "source": ["aws.s3"],
+      "detail-type": ["AWS API Call via CloudTrail"],
+      "detail": {
+        "eventName": [
+          "CreateBucket",
+          "PutBucketPublicAccessBlock",
+          "DeleteBucketPublicAccessBlock"
+        ]
+      }
+    }
+  }
+}

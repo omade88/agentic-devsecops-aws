@@ -1,0 +1,10 @@
+# AI Assistant Dependencies
+# All FREE and open-source
+
+requests>=2.31.0
+pyyaml>=6.0.1
+jinja2>=3.1.2
+
+# Optional: For advanced features
+# boto3>=1.34.0  # AWS SDK (only if using AWS API calls)
+# gitpython>=3.1.40  # For git operations

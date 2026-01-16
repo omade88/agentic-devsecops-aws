@@ -1,0 +1,33 @@
+name: Security Scan
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+jobs:
+  security-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 1.0.0
+
+      - name: Install TFLint
+        run: |
+          brew install tflint
+
+      - name: Run TFLint
+        run: tflint
+
+      - name: Install tfsec
+        run: |
+          brew install tfsec
+
+      - name: Run tfsec
+        run: tfsec .

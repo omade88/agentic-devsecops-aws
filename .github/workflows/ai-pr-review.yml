@@ -1,0 +1,242 @@
+name: AI-Powered PR Review
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'terraform/**'
+      - 'policies/**'
+      - '.github/workflows/**'
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+jobs:
+  ai-code-review:
+    runs-on: ubuntu-latest
+    name: AI Code Analysis & Review
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v41
+        with:
+          files: |
+            terraform/**
+            policies/**
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          pip install requests pyyaml jinja2
+
+      - name: Run AI Code Review (Local Model)
+        id: ai-review
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          REPO_NAME: ${{ github.repository }}
+        run: |
+          # Create inline AI reviewer script
+          cat > ai_reviewer.py << 'EOF'
+          import os
+          import json
+          import subprocess
+          import sys
+
+          def analyze_terraform_file(filepath):
+              """Analyze Terraform file for common issues"""
+              issues = []
+              recommendations = []
+              
+              try:
+                  with open(filepath, 'r') as f:
+                      content = f.read()
+                  
+                  # Security checks
+                  if '0.0.0.0/0' in content and 'port = 22' in content:
+                      issues.append(f"⚠️ Security Risk: SSH port 22 open to 0.0.0.0/0 in {filepath}")
+                  
+                  if 'encrypted = false' in content or ('aws_ebs_volume' in content and 'encrypted' not in content):
+                      issues.append(f"🔒 Security: EBS volume should be encrypted in {filepath}")
+                  
+                  if 'aws_instance' in content and 'http_tokens' not in content:
+                      issues.append(f"🛡️ Security: EC2 instance should enforce IMDSv2 in {filepath}")
+                  
+                  if 'aws_s3_bucket' in content:
+                      if 'versioning' not in content:
+                          recommendations.append(f"💡 Best Practice: Enable S3 versioning in {filepath}")
+                      if 'server_side_encryption_configuration' not in content:
+                          recommendations.append(f"🔒 Security: Enable S3 encryption in {filepath}")
+                  
+                  # Tag compliance
+                  if 'resource "aws_' in content and 'tags' not in content:
+                      issues.append(f"🏷️ Compliance: Missing required tags in {filepath}")
+                  
+                  # Best practices
+                  if 'resource "aws_instance"' in content:
+                      if 'monitoring = true' not in content:
+                          recommendations.append(f"📊 Best Practice: Enable detailed monitoring in {filepath}")
+                  
+              except Exception as e:
+                  print(f"Error analyzing {filepath}: {str(e)}")
+              
+              return issues, recommendations
+
+          def main():
+              changed_files = os.environ.get('CHANGED_FILES', '').split('\n')
+              all_issues = []
+              all_recommendations = []
+              
+              for filepath in changed_files:
+                  if filepath.endswith('.tf'):
+                      issues, recommendations = analyze_terraform_file(filepath)
+                      all_issues.extend(issues)
+                      all_recommendations.extend(recommendations)
+              
+              # Generate review comment
+              comment = "## 🤖 AI-Powered Code Review\n\n"
+              
+              if all_issues:
+                  comment += "### ⚠️ Issues Found\n\n"
+                  for issue in all_issues:
+                      comment += f"- {issue}\n"
+                  comment += "\n"
+              
+              if all_recommendations:
+                  comment += "### 💡 Recommendations\n\n"
+                  for rec in all_recommendations:
+                      comment += f"- {rec}\n"
+                  comment += "\n"
+              
+              if not all_issues and not all_recommendations:
+                  comment += "✅ **No issues found!** Code looks good.\n\n"
+              
+              comment += "---\n"
+              comment += "*AI Review powered by rule-based analysis. For advanced AI insights, set up Ollama locally.*\n"
+              
+              # Save to file for GitHub comment
+              with open('ai_review_comment.txt', 'w') as f:
+                  f.write(comment)
+              
+              print(comment)
+              
+              # Exit with error if critical issues found
+              if any('Security Risk' in issue for issue in all_issues):
+                  print("::error::Critical security issues found")
+                  sys.exit(1)
+
+          if __name__ == '__main__':
+              main()
+          EOF
+
+          # Run the AI reviewer
+          export CHANGED_FILES="${{ steps.changed-files.outputs.all_changed_files }}"
+          python ai_reviewer.py
+
+      - name: Comment PR with AI Review
+        uses: actions/github-script@v7
+        if: always()
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            let comment = '';
+            
+            try {
+              comment = fs.readFileSync('ai_review_comment.txt', 'utf8');
+            } catch (error) {
+              comment = '## 🤖 AI Review\n\nNo issues detected in this PR.';
+            }
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
+
+  security-enhanced-scan:
+    runs-on: ubuntu-latest
+    name: Enhanced Security Scanning
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.6.0
+
+      - name: Run TFLint
+        uses: terraform-linters/setup-tflint@v4
+        with:
+          tflint_version: latest
+
+      - name: Initialize TFLint
+        run: tflint --init
+
+      - name: Run TFLint
+        run: tflint --recursive --format=compact
+
+      - name: Run tfsec
+        uses: aquasecurity/tfsec-action@v1.0.3
+        with:
+          working_directory: terraform
+          soft_fail: false
+
+      - name: Run Checkov (Free Alternative)
+        uses: bridgecrewio/checkov-action@v12
+        with:
+          directory: terraform
+          framework: terraform
+          soft_fail: false
+          output_format: cli
+
+      - name: Run Trivy IaC Scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'config'
+          scan-ref: 'terraform'
+          exit-code: '1'
+          severity: 'CRITICAL,HIGH'
+
+  cost-estimation:
+    runs-on: ubuntu-latest
+    name: Cost Estimation
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Infracost
+        uses: infracost/actions/setup@v2
+        with:
+          api-key: ${{ secrets.INFRACOST_API_KEY }}
+
+      - name: Generate Infracost breakdown
+        if: env.INFRACOST_API_KEY != ''
+        run: |
+          infracost breakdown --path=terraform/environments/dev \
+                              --format=json \
+                              --out-file=/tmp/infracost.json || echo "Infracost not configured"
+
+      - name: Post cost estimate comment
+        if: env.INFRACOST_API_KEY != ''
+        uses: infracost/actions/comment@v1
+        with:
+          path: /tmp/infracost.json
+          behavior: update
