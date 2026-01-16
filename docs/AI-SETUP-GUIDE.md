@@ -263,7 +263,79 @@ curl --version
 </details>
 
 <details>
-<summary><b>🪟 Windows (WSL2 - Ubuntu)</b></summary>
+<summary><b>🪟 Windows (Option 1: Git Bash - Recommended for Windows Users)</b></summary>
+
+**Git Bash** provides a Linux-like terminal on Windows without WSL2. This is the easiest option for Windows users.
+
+```bash
+# Step 1: Download and Install Git for Windows
+# Visit: https://git-scm.com/download/win
+# Download the installer (64-bit recommended)
+# During installation:
+#   ✅ Check "Git Bash Here"
+#   ✅ Check "Git from the command line and also from 3rd-party software"
+#   ✅ Use default options for everything else
+
+# Step 2: Launch Git Bash
+# Right-click anywhere → "Git Bash Here"
+# Or: Start Menu → "Git Bash"
+
+# Step 3: Verify Git Bash is working
+git --version
+# Expected: git version 2.x.x
+
+# Step 4: Install Python (if not already installed)
+# Download Python from: https://www.python.org/downloads/
+# During installation:
+#   ⚠️ IMPORTANT: Check "Add Python to PATH"
+#   Install with default options
+
+# Step 5: Verify Python in Git Bash
+python --version || python3 --version
+# Expected: Python 3.x.x
+
+# Step 6: Install pip (Python package manager)
+curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+python get-pip.py
+rm get-pip.py
+
+# Step 7: Verify installations
+python --version
+pip --version
+git --version
+curl --version
+
+# Step 8: Set up aliases for Linux-style commands (optional but helpful)
+cat >> ~/.bashrc << 'EOF'
+# Aliases for Linux-style commands
+alias python=python3
+alias pip=pip3
+alias ll='ls -la'
+alias cls=clear
+EOF
+
+# Reload bash configuration
+source ~/.bashrc
+
+# ✅ Git Bash is ready!
+# You can now run all Linux commands in the rest of this guide
+```
+
+**Advantages of Git Bash**:
+- ✅ No system restart required (unlike WSL2)
+- ✅ Lightweight and fast
+- ✅ Native Windows integration
+- ✅ Run Linux commands directly (bash, curl, grep, etc.)
+- ✅ Perfect for this project
+
+**Note**: All commands in this guide work in Git Bash!
+
+</details>
+
+<details>
+<summary><b>🪟 Windows (Option 2: WSL2 - Ubuntu)</b></summary>
+
+**WSL2** provides a full Linux environment on Windows. Use this if you prefer a complete Linux subsystem.
 
 ```bash
 # Install WSL2 (run in PowerShell as Administrator)
