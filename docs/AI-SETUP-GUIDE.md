@@ -168,50 +168,228 @@ This automated approach will set up your complete Agentic AI DevSecOps environme
 
 ---
 
-##### Step 2: Clone and Configure Repository
+##### Step 2: Choose Your Deployment Environment
+
+**IMPORTANT**: You will run all commands on your **LOCAL MACHINE** (laptop/desktop), not on AWS EC2.
+
+**Why Local and Not EC2?**
+
+✅ **Local Machine (Recommended)**:
+- Ollama AI models run locally (free, no compute costs)
+- Easy development workflow (edit code, test, commit)
+- Direct access to your IDE and tools
+- GitHub Actions handles AWS deployments remotely
+- No EC2 costs ($0/month vs $10-50/month for EC2)
+
+❌ **EC2 Instance (NOT Recommended)**:
+- Additional costs (~$10-50/month for compute)
+- Requires SSH access and remote development
+- More complex setup (VPN, security groups, SSH keys)
+- Still need local machine for development anyway
+
+**Architecture Flow**:
+```
+┌─────────────────────────────────────────────────────┐
+│  YOUR LOCAL MACHINE (Development)                   │
+│  ├─ Clone repo                                      │
+│  ├─ Ollama + LLaMA 3.1 (AI runs here)              │
+│  ├─ AWS CLI (configured with credentials)          │
+│  ├─ Terraform (deploys to AWS from here)           │
+│  ├─ Git (push code to GitHub)                      │
+│  └─ Code editor (VS Code, etc.)                    │
+└──────────────┬──────────────────────────────────────┘
+               │
+               ▼ (git push)
+┌─────────────────────────────────────────────────────┐
+│  GITHUB (Code Repository & CI/CD)                   │
+│  ├─ GitHub Actions (runs workflows)                │
+│  ├─ Security scans                                  │
+│  └─ Terraform apply (via Actions)                  │
+└──────────────┬──────────────────────────────────────┘
+               │
+               ▼ (terraform apply)
+┌─────────────────────────────────────────────────────┐
+│  AWS (Production Infrastructure)                    │
+│  ├─ Lambda functions                                │
+│  ├─ VPC, EC2, Security Groups                      │
+│  ├─ EventBridge, CloudWatch                        │
+│  └─ S3, DynamoDB                                    │
+└─────────────────────────────────────────────────────┘
+```
+
+**Summary**: 
+- **Setup & Development**: Your local machine
+- **CI/CD & Automation**: GitHub Actions (free)
+- **Production Infrastructure**: AWS (deployed via Terraform)
+
+---
+
+##### Step 3: Prepare Your Local Machine
+
+Choose your operating system:
+
+<details>
+<summary><b>🐧 Linux (Ubuntu/Debian)</b></summary>
 
 ```bash
-# Clone the repository
+# Update package manager
+sudo apt update && sudo apt upgrade -y
+
+# Install required tools
+sudo apt install -y git curl wget unzip python3 python3-pip
+
+# Verify installations
+git --version
+python3 --version
+curl --version
+```
+</details>
+
+<details>
+<summary><b>🍎 macOS</b></summary>
+
+```bash
+# Install Homebrew (if not already installed)
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+# Install required tools
+brew install git curl wget python3
+
+# Verify installations
+git --version
+python3 --version
+curl --version
+```
+</details>
+
+<details>
+<summary><b>🪟 Windows (WSL2 - Ubuntu)</b></summary>
+
+```bash
+# Install WSL2 (run in PowerShell as Administrator)
+wsl --install Ubuntu
+
+# Restart your computer when prompted
+
+# After restart, open Ubuntu from Start Menu
+# Update and install tools
+sudo apt update && sudo apt upgrade -y
+sudo apt install -y git curl wget unzip python3 python3-pip
+
+# Verify installations
+git --version
+python3 --version
+curl --version
+```
+</details>
+
+---
+
+##### Step 4: Clone and Configure Repository
+
+```bash
+# Create a workspace directory (recommended)
+mkdir -p ~/projects
+cd ~/projects
+
+# Clone the repository to your local machine
 git clone https://github.com/omade88/agentic-devsecops-aws.git
 cd agentic-devsecops-aws
 
+# Verify you're in the right directory
+pwd
+# Should show: /home/yourusername/projects/agentic-devsecops-aws
+
 # Make setup script executable
 chmod +x scripts/setup-ai.sh
+
+# Optional: Open in your favorite code editor
+# code .  # For VS Code
+# or just: ls -la  # to see all files
 ```
+
+**What you cloned**:
+- `ai-assistant/` - AI code reviewer and policy generator
+- `terraform/` - Infrastructure as Code modules
+- `lambda/` - Auto-remediation functions
+- `scripts/` - Setup automation scripts
+- `.github/workflows/` - CI/CD pipelines
+- `docs/` - Documentation (you're reading it!)
 
 ---
 
-##### Step 3: Configure AWS Credentials Locally
+##### Step 5: Configure AWS Credentials on Your Local Machine
+
+**This configures AWS CLI to communicate with your AWS account from your laptop/desktop.**
 
 ```bash
-# Install AWS CLI (if not already installed)
+# Install AWS CLI v2 (choose your OS)
+
+# For Linux:
 curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
 unzip awscliv2.zip
 sudo ./aws/install
+rm -rf aws awscliv2.zip
 
-# Configure AWS credentials
+# For macOS:
+brew install awscli
+
+# For Windows WSL2:
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip awscliv2.zip
+sudo ./aws/install
+rm -rf aws awscliv2.zip
+
+# Verify installation
+aws --version
+# Expected: aws-cli/2.x.x Python/3.x.x
+
+# Configure AWS credentials (from Step 1)
 aws configure
-
-# When prompted, enter:
-# AWS Access Key ID: <paste your Access Key ID>
-# AWS Secret Access Key: <paste your Secret Access Key>
-# Default region name: us-east-1
-# Default output format: json
-
-# Verify configuration
-aws sts get-caller-identity
-# Should show your account ID, user ARN, and user ID
 ```
+
+**Interactive Prompts** (use credentials from Step 1):
+```
+AWS Access Key ID [None]: <paste your Access Key ID>
+AWS Secret Access Key [None]: <paste your Secret Access Key>
+Default region name [None]: us-east-1
+Default output format [None]: json
+```
+
+**Verify AWS Configuration**:
+```bash
+# Test AWS connection
+aws sts get-caller-identity
+
+# Expected output:
+{
+    "UserId": "AIDAXXXXXXXXXXXXXXXXX",
+    "Account": "123456789012",
+    "Arn": "arn:aws:iam::123456789012:user/terraform-deployer"
+}
+
+# Check your configured region
+aws configure get region
+# Should output: us-east-1
+
+# List S3 buckets to confirm access
+aws s3 ls
+# Should show your terraform state bucket from Step 1
+```
+
+✅ **Success**: You can now deploy infrastructure to AWS from your local machine!
 
 ---
 
-##### Step 4: Update Terraform Backend Configuration
+##### Step 6: Update Terraform Backend Configuration
 
 ```bash
-# Edit the backend configuration
+# Edit the backend configuration (use your preferred editor)
 nano terraform/backend.tf
+# or: vim terraform/backend.tf
+# or: code terraform/backend.tf  # VS Code
 
-# Update with your S3 bucket name:
+# Update with your S3 bucket name from Step 1:
 terraform {
   backend "s3" {
     bucket         = "agentic-devsecops-terraform-state-<your-initials>"
@@ -222,14 +400,36 @@ terraform {
   }
 }
 
-# Save and exit (Ctrl+X, Y, Enter)
+# Example: If your bucket is "agentic-devsecops-terraform-state-jd"
+# bucket = "agentic-devsecops-terraform-state-jd"
+
+# Save and exit
+# Nano: Ctrl+X, Y, Enter
+# Vim: :wq
+# VS Code: Ctrl+S (or Cmd+S on Mac)
 ```
+
+**Verify Backend Configuration**:
+```bash
+# View the file to confirm your changes
+cat terraform/backend.tf
+
+# Should show your actual bucket name (not <your-initials>)
+```
+
+✅ **Backend configured**: Terraform will now use S3 for state management!
 
 ---
 
-##### Step 5: Run the Automated Setup Script
+##### Step 7: Run the Automated Setup Script
 
 ```bash
+# Return to project root (if not already there)
+cd ~/projects/agentic-devsecops-aws
+
+# Verify setup script exists
+ls -lh scripts/setup-ai.sh
+
 # Execute the setup script
 ./scripts/setup-ai.sh
 
