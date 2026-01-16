@@ -107,21 +107,316 @@ This project uses **100% FREE** AI tools to power your DevSecOps workflow:
 
 ### Option 1: Automated Setup (Recommended)
 
+This automated approach will set up your complete Agentic AI DevSecOps environment on AWS in approximately 15-20 minutes.
+
+#### Prerequisites Before Starting
+
+1. **AWS Account** - Sign up at https://aws.amazon.com (Free tier eligible)
+2. **GitHub Account** - Sign up at https://github.com (Free tier with 2000 Actions minutes/month)
+3. **System Requirements**:
+   - 8GB RAM minimum (16GB recommended)
+   - 10GB free disk space
+   - Linux, macOS, or Windows WSL2
+
+---
+
+#### Detailed Step-by-Step Instructions
+
+##### Step 1: Prepare AWS Credentials
+
+1. **Log in to AWS Console**: https://console.aws.amazon.com
+
+2. **Create IAM User for Terraform**:
+   - Navigate to **IAM → Users → Add users**
+   - Username: `terraform-deployer`
+   - Select **"Access key - Programmatic access"**
+   - Click **Next: Permissions**
+
+3. **Attach Policies**:
+   - Click **"Attach existing policies directly"**
+   - Select these policies:
+     - `AmazonEC2FullAccess`
+     - `AmazonVPCFullAccess`
+     - `AmazonS3FullAccess`
+     - `IAMFullAccess`
+     - `CloudWatchFullAccess`
+     - `AWSLambda_FullAccess`
+     - `AmazonEventBridgeFullAccess`
+     - `AmazonDynamoDBFullAccess`
+   - Click **Next** → **Create user**
+
+4. **Save Your Credentials**:
+   - ⚠️ **CRITICAL**: Download the CSV file or copy:
+     - `Access Key ID` (e.g., AKIAIOSFODNN7EXAMPLE)
+     - `Secret Access Key` (e.g., wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY)
+   - You won't see the Secret Key again!
+
+5. **Create S3 Bucket for Terraform State**:
+   - Go to **S3 → Create bucket**
+   - Bucket name: `agentic-devsecops-terraform-state-<your-initials>` (must be globally unique)
+   - Region: `us-east-1` (or your preferred region)
+   - Enable **"Bucket Versioning"**
+   - Enable **"Default encryption"** (SSE-S3)
+   - Click **Create bucket**
+
+6. **Create DynamoDB Table for State Locking**:
+   - Go to **DynamoDB → Create table**
+   - Table name: `terraform-state-lock`
+   - Partition key: `LockID` (String)
+   - Use default settings
+   - Click **Create table**
+
+---
+
+##### Step 2: Clone and Configure Repository
+
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/agentic-devsecops-aws.git
+git clone https://github.com/omade88/agentic-devsecops-aws.git
 cd agentic-devsecops-aws
 
-# Run the setup script
+# Make setup script executable
 chmod +x scripts/setup-ai.sh
+```
+
+---
+
+##### Step 3: Configure AWS Credentials Locally
+
+```bash
+# Install AWS CLI (if not already installed)
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip awscliv2.zip
+sudo ./aws/install
+
+# Configure AWS credentials
+aws configure
+
+# When prompted, enter:
+# AWS Access Key ID: <paste your Access Key ID>
+# AWS Secret Access Key: <paste your Secret Access Key>
+# Default region name: us-east-1
+# Default output format: json
+
+# Verify configuration
+aws sts get-caller-identity
+# Should show your account ID, user ARN, and user ID
+```
+
+---
+
+##### Step 4: Update Terraform Backend Configuration
+
+```bash
+# Edit the backend configuration
+nano terraform/backend.tf
+
+# Update with your S3 bucket name:
+terraform {
+  backend "s3" {
+    bucket         = "agentic-devsecops-terraform-state-<your-initials>"
+    key            = "terraform/state/terraform.tfstate"
+    region         = "us-east-1"
+    dynamodb_table = "terraform-state-lock"
+    encrypt        = true
+  }
+}
+
+# Save and exit (Ctrl+X, Y, Enter)
+```
+
+---
+
+##### Step 5: Run the Automated Setup Script
+
+```bash
+# Execute the setup script
 ./scripts/setup-ai.sh
 
-# The script will:
-# ✅ Install all dependencies
-# ✅ Set up Ollama with LLaMA 3.1
-# ✅ Configure AWS CLI
-# ✅ Install security tools
-# ✅ Set up pre-commit hooks
+# The script will automatically:
+# ✅ Detect your OS (Linux/macOS/WSL2)
+# ✅ Install Python 3, pip, git, curl
+# ✅ Install Terraform 1.6.0
+# ✅ Install security tools (TFLint, tfsec, Checkov, Trivy)
+# ✅ Install Ollama (local AI runtime)
+# ✅ Download LLaMA 3.1:8b model (~4.7GB, one-time)
+# ✅ Install OPA (Open Policy Agent)
+# ✅ Install Python dependencies (requests, boto3, etc.)
+# ✅ Set up pre-commit hooks for git
+# ✅ Validate all installations
+
+# This will take 10-15 minutes depending on your internet speed
+```
+
+**What to expect during installation**:
+- Progress bars for downloading Ollama model
+- Terraform version check
+- Security tool installations
+- Python package installations
+- Final validation summary
+
+---
+
+##### Step 6: Initialize and Deploy Infrastructure
+
+```bash
+# Navigate to dev environment
+cd terraform/environments/dev
+
+# Create terraform.tfvars file
+cat > terraform.tfvars << EOF
+environment    = "dev"
+project_name   = "agentic-devsecops"
+aws_region     = "us-east-1"
+vpc_cidr       = "10.0.0.0/16"
+EOF
+
+# Initialize Terraform
+terraform init
+
+# Review the infrastructure plan
+terraform plan
+
+# Expected resources to be created:
+# - VPC with public/private subnets
+# - Security groups with guardrails
+# - Lambda functions (auto-remediation, security-response)
+# - EventBridge rules for automated triggers
+# - SNS topics for notifications
+# - CloudWatch log groups
+# - IAM roles and policies
+
+# Apply the infrastructure (creates AWS resources)
+terraform apply
+
+# Type 'yes' when prompted
+# This will take 5-10 minutes to complete
+```
+
+---
+
+##### Step 7: Configure GitHub Repository Secrets
+
+1. **Go to your GitHub repository**:
+   - URL: `https://github.com/omade88/agentic-devsecops-aws`
+
+2. **Navigate to Settings**:
+   - Click **Settings** tab
+   - Click **Secrets and variables** → **Actions**
+
+3. **Add these secrets** (click **New repository secret** for each):
+
+   | Secret Name | Value | Description |
+   |-------------|-------|-------------|
+   | `AWS_ACCESS_KEY_ID` | Your AWS Access Key ID | From Step 1 |
+   | `AWS_SECRET_ACCESS_KEY` | Your Secret Access Key | From Step 1 |
+   | `AWS_REGION` | `us-east-1` | Your AWS region |
+   | `DISCORD_WEBHOOK_URL` | Your Discord webhook (optional) | For notifications |
+   | `SLACK_WEBHOOK_URL` | Your Slack webhook (optional) | For notifications |
+
+4. **Verify secrets are added**:
+   - You should see 3 required secrets (AWS credentials + region)
+   - Optional: 2 additional secrets for ChatOps
+
+---
+
+##### Step 8: Test the AI-Powered Workflows
+
+```bash
+# Return to project root
+cd ../../..
+
+# Create a test feature branch
+git checkout -b test/ai-review
+
+# Make a test change to trigger AI review
+echo "# Test change" >> README.md
+
+# Commit and push
+git add README.md
+git commit -m "test: Trigger AI code review"
+git push origin test/ai-review
+
+# Create Pull Request on GitHub
+# Go to: https://github.com/omade88/agentic-devsecops-aws/pulls
+# Click "New pull request"
+# Select: base: main ← compare: test/ai-review
+# Click "Create pull request"
+```
+
+**What happens next**:
+1. GitHub Actions workflows trigger automatically
+2. AI code review analyzes your changes (using Ollama locally)
+3. Security scans run (TFLint, tfsec, Checkov, Trivy)
+4. OPA policies validate compliance
+5. Results appear as PR comments
+6. Notifications sent to Discord/Slack (if configured)
+
+---
+
+##### Step 9: Monitor AWS Lambda Functions
+
+```bash
+# Check Lambda function deployment
+aws lambda list-functions --query "Functions[?contains(FunctionName, 'agentic')].FunctionName"
+
+# Expected output:
+# [
+#     "agentic-devsecops-dev-auto-remediation",
+#     "agentic-devsecops-dev-security-response"
+# ]
+
+# View Lambda logs
+aws logs tail /aws/lambda/agentic-devsecops-dev-auto-remediation --follow
+
+# Test auto-remediation (create a security group with 0.0.0.0/0 open)
+# Lambda will automatically detect and fix it
+```
+
+---
+
+##### Step 10: Verify AI Assistant is Running
+
+```bash
+# Test local AI code reviewer
+cd ai-assistant
+python3 pr-reviewer.py
+
+# Test AI policy generator
+python3 policy-generator.py --interactive
+
+# When prompted, try:
+# "Create a policy to block all SSH access from the internet"
+# AI will generate complete OPA policy code!
+```
+
+---
+
+#### Setup Complete! 🎉
+
+Your Agentic AI DevSecOps environment is now fully operational:
+
+✅ **AWS Infrastructure**: Lambda, EventBridge, VPC, Security Groups  
+✅ **Local AI**: Ollama + LLaMA 3.1 ready for code review  
+✅ **Security Tools**: TFLint, tfsec, Checkov, Trivy installed  
+✅ **GitHub Actions**: Automated workflows running  
+✅ **Auto-Remediation**: Lambda functions monitoring AWS  
+✅ **ChatOps**: Notifications configured (if setup)
+
+**Cost Tracking**: $0/month (all within free tiers)
+
+---
+
+#### Next Steps
+
+1. **Create infrastructure changes** → Open PR → Watch AI review
+2. **Deploy workloads** using Terraform modules in `terraform/modules/`
+3. **Customize OPA policies** in `policies/templates/`
+4. **Set up ChatOps** for team notifications
+5. **Monitor costs** in AWS Cost Explorer
+
+For troubleshooting, see [Troubleshooting Section](#troubleshooting) below.
+
 ```
 
 ### Option 2: Manual Setup
