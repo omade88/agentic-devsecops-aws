@@ -1,0 +1,485 @@
+# ========================================
+# Agentic DevSecOps AWS - .gitignore
+# ========================================
+
+# ========================================
+# Python
+# ========================================
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+junit.xml
+
+# Virtual environments
+venv/
+ENV/
+env/
+.venv
+.ENV/
+.env/
+virtualenv/
+pipenv/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb
+
+# pyenv
+.python-version
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
+
+# SageMath parsed files
+*.sage.py
+
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# ========================================
+# Terraform
+# ========================================
+# Local .terraform directories
+**/.terraform/*
+.terraform/
+.terraform.lock.hcl
+
+# .tfstate files
+*.tfstate
+*.tfstate.*
+*.tfstate.backup
+
+# Crash log files
+crash.log
+crash.*.log
+
+# Exclude all .tfvars files (may contain sensitive data)
+*.tfvars
+*.tfvars.json
+
+# Override files
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Terraform plan files
+*.tfplan
+*.tfplan.*
+plan.out
+tfplan
+
+# Ignore CLI configuration files
+.terraformrc
+terraform.rc
+
+# Terraform lock files (uncomment if you want to ignore)
+# .terraform.lock.hcl
+
+# ========================================
+# AWS
+# ========================================
+# AWS credentials
+.aws/
+*.pem
+*.key
+
+# SAM & CloudFormation
+.aws-sam/
+samconfig.toml
+
+# Lambda deployment packages
+lambda-package/
+*.zip
+
+# CDK
+cdk.out/
+.cdk.staging/
+
+# ========================================
+# Secrets & Credentials
+# ========================================
+# Environment variables
+.env
+.env.*
+.envrc
+*.env
+!.env.example
+
+# Secrets
+secrets/
+secrets.*
+*.secret
+*.secrets
+secret.txt
+credentials.json
+*.credentials
+
+# SSH keys
+id_rsa
+id_rsa.pub
+*.ppk
+
+# API keys
+api_keys.txt
+.api_keys
+
+# Service account files
+*-key.json
+service-account*.json
+
+# ========================================
+# AI / ML Models
+# ========================================
+# Ollama models (large files)
+models/
+*.gguf
+*.bin
+*.safetensors
+*.h5
+*.model
+*.pkl
+*.joblib
+
+# Model checkpoints
+checkpoints/
+*.ckpt
+*.pt
+*.pth
+
+# ========================================
+# Logs
+# ========================================
+logs/
+*.log
+log/
+*.log.*
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+
+# Lambda logs
+lambda-logs/
+
+# ========================================
+# OS-specific
+# ========================================
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.stackdump
+[Dd]esktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+# ========================================
+# IDE / Editor
+# ========================================
+# VS Code
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+.history/
+*.vsix
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# PyCharm
+.idea/
+*.swp
+*.swo
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim
+[._]*.s[a-v][a-z]
+[._]*.sw[a-p]
+[._]s[a-rt-v][a-z]
+[._]ss[a-gi-z]
+[._]sw[a-p]
+Session.vim
+Sessionx.vim
+.netrwhist
+tags
+[._]*.un~
+
+# Emacs
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+auto-save-list
+tramp
+.\#*
+
+# Eclipse
+.settings/
+.project
+.classpath
+.metadata
+
+# NetBeans
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+# ========================================
+# Build / Deployment
+# ========================================
+# Node modules (if any)
+node_modules/
+npm-debug.log
+yarn.lock
+package-lock.json
+
+# Build directories
+target/
+bin/
+obj/
+
+# Docker
+.dockerignore
+docker-compose.override.yml
+
+# ========================================
+# Temporary files
+# ========================================
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
+*~
+.*.sw?
+tmp/
+temp/
+cache/
+.cache/
+
+# ========================================
+# ChatOps / Notifications
+# ========================================
+# Webhook URLs (if stored locally)
+webhook-urls.txt
+discord-webhook.txt
+slack-webhook.txt
+
+# ========================================
+# Testing
+# ========================================
+.tox/
+.pytest_cache/
+.coverage
+htmlcov/
+test-results/
+*.coveragerc
+
+# ========================================
+# Security Scanning
+# ========================================
+# Trivy cache
+.trivy/
+
+# Checkov cache
+.checkov/
+
+# tfsec cache
+.tfsec/
+
+# Scan results
+scan-results/
+security-scan-*.json
+security-report-*.html
+
+# ========================================
+# GitHub Actions
+# ========================================
+# Local Act testing
+.act/
+act-results/
+
+# ========================================
+# Backup files
+# ========================================
+*.backup
+*.old
+*.orig
+*_backup
+*_old
+*_original
+
+# ========================================
+# Archives
+# ========================================
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+*.war
+*.ear
+*.sar
+*.class
+
+# ========================================
+# Project-specific
+# ========================================
+# Local configuration overrides
+config.local.yaml
+config.local.yml
+local-config.*
+
+# Development databases
+*.db
+*.sqlite
+*.sqlite3
+
+# AI assistant cache
+ai-assistant/cache/
+ai-assistant/.cache/
+ollama-cache/
+
+# Policy testing
+policy-test-results/
+opa-test-results/
+
+# Lambda layers
+lambda-layers/
+python-packages/
+
+# Cost reports
+cost-reports/
+billing-*.csv
+
+# Infrastructure state backups
+terraform-backup/
+state-backup/
+
+# Custom scripts output
+output/
+artifacts/
+
+# ========================================
+# Keep these files
+# ========================================
+# Example files
+!.env.example
+!config.example.yaml
+!secrets.example.json
+
+# Documentation
+!README.md
+!*.md
+
+# Templates
+!**/templates/
+!**/*-template.*
