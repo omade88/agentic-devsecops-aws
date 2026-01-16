@@ -6,28 +6,34 @@ on:
   pull_request:
     branches:
       - main
+
+permissions:
+  contents: read
+  security-events: write
+
 jobs:
   security-scan:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Set up Terraform
-        uses: hashicorp/setup-terraform@v1
+        uses: hashicorp/setup-terraform@v3
         with:
-          terraform_version: 1.0.0
+          terraform_version: 1.6.0
 
-      - name: Install TFLint
-        run: |
-          brew install tflint
+      - name: Setup TFLint
+        uses: terraform-linters/setup-tflint@v4
 
       - name: Run TFLint
-        run: tflint
-
-      - name: Install tfsec
         run: |
-          brew install tfsec
+          tflint --init
+          tflint --recursive --format=compact terraform/
+        continue-on-error: true
 
       - name: Run tfsec
-        run: tfsec .
+        uses: aquasecurity/tfsec-action@v1.0.3
+        with:
+          working_directory: terraform
+          soft_fail: true

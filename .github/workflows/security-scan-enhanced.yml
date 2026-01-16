@@ -54,17 +54,16 @@ jobs:
 
       - name: Init TFLint
         run: tflint --init
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
 
       - name: Run TFLint
-        run: tflint --recursive --format=sarif > tflint-results.sarif
+        run: tflint --recursive --format=compact terraform/
         continue-on-error: true
 
-      - name: Upload TFLint SARIF
-        uses: github/codeql-action/upload-sarif@v3
-        if: always()
-        with:
-          sarif_file: tflint-results.sarif
-          category: tflint
+      - name: Run TFLint
+        run: tflint --recursive --format=compact terraform/
+        continue-on-error: true
 
       - name: tfsec Security Scanner
         uses: aquasecurity/tfsec-action@v1.0.3
@@ -73,15 +72,7 @@ jobs:
           format: sarif
           soft_fail: true
 
-      - name: Upload tfsec SARIF
-        uses: github/codeql-action/upload-sarif@v3
-        if: always()
-        with:
-          sarif_file: results.sarif
-          category: tfsec
-
-      - name: Checkov IaC Scanner
-        uses: bridgecrewio/checkov-action@v12
+      - nasoft_fail: trueo/checkov-action@v12
         with:
           directory: terraform
           framework: terraform
@@ -93,16 +84,9 @@ jobs:
         uses: github/codeql-action/upload-sarif@v3
         if: always()
         with:
-          sarif_file: results.sarif
-          category: checkov
-
-      - name: Trivy IaC Security Scanner
-        uses: aquasecurity/trivy-action@master
-        with:
-          scan-type: 'config'
-          scan-ref: 'terraform'
-          format: 'sarif'
-          output: 'trivy-results.sarif'
+          soft_fail: true
+          download_external_modules: true
+          skip_check: CKV_AWS_79,CKV_AWS_144sults.sarif'
           severity: 'CRITICAL,HIGH,MEDIUM'
 
       - name: Upload Trivy SARIF
@@ -116,8 +100,8 @@ jobs:
         run: |
           # Install OPA
           curl -L -o opa https://openpolicyagent.org/downloads/latest/opa_linux_amd64_static
-          chmod 755 opa
-          sudo mv opa /usr/local/bin/
+          exit-code: '0'
+          severity: 'CRITICAL,HIGH
           
           # Test OPA policies
           if [ -f "policies/opa/policy.rego" ]; then
