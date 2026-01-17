@@ -1,10 +1,10 @@
 # Staging Environment Backend Configuration
 terraform {
   backend "s3" {
-    bucket         = "agentic-devsecops-terraform-state"
-    key            = "terraform/staging/terraform.tfstate"  # Different key for staging
+    bucket         = "your-terraform-state-bucket"  # Replace with your S3 bucket name
+    key            = "terraform/staging/terraform.tfstate"
     region         = "us-east-1"
-    dynamodb_table = "terraform-state-lock"
+    dynamodb_table = "your-terraform-state-lock"  # Replace with your DynamoDB table name
     encrypt        = true
   }
 }

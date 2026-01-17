@@ -3,6 +3,22 @@
 # ========================================
 
 # ========================================
+# Sensitive Files - NEVER COMMIT
+# ========================================
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+credentials.json
+secrets.json
+config.json
+*.secret
+
+# ========================================
 # Python
 # ========================================
 # Byte-compiled / optimized / DLL files

@@ -1,3 +1,7 @@
+# Terraform Variables for Dev Environment
+# Copy this file to terraform.tfvars and update with your actual values
+# terraform.tfvars is gitignored and will NOT be committed
+
 environment = "dev"
 
 region = "us-east-1"
@@ -14,20 +18,20 @@ instance_type = "t3.micro"
 ami_id = "ami-0453ec754f44f9a4a"  # Amazon Linux 2023 - free tier eligible
 
 # Security: Replace with YOUR public IP address
-# Find your IP: https://whatismyipaddress.com/
+# Find your IP: https://whatismyipaddress.com/ or run: curl https://api.ipify.org
 # Format: "YOUR.IP.ADDRESS.HERE/32"
-# Example: allowed_ip_ranges = ["203.0.113.45/32"]
-allowed_ip_ranges = ["203.0.113.45/32", "198.51.100.0/24"]
+# Example: allowed_ip_ranges = ["98.207.254.136/32"]
+allowed_ip_ranges = ["YOUR.IP.ADDRESS.HERE/32"]
 
 # Project Configuration
 project_name = "agentic-devsecops"
 
 # Lambda Auto-Remediation Configuration
-# IMPORTANT: Replace with your actual email address
-sns_email = "your-email@example.com"  # Replace with your actual email
+# ⚠️ IMPORTANT: Replace with your actual email address for SNS notifications
+sns_email = "your-email@example.com"
 
 # Auto-fix mode: false = dry-run (detect only), true = auto-fix issues
 auto_fix_enabled = false  # Start with dry-run mode for safety
 
-# If you need to allow multiple IPs or ranges:
-# allowed_ip_ranges = ["203.0.113.45/32", "198.51.100.0/24"]
+# If you need to allow multiple IPs or IP ranges:
+# allowed_ip_ranges = ["98.207.254.136/32", "203.0.113.0/24"]

@@ -728,7 +728,7 @@ cat terraform/environments/dev/backend.tf
 # Expected output:
 # terraform {
 #   backend "s3" {
-#     bucket         = "agentic-devsecops-terraform-state"
+#     bucket         = "your-terraform-state-bucket"  # Your actual bucket name
 #     key            = "terraform/dev/terraform.tfstate"
 #     region         = "us-east-1"
 #     dynamodb_table = "terraform-state-lock"
@@ -746,28 +746,28 @@ cat terraform/environments/dev/backend.tf
 **Verify S3 Backend Resources**:
 ```bash
 # Check S3 bucket exists
-aws s3 ls | grep agentic-devsecops-terraform-state
-# Expected: agentic-devsecops-terraform-state
+aws s3 ls | grep terraform-state
+# Expected: your-terraform-state-bucket
 
 # Check DynamoDB table exists
 aws dynamodb describe-table --table-name terraform-state-lock --query "Table.TableName"
 # Expected: "terraform-state-lock"
 
 # Check versioning is enabled (important for state recovery)
-aws s3api get-bucket-versioning --bucket agentic-devsecops-terraform-state
+aws s3api get-bucket-versioning --bucket your-terraform-state-bucket
 # Expected: "Status": "Enabled"
 ```
 
 ✅ **Backend configured**: Terraform will use S3 for state storage!
 
-**Note**: If you created your own S3 bucket in Step 1 with a different name (e.g., `agentic-devsecops-terraform-state-jd`), you'll need to update `backend.tf`:
+**Note**: If you created your own S3 bucket in Step 1 with a different name (e.g., `my-company-terraform-state`), you'll need to update `backend.tf`:
 
 ```bash
 # Only if you used a different bucket name
 nano terraform/environments/dev/backend.tf
 
 # Update the bucket line:
-# bucket = "agentic-devsecops-terraform-state-<your-initials>"
+# bucket = "your-terraform-state-bucket"
 
 # Then re-initialize:
 # terraform init -reconfigure
@@ -987,7 +987,7 @@ To confirm this subscription, click or visit the link below:
 ##### Step 7: Configure GitHub Repository Secrets
 
 1. **Go to your GitHub repository**:
-   - URL: `https://github.com/omade88/agentic-devsecops-aws`
+   - URL: `https://github.com/<your-username>/agentic-devsecops-aws`
 
 2. **Navigate to Settings**:
    - Click **Settings** tab
@@ -1093,7 +1093,7 @@ git commit -m "test: Trigger AI code review"
 git push origin test/ai-review
 
 # Create Pull Request on GitHub
-# Go to: https://github.com/omade88/agentic-devsecops-aws/pulls
+# Go to: https://github.com/<your-username>/agentic-devsecops-aws/pulls
 # Click "New pull request"
 # Select: base: main ← compare: test/ai-review
 # Click "Create pull request"
@@ -1639,7 +1639,7 @@ Your Agentic AI DevSecOps environment is now fully operational:
 - OPA (policy validation)
 
 ✅ **GitHub Integration**:
-- Repository: omade88/agentic-devsecops-aws
+- Repository: <your-username>/agentic-devsecops-aws
 - GitHub Actions workflows running
 - S3 backend for Terraform state
 - DynamoDB state locking

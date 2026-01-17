@@ -8,6 +8,8 @@
 [![AWS](https://img.shields.io/badge/AWS-Free%20Tier-orange.svg)](https://aws.amazon.com/free/)
 [![AI](https://img.shields.io/badge/AI-Ollama%20LLaMA%203.1-blue.svg)](https://ollama.ai/)
 
+> ⚠️ **SECURITY NOTICE**: This is a template repository. Before using, replace all placeholder values (email, bucket names, etc.) with your own. See [SECURITY.md](SECURITY.md) for details.
+
 ---
 
 ## 🎯 What Is This?
@@ -28,7 +30,8 @@ A **production-ready DevSecOps pipeline** that uses **FREE AI** to automate:
 ### 1-Command Setup
 
 ```bash
-git clone https://github.com/yourusername/agentic-devsecops-aws.git
+# Replace <your-username> with your GitHub username
+git clone https://github.com/<your-username>/agentic-devsecops-aws.git
 cd agentic-devsecops-aws
 chmod +x scripts/setup-ai.sh && ./scripts/setup-ai.sh
 ```
