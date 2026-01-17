@@ -50,3 +50,20 @@ variable "allowed_ip_ranges" {
   description = "The IP ranges that are allowed to access the EC2 instance"
   type        = list(string)
 }
+
+variable "project_name" {
+  description = "Project name for resource tagging"
+  type        = string
+  default     = "agentic-devsecops"
+}
+
+variable "sns_email" {
+  description = "Email address for SNS notifications (Lambda alerts)"
+  type        = string
+}
+
+variable "auto_fix_enabled" {
+  description = "Enable automatic remediation (false = dry-run mode, true = auto-fix)"
+  type        = bool
+  default     = false
+}

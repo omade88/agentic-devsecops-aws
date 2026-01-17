@@ -58,3 +58,19 @@ resource "aws_route_table_association" "public" {
   subnet_id = aws_subnet.public[count.index].id
   route_table_id = aws_route_table.public.id
 }
+
+# Lambda Functions Module - Auto-Remediation and Security Response
+module "lambda_functions" {
+  source = "../../modules/lambda-functions"
+
+  environment      = var.environment
+  project_name     = var.project_name
+  sns_email        = var.sns_email
+  auto_fix_enabled = var.auto_fix_enabled
+
+  tags = {
+    Environment = var.environment
+    Project     = var.project_name
+    ManagedBy   = "Terraform"
+  }
+}

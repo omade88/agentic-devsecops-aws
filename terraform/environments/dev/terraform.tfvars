@@ -19,5 +19,15 @@ ami_id = "ami-0453ec754f44f9a4a"  # Amazon Linux 2023 - free tier eligible
 # Example: allowed_ip_ranges = ["203.0.113.45/32"]
 allowed_ip_ranges = ["203.0.113.45/32", "198.51.100.0/24"]
 
+# Project Configuration
+project_name = "agentic-devsecops"
+
+# Lambda Auto-Remediation Configuration
+# IMPORTANT: Replace with your actual email address
+sns_email = "your-email@example.com"  # Update this!
+
+# Auto-fix mode: false = dry-run (detect only), true = auto-fix issues
+auto_fix_enabled = false  # Start with dry-run mode for safety
+
 # If you need to allow multiple IPs or ranges:
 # allowed_ip_ranges = ["203.0.113.45/32", "198.51.100.0/24"]
