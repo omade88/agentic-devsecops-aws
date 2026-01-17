@@ -36,9 +36,6 @@ jobs:
       - name: Terraform Validation
         run: |
           cd terraform/environments/dev
-          echo 'environment = "dev"' > terraform.tfvars
-          echo 'aws_region = "us-east-1"' >> terraform.tfvars
-          echo 'project_name = "agentic-devsecops"' >> terraform.tfvars
           terraform init -backend=false
           terraform validate
         continue-on-error: true
