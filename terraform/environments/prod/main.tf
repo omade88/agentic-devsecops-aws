@@ -59,15 +59,6 @@ resource "aws_route_table_association" "public" {
   route_table_id = aws_route_table.public.id
 }
 
-# Security Module - Manages security groups and rules
-module "security" {
-  source = "../../modules/security"
-
-  vpc_id = aws_vpc.main.id
-  environment = var.environment
-  allowed_ip_ranges = var.allowed_ip_ranges
-}
-
 # Lambda Functions Module - Auto-remediation and security response
 module "lambda_functions" {
   source = "../../modules/lambda-functions"
