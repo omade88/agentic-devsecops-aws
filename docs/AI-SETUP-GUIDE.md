@@ -628,8 +628,8 @@ curl --version
 mkdir -p ~/projects
 cd ~/projects
 
-# Clone the repository to your local machine
-git clone https://github.com/omade88/agentic-devsecops-aws.git
+# Clone the repository to your local machine (replace <your-username>)
+git clone https://github.com/<your-username>/agentic-devsecops-aws.git
 cd agentic-devsecops-aws
 
 # Verify you're in the right directory
