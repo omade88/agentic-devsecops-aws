@@ -168,15 +168,25 @@ Be concise and actionable."""
 def get_changed_terraform_files() -> List[str]:
     """Get list of changed Terraform files in git"""
     try:
+        # Change to git root directory to ensure paths are correct
+        git_root = subprocess.run(
+            ['git', 'rev-parse', '--show-toplevel'],
+            capture_output=True,
+            text=True
+        ).stdout.strip()
+        
         result = subprocess.run(
             ['git', 'diff', '--name-only', 'HEAD^', 'HEAD'],
             capture_output=True,
-            text=True
+            text=True,
+            cwd=git_root
         )
         
         files = result.stdout.strip().split('\n')
-        tf_files = [f for f in files if f.endswith('.tf') and os.path.exists(f)]
-        return tf_files
+        # Build full path for file existence check
+        tf_files = [f for f in files if f.endswith('.tf') and os.path.exists(os.path.join(git_root, f))]
+        # Return paths relative to git root
+        return [os.path.join(git_root, f) for f in tf_files]
         
     except Exception as e:
         print(f"Error getting changed files: {e}")
@@ -245,7 +255,7 @@ def main():
         
         # Save to file
         output_file = 'ai_review_output.md'
-        with open(output_file, 'w') as f:
+        with open(output_file, 'w', encoding='utf-8') as f:
             f.write(comment)
         
         print("=" * 50)
