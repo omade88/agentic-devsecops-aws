@@ -32,7 +32,7 @@ variable "public_subnet_count" {
 variable "availability_zones" {
   description = "Availability zones"
   type        = list(string)
-  default     = ["us-west-1a", "us-west-1c"]
+  default     = ["us-west-1a", "us-west-1b"]
 }
 
 variable "instance_type" {
