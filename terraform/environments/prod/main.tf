@@ -76,21 +76,26 @@ module "lambda_functions" {
 }
 
 output "vpc_id" {
-  value = aws_vpc.main.id
+  value       = aws_vpc.main.id
   description = "Production VPC ID"
 }
 
 output "public_subnet_ids" {
-  value = aws_subnet.public[*].id
+  value       = aws_subnet.public[*].id
   description = "Production public subnet IDs"
 }
 
-output "lambda_function_arns" {
-  value = module.lambda_functions.function_arns
-  description = "Production Lambda function ARNs"
+output "auto_remediation_function_arn" {
+  value       = module.lambda_functions.auto_remediation_function_arn
+  description = "Production auto-remediation Lambda function ARN"
+}
+
+output "security_response_function_arn" {
+  value       = module.lambda_functions.security_response_function_arn
+  description = "Production security response Lambda function ARN"
 }
 
 output "sns_topic_arn" {
-  value = module.lambda_functions.sns_topic_arn
+  value       = module.lambda_functions.sns_topic_arn
   description = "Production SNS topic ARN for security alerts"
 }
