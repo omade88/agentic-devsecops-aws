@@ -1,6 +1,6 @@
 environment = "dev"
 
-region = "us-west-1"
+region = "us-east-1"
 
 vpc_cidr = "10.0.0.0/16"
 
@@ -10,8 +10,8 @@ private_subnet_cidrs = ["10.0.3.0/24", "10.0.4.0/24"]
 
 instance_type = "t3.micro"
 
-# Amazon Linux 2023 AMI for us-west-1 (recommended)
-ami_id = "ami-0d5ae5525eb033d0a"  # Amazon Linux 2023 - free tier eligible
+# Amazon Linux 2023 AMI for us-east-1 (recommended)
+ami_id = "ami-0453ec754f44f9a4a"  # Amazon Linux 2023 - free tier eligible
 
 # Security: Replace with YOUR public IP address
 # Find your IP: https://whatismyipaddress.com/
