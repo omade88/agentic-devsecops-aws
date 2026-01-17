@@ -36,7 +36,7 @@ variable "availability_zones" {
 }
 
 variable "instance_type" {
-  description = "The type of EC2 instance to launch"
+  description = "The type of EC2 instance to launch (t3.micro is free tier eligible)"
   type        = string
   default     = "t3.micro"
 }
