@@ -717,43 +717,61 @@ aws s3 ls
 
 ---
 
-##### Step 6: Update Terraform Backend Configuration
+##### Step 6: Verify Backend Configuration
+
+The Terraform backend is already configured to use S3 for remote state management.
 
 ```bash
-# Edit the backend configuration (use your preferred editor)
-nano terraform/backend.tf
-# or: vim terraform/backend.tf
-# or: code terraform/backend.tf  # VS Code
+# View the backend configuration
+cat terraform/environments/dev/backend.tf
 
-# Update with your S3 bucket name from Step 1:
-terraform {
-  backend "s3" {
-    bucket         = "agentic-devsecops-terraform-state-<your-initials>"
-    key            = "terraform/state/terraform.tfstate"
-    region         = "us-east-1"
-    dynamodb_table = "terraform-state-lock"
-    encrypt        = true
-  }
-}
-
-# Example: If your bucket is "agentic-devsecops-terraform-state-jd"
-# bucket = "agentic-devsecops-terraform-state-jd"
-
-# Save and exit
-# Nano: Ctrl+X, Y, Enter
-# Vim: :wq
-# VS Code: Ctrl+S (or Cmd+S on Mac)
+# Expected output:
+# terraform {
+#   backend "s3" {
+#     bucket         = "agentic-devsecops-terraform-state"
+#     key            = "terraform/dev/terraform.tfstate"
+#     region         = "us-east-1"
+#     dynamodb_table = "terraform-state-lock"
+#     encrypt        = true
+#   }
+# }
 ```
 
-**Verify Backend Configuration**:
+**What This Means:**
+- **State Storage**: Terraform state is stored in S3 (remote, not local)
+- **State Locking**: DynamoDB prevents concurrent modifications
+- **Encryption**: State file is encrypted at rest
+- **Collaboration**: Team members can share the same state
+
+**Verify S3 Backend Resources**:
 ```bash
-# View the file to confirm your changes
-cat terraform/backend.tf
+# Check S3 bucket exists
+aws s3 ls | grep agentic-devsecops-terraform-state
+# Expected: agentic-devsecops-terraform-state
 
-# Should show your actual bucket name (not <your-initials>)
+# Check DynamoDB table exists
+aws dynamodb describe-table --table-name terraform-state-lock --query "Table.TableName"
+# Expected: "terraform-state-lock"
+
+# Check versioning is enabled (important for state recovery)
+aws s3api get-bucket-versioning --bucket agentic-devsecops-terraform-state
+# Expected: "Status": "Enabled"
 ```
 
-✅ **Backend configured**: Terraform will now use S3 for state management!
+✅ **Backend configured**: Terraform will use S3 for state storage!
+
+**Note**: If you created your own S3 bucket in Step 1 with a different name (e.g., `agentic-devsecops-terraform-state-jd`), you'll need to update `backend.tf`:
+
+```bash
+# Only if you used a different bucket name
+nano terraform/environments/dev/backend.tf
+
+# Update the bucket line:
+# bucket = "agentic-devsecops-terraform-state-<your-initials>"
+
+# Then re-initialize:
+# terraform init -reconfigure
+```
 
 ---
 
@@ -795,37 +813,174 @@ ls -lh scripts/setup-ai.sh
 
 ##### Step 6: Initialize and Deploy Infrastructure
 
+**6.1: Review Terraform Configuration**
+
 ```bash
 # Navigate to dev environment
 cd terraform/environments/dev
 
-# Review and update terraform.tfvars with your IP address
-# The file already exists with all required configuration
-# IMPORTANT: Replace the example IPs in allowed_ip_ranges with your actual public IP
-# Get your IP: curl https://api.ipify.org
-# Update: allowed_ip_ranges = ["YOUR.IP.ADDRESS/32"]
+# View the terraform.tfvars configuration
+cat terraform.tfvars
 
-# Initialize Terraform
+# Expected configuration (already set up):
+# environment = "dev"
+# region = "us-east-1"
+# vpc_cidr = "10.0.0.0/16"
+# public_subnet_cidrs = ["10.0.1.0/24", "10.0.2.0/24"]
+# private_subnet_cidrs = ["10.0.3.0/24", "10.0.4.0/24"]
+# instance_type = "t3.micro"
+# ami_id = "ami-0453ec754f44f9a4a"  # Amazon Linux 2023
+# allowed_ip_ranges = ["203.0.113.45/32", "198.51.100.0/24"]  # UPDATE THIS!
+# project_name = "agentic-devsecops"
+# sns_email = "your-email@example.com"  # UPDATE THIS!
+# auto_fix_enabled = false  # Dry-run mode (safe)
+```
+
+**6.2: Update Required Configuration**
+
+⚠️ **IMPORTANT**: You must update these values:
+
+```bash
+# 1. Get your public IP address
+curl https://api.ipify.org
+# Example output: 98.207.254.136
+
+# 2. Edit terraform.tfvars
+nano terraform.tfvars  # or: vim, code, notepad, etc.
+
+# 3. Update these lines:
+# BEFORE:
+# allowed_ip_ranges = ["203.0.113.45/32", "198.51.100.0/24"]
+# sns_email = "your-email@example.com"
+
+# AFTER (use YOUR values):
+# allowed_ip_ranges = ["98.207.254.136/32"]  # Your actual IP
+# sns_email = "your-email@example.com"  # Your actual email
+
+# Save and exit (Ctrl+X, Y, Enter in nano)
+```
+
+**6.3: Initialize Terraform**
+
+```bash
+# Initialize Terraform (downloads providers and modules)
 terraform init
 
-# Review the infrastructure plan
+# Expected output:
+# Initializing modules...
+# - lambda_functions in ../../modules/lambda-functions
+# - security in ../../modules/security
+# - vpc in ../../modules/vpc
+# 
+# Initializing the backend...
+# Successfully configured the backend "s3"!
+# 
+# Initializing provider plugins...
+# - Using hashicorp/aws v6.28.0
+# - Using hashicorp/archive v2.7.1
+# 
+# Terraform has been successfully initialized!
+```
+
+**6.4: Review Infrastructure Plan**
+
+```bash
+# Generate and review the execution plan
 terraform plan
 
-# Expected resources to be created:
-# - VPC with public/private subnets
-# - Security groups with guardrails
-# - Lambda functions (auto-remediation, security-response)
-# - EventBridge rules for automated triggers
-# - SNS topics for notifications
-# - CloudWatch log groups
-# - IAM roles and policies
+# Expected output summary:
+# Plan: 21 to add, 0 to change, 0 to destroy.
 
-# Apply the infrastructure (creates AWS resources)
+# Resources to be created:
+# 
+# VPC & Networking (7 resources):
+#   - aws_vpc.main (10.0.0.0/16)
+#   - aws_subnet.public[0] (10.0.1.0/24, us-east-1a)
+#   - aws_subnet.public[1] (10.0.2.0/24, us-east-1b)
+#   - aws_subnet.private[0] (10.0.3.0/24, us-east-1a)
+#   - aws_subnet.private[1] (10.0.4.0/24, us-east-1b)
+#   - aws_internet_gateway.main
+#   - aws_route_table.public + associations
+# 
+# Lambda Functions (14 resources):
+#   - aws_lambda_function.auto_remediation (Python 3.11, 256MB)
+#   - aws_lambda_function.security_response (Python 3.11, 256MB)
+#   - aws_cloudwatch_event_rule.security_group_changes
+#   - aws_cloudwatch_event_rule.ec2_state_changes
+#   - aws_cloudwatch_event_target (2 targets)
+#   - aws_cloudwatch_log_group (2 groups, 14-day retention)
+#   - aws_lambda_permission (2 permissions)
+#   - aws_iam_role.lambda_role
+#   - aws_iam_role_policy.lambda_policy
+#   - aws_sns_topic.notifications
+#   - aws_sns_topic_subscription.email (your-email@example.com)
+```
+
+**6.5: Deploy Infrastructure**
+
+```bash
+# Apply the configuration (creates AWS resources)
 terraform apply
 
-# Type 'yes' when prompted
-# This will take 5-10 minutes to complete
+# Review the plan again, then type 'yes' when prompted
+# 
+# Do you want to perform these actions?
+#   Terraform will perform the actions described above.
+#   Only 'yes' will be accepted to approve.
+# 
+#   Enter a value: yes
+
+# ⏳ Deployment in progress... (5-10 minutes)
+# 
+# Expected output:
+# module.vpc.aws_vpc.main: Creating...
+# module.vpc.aws_vpc.main: Creation complete after 3s
+# module.vpc.aws_internet_gateway.main: Creating...
+# module.vpc.aws_subnet.public[0]: Creating...
+# module.vpc.aws_subnet.public[1]: Creating...
+# ...
+# module.lambda_functions.aws_lambda_function.auto_remediation: Creating...
+# module.lambda_functions.aws_lambda_function.security_response: Creating...
+# module.lambda_functions.aws_sns_topic.notifications: Creating...
+# module.lambda_functions.aws_sns_topic_subscription.email: Creating...
+# ...
+# 
+# Apply complete! Resources: 21 added, 0 changed, 0 destroyed.
 ```
+
+**6.6: Verify Deployment Success**
+
+```bash
+# Check VPC creation
+aws ec2 describe-vpcs --filters "Name=tag:Name,Values=agentic-devsecops-dev-vpc"
+
+# Check Lambda functions
+aws lambda list-functions --query "Functions[?contains(FunctionName, 'agentic')].FunctionName"
+
+# Check SNS topic
+aws sns list-topics --query "Topics[?contains(TopicArn, 'agentic-devsecops-dev-notifications')]"
+
+# Expected output: All resources created successfully!
+```
+
+**6.7: Important Next Step**
+
+⚠️ **CHECK YOUR EMAIL**: You should receive an SNS subscription confirmation email within 1-2 minutes.
+
+```
+From: AWS Notifications <no-reply@sns.amazonaws.com>
+Subject: AWS Notification - Subscription Confirmation
+
+You have chosen to subscribe to the topic:
+arn:aws:sns:us-east-1:123456789012:agentic-devsecops-dev-notifications
+
+To confirm this subscription, click or visit the link below:
+[Confirm subscription]
+```
+
+**You MUST click the confirmation link** to receive Lambda notifications!
+
+---
 
 ---
 
@@ -966,10 +1121,14 @@ git push origin test/ai-review
 
 ---
 
-##### Step 9: Monitor AWS Lambda Functions
+##### Step 9: Deploy and Monitor AWS Lambda Functions
+
+**9.1: Verify Lambda Deployment**
+
+After running `terraform apply` in Step 6, verify your Lambda functions are deployed:
 
 ```bash
-# Check Lambda function deployment
+# Check Lambda functions
 aws lambda list-functions --query "Functions[?contains(FunctionName, 'agentic')].FunctionName"
 
 # Expected output:
@@ -978,11 +1137,306 @@ aws lambda list-functions --query "Functions[?contains(FunctionName, 'agentic')]
 #     "agentic-devsecops-dev-security-response"
 # ]
 
-# View Lambda logs
+# Get function details
+aws lambda get-function --function-name agentic-devsecops-dev-auto-remediation
+
+# Expected output shows:
+# - Runtime: python3.11
+# - Handler: handler.lambda_handler
+# - MemorySize: 256
+# - Timeout: 300
+# - State: Active
+```
+
+**9.2: Confirm SNS Email Subscription**
+
+⚠️ **IMPORTANT**: You must confirm your email subscription to receive notifications!
+
+```bash
+# 1. Check your email inbox (the one you configured in terraform.tfvars)
+# Look for: "AWS Notification - Subscription Confirmation"
+# From: AWS Notifications <no-reply@sns.amazonaws.com>
+
+# 2. Click the "Confirm subscription" link in the email
+
+# 3. Verify subscription is active
+aws sns list-subscriptions-by-topic \
+    --topic-arn $(aws sns list-topics --query "Topics[?contains(TopicArn, 'agentic-devsecops-dev-notifications')].TopicArn" --output text)
+
+# Expected output:
+# {
+#     "Subscriptions": [
+#         {
+#             "SubscriptionArn": "arn:aws:sns:us-east-1:...",
+#             "Owner": "123456789012",
+#             "Protocol": "email",
+#             "Endpoint": "your-email@example.com",
+#             "TopicArn": "arn:aws:sns:us-east-1:...:agentic-devsecops-dev-notifications"
+#         }
+#     ]
+# }
+```
+
+**9.3: View Lambda Resources Created**
+
+The `terraform apply` created 14 Lambda-related resources:
+
+| Resource Type | Name | Purpose |
+|--------------|------|---------|
+| **Lambda Functions** | `auto-remediation` | Automatically fixes security issues |
+| | `security-response` | Responds to security events |
+| **EventBridge Rules** | `security_group_changes` | Triggers on SG modifications |
+| | `ec2_state_changes` | Triggers on EC2 state changes |
+| **CloudWatch Log Groups** | `/aws/lambda/...-auto-remediation` | 14-day retention logs |
+| | `/aws/lambda/...-security-response` | 14-day retention logs |
+| **EventBridge Targets** | Auto-remediation target | Routes SG events to Lambda |
+| | Security response target | Routes EC2 events to Lambda |
+| **Lambda Permissions** | EventBridge invoke permission | Allows EventBridge to call Lambda |
+| **IAM Role** | `lambda_role` | Execution role for Lambda |
+| **IAM Policy** | `lambda_policy` | EC2, S3, CloudWatch permissions |
+| **SNS Topic** | `notifications` | Email/Slack notifications |
+| **SNS Subscription** | Email subscription | Sends emails to your address |
+
+**9.4: Monitor Lambda Logs (Real-Time)**
+
+```bash
+# Tail auto-remediation logs (Ctrl+C to exit)
 aws logs tail /aws/lambda/agentic-devsecops-dev-auto-remediation --follow
 
-# Test auto-remediation (create a security group with 0.0.0.0/0 open)
-# Lambda will automatically detect and fix it
+# Tail security-response logs
+aws logs tail /aws/lambda/agentic-devsecops-dev-security-response --follow
+
+# View recent logs (last 1 hour)
+aws logs tail /aws/lambda/agentic-devsecops-dev-auto-remediation --since 1h
+
+# View logs with filter pattern (errors only)
+aws logs tail /aws/lambda/agentic-devsecops-dev-auto-remediation \
+    --filter-pattern "ERROR" \
+    --follow
+```
+
+**9.5: Test Auto-Remediation (Dry-Run Mode)**
+
+By default, `auto_fix_enabled = false` means Lambda will **detect but not fix** issues (safe for testing).
+
+**Test 1: Create Insecure Security Group**
+
+```bash
+# Create a security group with open SSH (insecure!)
+aws ec2 create-security-group \
+    --group-name test-insecure-sg \
+    --description "Test security group for Lambda auto-remediation" \
+    --vpc-id $(aws ec2 describe-vpcs --filters "Name=tag:Name,Values=agentic-devsecops-dev-vpc" --query "Vpcs[0].VpcId" --output text)
+
+# Get the security group ID
+SG_ID=$(aws ec2 describe-security-groups --filters "Name=group-name,Values=test-insecure-sg" --query "SecurityGroups[0].GroupId" --output text)
+
+# Add insecure rule (SSH open to the world - BAD!)
+aws ec2 authorize-security-group-ingress \
+    --group-id $SG_ID \
+    --protocol tcp \
+    --port 22 \
+    --cidr 0.0.0.0/0
+
+# This triggers EventBridge → Lambda within seconds!
+```
+
+**Test 2: Check Lambda Execution**
+
+```bash
+# Wait 30-60 seconds for Lambda to process the event
+
+# View Lambda logs (should show detection)
+aws logs tail /aws/lambda/agentic-devsecops-dev-auto-remediation --since 5m
+
+# Expected log output:
+# 🔍 DETECTION MODE: Auto-fix is DISABLED
+# 🚨 Security Issue Detected!
+# ├─ Type: Overly permissive security group
+# ├─ Resource: sg-xxxxx (test-insecure-sg)
+# ├─ Issue: SSH (port 22) open to 0.0.0.0/0
+# ├─ Risk Level: HIGH
+# └─ Recommendation: Restrict to specific IP ranges
+# 
+# ⚠️  Would fix in production mode (auto_fix_enabled = true)
+# 📧 Sending notification to SNS...
+```
+
+**Test 3: Check Your Email**
+
+You should receive an email notification:
+
+```
+Subject: [DETECTION] Security Issue Found in dev Environment
+
+Body:
+Security Group Issue Detected
+
+Resource: sg-xxxxx (test-insecure-sg)
+Issue: SSH (port 22) open to 0.0.0.0/0
+Severity: HIGH
+Environment: dev
+Mode: Dry-run (detection only)
+
+Recommendation: Restrict SSH access to specific IP ranges
+
+AWS Console:
+https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#SecurityGroups:group-id=sg-xxxxx
+```
+
+**Test 4: Verify Security Group Still Has Insecure Rule (Dry-Run)**
+
+```bash
+# Check security group rules (should still have 0.0.0.0/0 because dry-run mode)
+aws ec2 describe-security-groups --group-ids $SG_ID --query "SecurityGroups[0].IpPermissions"
+
+# Expected output shows SSH still open to 0.0.0.0/0 (not fixed in dry-run)
+```
+
+**9.6: Test Auto-Remediation (Production Mode - Auto-Fix)**
+
+⚠️ **WARNING**: This will automatically modify AWS resources!
+
+```bash
+# Navigate to terraform dev environment
+cd terraform/environments/dev
+
+# Edit terraform.tfvars
+nano terraform.tfvars  # or: vim, code, etc.
+
+# Change this line:
+# auto_fix_enabled = false  →  auto_fix_enabled = true
+
+# Apply the change
+terraform apply
+
+# Type 'yes' when prompted
+
+# Expected output:
+# module.lambda_functions.aws_lambda_function.auto_remediation: Modifying...
+# Apply complete! Resources: 0 added, 1 changed, 0 destroyed.
+```
+
+**Now test with auto-fix enabled:**
+
+```bash
+# Create another insecure rule
+aws ec2 authorize-security-group-ingress \
+    --group-id $SG_ID \
+    --protocol tcp \
+    --port 3389 \
+    --cidr 0.0.0.0/0
+
+# Wait 30-60 seconds
+
+# Check Lambda logs
+aws logs tail /aws/lambda/agentic-devsecops-dev-auto-remediation --since 5m
+
+# Expected log output:
+# ✅ AUTO-FIX MODE: Enabled
+# 🚨 Security Issue Detected!
+# ├─ Type: Overly permissive security group
+# ├─ Resource: sg-xxxxx (test-insecure-sg)
+# ├─ Issue: RDP (port 3389) open to 0.0.0.0/0
+# ├─ Risk Level: CRITICAL
+# └─ Action: REMOVING insecure rule
+# 
+# 🔧 Fixing security issue...
+# ✅ Successfully removed insecure ingress rule
+# ✅ Applied least-privilege access
+# 📧 Notification sent
+```
+
+**Verify the fix was applied:**
+
+```bash
+# Check security group rules (RDP rule should be REMOVED)
+aws ec2 describe-security-groups --group-ids $SG_ID --query "SecurityGroups[0].IpPermissions"
+
+# RDP 0.0.0.0/0 rule should be gone!
+```
+
+**9.7: Clean Up Test Resources**
+
+```bash
+# Delete test security group
+aws ec2 delete-security-group --group-id $SG_ID
+
+# Verify deletion
+aws ec2 describe-security-groups --group-ids $SG_ID
+# Expected: An error: "does not exist" (this is correct!)
+```
+
+**9.8: Monitor Lambda Performance**
+
+```bash
+# Get Lambda metrics (invocation count, errors, duration)
+aws cloudwatch get-metric-statistics \
+    --namespace AWS/Lambda \
+    --metric-name Invocations \
+    --dimensions Name=FunctionName,Value=agentic-devsecops-dev-auto-remediation \
+    --start-time $(date -u -d '1 hour ago' +%Y-%m-%dT%H:%M:%S) \
+    --end-time $(date -u +%Y-%m-%dT%H:%M:%S) \
+    --period 300 \
+    --statistics Sum
+
+# Check for errors
+aws cloudwatch get-metric-statistics \
+    --namespace AWS/Lambda \
+    --metric-name Errors \
+    --dimensions Name=FunctionName,Value=agentic-devsecops-dev-auto-remediation \
+    --start-time $(date -u -d '1 hour ago' +%Y-%m-%dT%H:%M:%S) \
+    --end-time $(date -u +%Y-%m-%dT%H:%M:%S) \
+    --period 300 \
+    --statistics Sum
+
+# Check average duration (execution time)
+aws cloudwatch get-metric-statistics \
+    --namespace AWS/Lambda \
+    --metric-name Duration \
+    --dimensions Name=FunctionName,Value=agentic-devsecops-dev-auto-remediation \
+    --start-time $(date -u -d '1 hour ago' +%Y-%m-%dT%H:%M:%S) \
+    --end-time $(date -u +%Y-%m-%dT%H:%M:%S) \
+    --period 300 \
+    --statistics Average
+```
+
+**9.9: View Lambda in AWS Console**
+
+**Option 1: Command Line (opens in browser)**
+```bash
+# Get Lambda function ARN
+LAMBDA_ARN=$(aws lambda get-function \
+    --function-name agentic-devsecops-dev-auto-remediation \
+    --query "Configuration.FunctionArn" \
+    --output text)
+
+echo "Lambda Console: https://console.aws.amazon.com/lambda/home?region=us-east-1#/functions/agentic-devsecops-dev-auto-remediation"
+```
+
+**Option 2: Manual Navigation**
+1. Go to: https://console.aws.amazon.com/lambda
+2. Region: **us-east-1** (top-right dropdown)
+3. Click: **Functions** (left sidebar)
+4. Find: `agentic-devsecops-dev-auto-remediation`
+5. Explore:
+   - **Code** tab: View Lambda function code
+   - **Monitor** tab: Invocations, errors, duration graphs
+   - **Configuration** tab: Memory, timeout, environment variables
+   - **Logs** tab: CloudWatch logs (same as CLI)
+
+**9.10: Cost Tracking (Lambda)**
+
+Lambda is **FREE** for personal use:
+- **Free Tier**: 1 million requests/month + 400,000 GB-seconds compute
+- **Your Usage**: ~10-100 invocations/month (far below free tier)
+- **Cost**: $0/month
+
+```bash
+# Check AWS Free Tier usage
+# Go to: https://console.aws.amazon.com/billing/home#/freetier
+# Filter: Lambda
+# Expected: Well under 1M requests/month limit
 ```
 
 ---
@@ -1155,24 +1609,216 @@ cat ai_review_output.md
 
 Your Agentic AI DevSecOps environment is now fully operational:
 
-✅ **AWS Infrastructure**: Lambda, EventBridge, VPC, Security Groups  
-✅ **Local AI**: Ollama + LLaMA 3.1 ready for code review  
-✅ **Security Tools**: TFLint, tfsec, Checkov, Trivy installed  
-✅ **GitHub Actions**: Automated workflows running  
-✅ **Auto-Remediation**: Lambda functions monitoring AWS  
-✅ **ChatOps**: Notifications configured (if setup)
+✅ **AWS Infrastructure Deployed**:
+- VPC with public/private subnets (10.0.0.0/16)
+- Internet Gateway and route tables
+- Security groups with least-privilege access
+- Lambda functions for auto-remediation
+- EventBridge rules monitoring AWS events
+- CloudWatch log groups (14-day retention)
+- SNS notifications to your email
+
+✅ **Lambda Auto-Remediation**:
+- 2 Lambda functions (auto-remediation, security-response)
+- Python 3.11 runtime, 256MB memory, 300s timeout
+- EventBridge triggers (security group + EC2 changes)
+- IAM roles with appropriate permissions
+- Dry-run mode enabled (safe for testing)
+
+✅ **Local AI Ready**:
+- Ollama v0.14.1 installed
+- LLaMA 3.1:8b model (~4.7GB) downloaded
+- AI code reviewer working
+- Policy generator available
+
+✅ **Security Tools Installed**:
+- TFLint (Terraform linting)
+- tfsec (security scanning)
+- Checkov (compliance checking)
+- Trivy (vulnerability scanning)
+- OPA (policy validation)
+
+✅ **GitHub Integration**:
+- Repository: omade88/agentic-devsecops-aws
+- GitHub Actions workflows running
+- S3 backend for Terraform state
+- DynamoDB state locking
+- Automated security scans on PRs
+
+✅ **ChatOps (Optional)**:
+- Slack webhook configured (if you completed Step 7.1)
+- SNS email notifications active
 
 **Cost Tracking**: $0/month (all within free tiers)
+- Lambda: 1M requests/month free (using ~10-100/month)
+- EventBridge: 14M events free (using ~1K/month)
+- CloudWatch: 10 metrics free (using 5)
+- S3: 5GB free (using <1GB)
+- Total: **$0/month** 🎉
+
+---
+
+#### What Just Got Deployed?
+
+**Total Resources Created: 21**
+
+| Category | Resources | Description |
+|----------|-----------|-------------|
+| **Networking** | 7 | VPC, subnets (2 public, 2 private), IGW, route table, associations |
+| **Lambda Functions** | 2 | Auto-remediation (370 lines Python), Security-response |
+| **EventBridge** | 4 | 2 rules (SG changes, EC2 changes) + 2 targets |
+| **CloudWatch Logs** | 2 | Log groups with 14-day retention |
+| **Lambda Permissions** | 2 | Allow EventBridge to invoke Lambda |
+| **IAM** | 2 | Lambda execution role + policy |
+| **SNS** | 2 | Notification topic + email subscription |
+
+**Infrastructure Details:**
+```
+VPC (10.0.0.0/16, us-east-1)
+├── Public Subnets
+│   ├── 10.0.1.0/24 (us-east-1a)
+│   └── 10.0.2.0/24 (us-east-1b)
+├── Private Subnets
+│   ├── 10.0.3.0/24 (us-east-1a)
+│   └── 10.0.4.0/24 (us-east-1b)
+├── Internet Gateway
+└── Route Tables
+
+Lambda Auto-Remediation
+├── Function: auto-remediation (Python 3.11, 256MB)
+│   ├── Trigger: EventBridge (security group changes)
+│   ├── Trigger: EventBridge (EC2 state changes)
+│   ├── Logs: CloudWatch (/aws/lambda/...-auto-remediation)
+│   └── Permissions: EC2, S3, CloudWatch access
+├── Function: security-response (Python 3.11, 256MB)
+│   ├── Logs: CloudWatch (/aws/lambda/...-security-response)
+│   └── Permissions: EC2, IAM, CloudWatch access
+├── SNS Topic: agentic-devsecops-dev-notifications
+│   └── Email: your-email@example.com (confirmed ✅)
+└── Mode: Dry-run (auto_fix_enabled = false)
+```
 
 ---
 
 #### Next Steps
 
-1. **Create infrastructure changes** → Open PR → Watch AI review
-2. **Deploy workloads** using Terraform modules in `terraform/modules/`
-3. **Customize OPA policies** in `policies/templates/`
-4. **Set up ChatOps** for team notifications
-5. **Monitor costs** in AWS Cost Explorer
+**Immediate Actions (Required):**
+
+1. **✅ Confirm SNS Email Subscription**
+   - Check inbox for "AWS Notification - Subscription Confirmation"
+   - Click confirmation link
+   - Verify in AWS Console: SNS → Subscriptions → Status should show "Confirmed"
+
+2. **🧪 Test Lambda Auto-Remediation (Dry-Run)**
+   ```bash
+   # Create insecure security group to trigger Lambda
+   cd terraform/environments/dev
+   
+   # See Step 9.5 for complete testing instructions
+   # Lambda will DETECT but not fix (safe mode)
+   ```
+
+3. **📊 Monitor Lambda Logs**
+   ```bash
+   # Watch Lambda execution in real-time
+   aws logs tail /aws/lambda/agentic-devsecops-dev-auto-remediation --follow
+   
+   # Press Ctrl+C to stop
+   ```
+
+**Learning & Exploration:**
+
+4. **🤖 Test AI Code Review**
+   ```bash
+   # Create a test PR with Terraform changes
+   git checkout -b test/lambda-monitoring
+   echo "# Monitor Lambda performance" >> README.md
+   git add . && git commit -m "docs: Add Lambda monitoring notes"
+   git push origin test/lambda-monitoring
+   
+   # Open PR on GitHub, watch AI analysis
+   ```
+
+5. **🔒 Create Infrastructure Changes** 
+   - Modify Terraform files in `terraform/modules/`
+   - Open PR → Watch automated security scans
+   - See TFLint, tfsec, Checkov, Trivy results
+   - Review AI-generated recommendations
+
+6. **📜 Customize OPA Policies**
+   - Edit policies in `policies/templates/`
+   - Examples:
+     - `ec2-compliance.rego` - EC2 compliance rules
+     - `s3-security.rego` - S3 bucket security
+     - `security-group.rego` - Security group validation
+   - Test with: `opa test policies/`
+
+7. **💬 Set Up ChatOps** (Optional but Recommended)
+   - Complete Step 7.1 for Slack integration
+   - Receive notifications for:
+     - Lambda auto-remediations
+     - Security violations detected
+     - Deployment status
+     - Cost optimization recommendations
+
+8. **🚀 Enable Auto-Fix Mode** (When Ready)
+   ```bash
+   # After testing dry-run mode
+   cd terraform/environments/dev
+   nano terraform.tfvars
+   # Change: auto_fix_enabled = false → true
+   terraform apply
+   
+   # Lambda will now AUTOMATICALLY FIX security issues!
+   ```
+
+**Advanced Usage:**
+
+9. **📈 Monitor Costs in AWS**
+   - Go to: https://console.aws.amazon.com/billing/home#/freetier
+   - Filter: Lambda, EventBridge, CloudWatch
+   - Expected: All within free tier ($0/month)
+
+10. **🔄 Deploy to Staging** (Optional)
+    ```bash
+    # Configure staging environment
+    cd terraform/environments/staging
+    
+    # Update terraform.tfvars with staging values
+    nano terraform.tfvars
+    # Use different VPC CIDR: 10.1.0.0/16
+    # Use different email or same
+    
+    # Deploy staging
+    terraform init
+    terraform plan
+    terraform apply
+    ```
+
+11. **🏭 Production Deployment** (Portfolio Ready)
+    ```bash
+    # Deploy to production when ready to showcase
+    cd terraform/environments/prod
+    
+    # Update terraform.tfvars
+    # Use production-grade settings
+    # Enable auto-fix for production
+    
+    terraform init && terraform plan && terraform apply
+    ```
+
+12. **📚 Document Your Learning**
+    - Take screenshots of Lambda logs
+    - Document auto-remediation examples
+    - Create architecture diagrams
+    - Add to portfolio/resume
+
+**Maintenance & Best Practices:**
+
+- **Weekly**: Review CloudWatch logs for anomalies
+- **Monthly**: Check AWS Free Tier usage dashboard
+- **Quarterly**: Update Terraform modules and providers
+- **Regularly**: Pull latest AI model updates (`ollama pull llama3.1:8b`)
 
 For troubleshooting, see [Troubleshooting Section](#troubleshooting) below.
 
@@ -1615,6 +2261,194 @@ $env:Path += ";C:\Users\$env:USERNAME\AppData\Local\Programs\Ollama"
 # Verify PATH contains your programs
 $env:Path -split ';' | Select-String "Ollama"
 ```
+
+### Issue: Lambda not receiving events
+
+**Problem**: Created insecure security group but Lambda didn't trigger
+
+**Solution**:
+
+```bash
+# 1. Check EventBridge rules exist
+aws events list-rules --query "Rules[?contains(Name, 'agentic')]"
+
+# 2. Check Lambda permissions
+aws lambda get-policy --function-name agentic-devsecops-dev-auto-remediation
+
+# 3. Check CloudWatch logs for errors
+aws logs tail /aws/lambda/agentic-devsecops-dev-auto-remediation --since 1h
+
+# 4. Verify EventBridge targets
+aws events list-targets-by-rule --rule agentic-devsecops-dev-security-group-changes
+
+# 5. Test Lambda directly (manual invocation)
+aws lambda invoke \
+    --function-name agentic-devsecops-dev-auto-remediation \
+    --payload '{"detail":{"eventName":"AuthorizeSecurityGroupIngress"}}' \
+    response.json
+
+# View response
+cat response.json
+```
+
+### Issue: SNS email not received
+
+**Problem**: Didn't receive SNS subscription confirmation or notifications
+
+**Solution**:
+
+```bash
+# 1. Check email address in terraform.tfvars
+cd terraform/environments/dev
+grep sns_email terraform.tfvars
+# Should show your correct email
+
+# 2. Check SNS subscription status
+aws sns list-subscriptions-by-topic \
+    --topic-arn $(aws sns list-topics --query "Topics[?contains(TopicArn, 'agentic-devsecops-dev-notifications')].TopicArn" --output text)
+
+# If "SubscriptionArn" shows "PendingConfirmation", check your spam folder
+
+# 3. Resend confirmation (if needed)
+# Delete and recreate subscription:
+terraform taint module.lambda_functions.aws_sns_topic_subscription.email
+terraform apply
+
+# 4. Check spam/junk folder for:
+# From: AWS Notifications <no-reply@sns.amazonaws.com>
+# Subject: AWS Notification - Subscription Confirmation
+```
+
+### Issue: Lambda function errors
+
+**Problem**: Lambda showing errors in CloudWatch logs
+
+**Solution**:
+
+```bash
+# 1. View error logs
+aws logs tail /aws/lambda/agentic-devsecops-dev-auto-remediation \
+    --filter-pattern "ERROR" \
+    --since 1h
+
+# 2. Check IAM permissions
+aws lambda get-function --function-name agentic-devsecops-dev-auto-remediation \
+    --query "Configuration.Role"
+
+# Get role details
+aws iam get-role --role-name <role-name-from-above>
+
+# 3. Verify Lambda environment variables
+aws lambda get-function-configuration \
+    --function-name agentic-devsecops-dev-auto-remediation \
+    --query "Environment"
+
+# 4. Check function code integrity
+aws lambda get-function \
+    --function-name agentic-devsecops-dev-auto-remediation \
+    --query "Code.Location"
+
+# 5. Redeploy Lambda (if code is corrupted)
+cd terraform/environments/dev
+terraform taint module.lambda_functions.aws_lambda_function.auto_remediation
+terraform apply
+```
+
+### Issue: Terraform provider version conflicts
+
+**Problem**: `Error: locked provider ... does not match configured version constraint`
+
+**Solution**:
+
+```bash
+# Example error:
+# locked provider hashicorp/aws 6.28.0 does not match
+# configured version constraint ~> 5.0
+
+# This means different modules require different AWS provider versions
+
+# 1. Check current provider versions
+terraform version
+
+# 2. Update all modules to use compatible versions
+# Edit terraform/modules/lambda-functions/main.tf:
+# Change: version = "~> 5.0"
+# To:     version = "~> 6.0"
+
+# 3. Re-initialize Terraform
+terraform init -upgrade
+
+# 4. If still failing, remove lock file and re-init
+rm .terraform.lock.hcl
+terraform init
+```
+
+### Issue: Auto-fix not working (dry-run mode stuck)
+
+**Problem**: Lambda detects issues but doesn't fix them
+
+**Solution**:
+
+```bash
+# Verify auto-fix mode setting
+cd terraform/environments/dev
+grep auto_fix_enabled terraform.tfvars
+
+# Should show:
+# auto_fix_enabled = false  # Dry-run (detect only)
+# or
+# auto_fix_enabled = true   # Auto-fix (production mode)
+
+# To enable auto-fix:
+nano terraform.tfvars
+# Change: auto_fix_enabled = false
+# To:     auto_fix_enabled = true
+
+# Apply the change
+terraform apply
+
+# Verify Lambda received the updated environment variable
+aws lambda get-function-configuration \
+    --function-name agentic-devsecops-dev-auto-remediation \
+    --query "Environment.Variables.AUTO_FIX_ENABLED"
+# Should output: "true"
+```
+
+### Issue: High Lambda costs
+
+**Problem**: Concerned about Lambda charges
+
+**Solution**:
+
+```bash
+# Check Lambda invocation count
+aws cloudwatch get-metric-statistics \
+    --namespace AWS/Lambda \
+    --metric-name Invocations \
+    --dimensions Name=FunctionName,Value=agentic-devsecops-dev-auto-remediation \
+    --start-time $(date -u -d '30 days ago' +%Y-%m-%dT%H:%M:%S) \
+    --end-time $(date -u +%Y-%m-%dT%H:%M:%S) \
+    --period 2592000 \
+    --statistics Sum
+
+# Compare to free tier: 1,000,000 requests/month
+
+# Check AWS Cost Explorer
+# https://console.aws.amazon.com/cost-management/home#/custom
+
+# Filter by:
+# - Service: Lambda
+# - Time: Last 30 days
+
+# Expected for personal use: $0 (within free tier)
+
+# If charges appear:
+# - Reduce Lambda timeout (currently 300s)
+# - Reduce memory (currently 256MB)
+# - Add EventBridge filters to reduce invocations
+```
+
+
 
 ### Windows Best Practices
 
