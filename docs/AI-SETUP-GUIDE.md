@@ -309,11 +309,39 @@ aws configure
 ```
 
 #### Issue: Ollama installation fails on Windows
-```bash
-# Download manually from: https://ollama.com/download/windows
-# Run OllamaSetup.exe installer
-# Then: ollama pull llama3.1:8b
+```powershell
+# Option 1: Install via Chocolatey (Recommended)
+# First, install Chocolatey if not already installed:
+# Visit: https://chocolatey.org/install
+# Then run in PowerShell (as Administrator):
+choco install ollama
+
+# Option 2: Manual Installation
+# Download from: https://ollama.com/download/windows
+# Run OllamaSetup.exe installer (1.17GB download)
+# Installation path: C:\Users\<username>\AppData\Local\Programs\Ollama\
+
+# IMPORTANT: After installation, restart PowerShell
+# Or add to PATH temporarily:
+$env:Path += ";C:\Users\$env:USERNAME\AppData\Local\Programs\Ollama"
+
+# Verify installation
+ollama --version
+# Expected: ollama version is 0.14.1 (or later)
+
+# Pull LLaMA 3.1:8b model (~4.7GB download)
+ollama pull llama3.1:8b
+
+# Test the model
+ollama run llama3.1:8b "Hello, are you ready?"
+# Expected: AI responds with a greeting
 ```
+
+**Windows-Specific Notes:**
+- Use **PowerShell** (not Git Bash) for Ollama commands
+- Git Bash doesn't recognize Windows apps in PATH automatically
+- Ollama runs as a Windows service after installation
+- No need for `ollama serve` on Windows (starts automatically)
 
 ---
 
@@ -917,12 +945,24 @@ git push origin test/ai-review
 ```
 
 **What happens next**:
-1. GitHub Actions workflows trigger automatically
-2. AI code review analyzes your changes (using Ollama locally)
-3. Security scans run (TFLint, tfsec, Checkov, Trivy)
-4. OPA policies validate compliance
-5. Results appear as PR comments
-6. Notifications sent to Discord/Slack (if configured)
+1. ✅ **GitHub Actions workflows trigger automatically**
+2. ✅ **Security scans run** (TFLint, tfsec, Checkov, Trivy)
+3. ✅ **Terraform validation** checks syntax and configuration
+4. ✅ **OPA policies** validate compliance rules
+5. ✅ **Results appear** as workflow status on PR
+6. ✅ **Notifications sent** to Discord/Slack (if configured)
+
+**Note about AI Code Review:**
+- The AI review runs **locally** on your machine, not in GitHub Actions
+- To see AI review output, run `python3 ai-assistant/pr-reviewer.py` locally
+- This keeps costs at $0 (no cloud AI API calls needed)
+
+**Workflow Files Fixed (Latest Version):**
+- ✅ **terraform-plan.yml**: Now uses correct working directory (`terraform/environments/dev`)
+- ✅ **terraform-apply.yml**: Manual trigger only (safety feature), proper AWS credentials
+- ✅ **Updated actions**: Using latest versions (v4 for checkout, v3 for Terraform)
+- ✅ **Terraform version**: 1.6.0 (matches local version)
+- ✅ **Added validation step**: Catches errors before planning
 
 ---
 
@@ -949,18 +989,165 @@ aws logs tail /aws/lambda/agentic-devsecops-dev-auto-remediation --follow
 
 ##### Step 10: Verify AI Assistant is Running
 
-```bash
-# Test local AI code reviewer
-cd ai-assistant
-python3 pr-reviewer.py
+**10.1: Install Ollama and Pull LLaMA Model**
 
-# Test AI policy generator
+<details>
+<summary><b>🪟 Windows (PowerShell)</b></summary>
+
+```powershell
+# Install Ollama via Chocolatey
+choco install ollama
+
+# After installation, restart PowerShell or add to PATH:
+$env:Path += ";C:\Users\$env:USERNAME\AppData\Local\Programs\Ollama"
+
+# Verify installation
+ollama --version
+# Expected: ollama version is 0.14.1 (or later)
+
+# Pull LLaMA 3.1:8b model (~4.7GB, one-time download)
+ollama pull llama3.1:8b
+# This will take 5-10 minutes depending on internet speed
+
+# Test the model
+ollama run llama3.1:8b "Hello, are you ready?"
+# Expected output: AI responds with a greeting
+# Press Ctrl+D or type /bye to exit
+```
+</details>
+
+<details>
+<summary><b>🐧 Linux / 🍎 macOS</b></summary>
+
+```bash
+# Install Ollama
+# Linux:
+curl -fsSL https://ollama.ai/install.sh | sh
+
+# macOS:
+brew install ollama
+
+# Start Ollama service (Linux only)
+ollama serve &
+
+# Pull LLaMA 3.1:8b model (~4.7GB)
+ollama pull llama3.1:8b
+
+# Test the model
+ollama run llama3.1:8b "Hello, are you ready?"
+```
+</details>
+
+**10.2: Install AI Assistant Dependencies**
+
+```bash
+# Navigate to ai-assistant directory
+cd ai-assistant
+
+# Install Python dependencies
+python3 -m pip install -r requirements.txt
+# or: pip install -r requirements.txt
+
+# Expected packages installed:
+# - requests>=2.31.0
+# - pyyaml>=6.0.1
+# - jinja2>=3.1.2
+```
+
+**10.3: Test AI Code Reviewer**
+
+```bash
+# IMPORTANT: The PR reviewer needs git commits to analyze
+# It compares HEAD^ (previous commit) vs HEAD (current commit)
+
+# Option 1: Test with existing commits
+python3 pr-reviewer.py
+# If you see "No Terraform files changed", create a test commit (Option 2)
+
+# Option 2: Create a test commit
+# Create a test branch
+cd ..
+git checkout -b test/ai-code-review
+
+# Make a small change to Terraform files
+cd terraform/environments/dev
+echo "# Test comment" >> variables.tf
+
+# Commit the change
+git add variables.tf
+git commit -m "test: verify AI code reviewer"
+
+# Now run the AI reviewer
+cd ../../../ai-assistant
+python3 pr-reviewer.py
+```
+
+**Expected Output:**
+```
+🤖 AI-Powered PR Reviewer (Ollama)
+==================================================
+✅ Connected to Ollama at http://localhost:11434
+📦 Using model: llama3.1:8b
+
+📝 Analyzing 1 file(s)...
+
+🔍 Analyzing: /path/to/terraform/environments/dev/variables.tf
+  ✅ Complete
+
+==================================================
+✅ Review complete! Output saved to: ai_review_output.md
+
+Preview:
+## 🤖 AI-Powered Code Review (Ollama)
+
+**Model:** `llama3.1:8b`
+
+✅ **No issues found!** Code looks good.
+
+---
+*AI-powered review using free local models via Ollama.*
+```
+
+**10.4: Test AI Policy Generator**
+
+```bash
+# Interactive mode
 python3 policy-generator.py --interactive
 
 # When prompted, try:
 # "Create a policy to block all SSH access from the internet"
 # AI will generate complete OPA policy code!
+
+# Example output:
+# package terraform.security
+# 
+# deny[msg] {
+#     resource := input.resource_changes[_]
+#     resource.type == "aws_security_group_rule"
+#     resource.change.after.from_port == 22
+#     resource.change.after.cidr_blocks[_] == "0.0.0.0/0"
+#     msg := "SSH (port 22) should not be open to 0.0.0.0/0"
+# }
 ```
+
+**10.5: View AI Review Output**
+
+```bash
+# Open the generated review file
+cat ai_review_output.md
+# or: code ai_review_output.md  # VS Code
+# or: notepad ai_review_output.md  # Windows
+```
+
+**Troubleshooting AI Reviewer:**
+
+- **"No Terraform files changed"**: Create a commit with Terraform changes (see Option 2 above)
+- **"Ollama is not running"**: 
+  - Windows: Restart PowerShell, Ollama service starts automatically
+  - Linux/Mac: Run `ollama serve &` in background
+- **"Model not found"**: Run `ollama pull llama3.1:8b` again
+- **UnicodeEncodeError**: This is fixed in the latest version (UTF-8 encoding added)
+- **Path not found**: The PR reviewer now works from any directory (fixed in latest update)
 
 ---
 
@@ -1402,7 +1589,80 @@ ollama pull mistral:7b  # Only 4.1GB
 ollama pull llama3.1:8b-q4_0  # Smaller, still good quality
 
 # Monitor memory usage
-htop  # or top
+htop  # or top on Linux/Mac
+# Task Manager on Windows (Ctrl+Shift+Esc)
+```
+
+### Issue: Command not found on Windows
+
+**Problem**: Commands like `terraform`, `ollama`, or `python3` not recognized
+
+**Solution**:
+
+```powershell
+# Option 1: Restart PowerShell after installation
+# Many installers add to PATH but require terminal restart
+
+# Option 2: Add to PATH temporarily (current session only)
+$env:Path += ";C:\Path\To\Your\Program"
+
+# Example for Ollama:
+$env:Path += ";C:\Users\$env:USERNAME\AppData\Local\Programs\Ollama"
+
+# Option 3: Use full path
+& "C:\Users\$env:USERNAME\AppData\Local\Programs\Ollama\ollama.exe" --version
+
+# Verify PATH contains your programs
+$env:Path -split ';' | Select-String "Ollama"
+```
+
+### Windows Best Practices
+
+**Use the Right Terminal for Each Tool:**
+
+| Tool | Use Terminal | Why |
+|------|-------------|-----|
+| **Ollama** | PowerShell | Windows app, needs Windows PATH |
+| **Git** | Git Bash | Better git integration |
+| **Terraform** | Git Bash or PowerShell | Works in both |
+| **Python** | PowerShell or Git Bash | Works in both |
+| **AWS CLI** | PowerShell or Git Bash | Works in both |
+
+**Quick Setup for Windows Users:**
+
+```powershell
+# 1. Install core tools via Chocolatey (PowerShell as Admin)
+choco install git python terraform awscli ollama -y
+
+# 2. Restart PowerShell (important!)
+# Close and reopen PowerShell
+
+# 3. Verify installations
+git --version
+python --version
+terraform --version
+aws --version
+ollama --version
+
+# 4. Pull AI model (PowerShell)
+ollama pull llama3.1:8b
+
+# 5. Use Git Bash for git/terraform work
+# Right-click in project folder → "Git Bash Here"
+
+# 6. Use PowerShell for Ollama/AI work
+# In project folder: Shift+Right-click → "Open PowerShell window here"
+```
+
+**Line Ending Warning (Windows Git Bash):**
+
+You may see: `warning: LF will be replaced by CRLF`
+
+This is normal and safe. Git automatically converts line endings for Windows.
+
+**To disable the warning**:
+```bash
+git config --global core.autocrlf true
 ```
 
 ---
