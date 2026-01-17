@@ -590,6 +590,72 @@ terraform apply
 
 ---
 
+##### Step 7.1: (Optional) Set Up Slack Notifications
+
+If you want to receive deployment and security notifications in Slack, follow these steps:
+
+**1. Create or Access Slack Workspace**:
+- Go to https://slack.com
+- Sign in to your existing workspace, OR
+- Click **"Create a new workspace"** (free tier is fine)
+
+**2. Create a Slack App**:
+- Go to https://api.slack.com/apps
+- Click **"Create New App"**
+- Select **"From scratch"**
+- App Name: `Agentic DevSecOps Notifications`
+- Pick your workspace from the dropdown
+- Click **"Create App"**
+
+**3. Enable Incoming Webhooks**:
+- In your app settings, find **"Incoming Webhooks"** in the left sidebar
+- Toggle **"Activate Incoming Webhooks"** to **ON**
+- Scroll down and click **"Add New Webhook to Workspace"**
+- Select the channel where you want notifications (e.g., `#deployments`, `#devops`, or `#general`)
+- Click **"Allow"**
+
+**4. Copy Your Webhook URL**:
+- After authorization, you'll see your webhook URL
+- It looks like: `https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXX`
+- Click the **"Copy"** button to copy the full URL
+
+**5. Add to GitHub Secrets**:
+- Go back to: **Settings** → **Secrets and variables** → **Actions**
+- Click **"New repository secret"**
+- **Name**: `SLACK_WEBHOOK_URL`
+- **Value**: Paste your webhook URL
+- Click **"Add secret"**
+
+**6. Test the Webhook (Optional)**:
+```bash
+# In your local repository
+cd chatops
+
+# Install Python dependencies (if not already installed)
+pip install -r requirements.txt
+# Or: python3 -m pip install -r requirements.txt
+
+# Set the webhook URL temporarily (replace with your actual URL)
+export SLACK_WEBHOOK_URL="https://hooks.slack.com/services/YOUR/WEBHOOK/URL"
+
+# Test notification
+python3 slack-webhook.py
+# Expected output: ✅ Test notification sent successfully!
+
+# You should see a test message in your Slack channel!
+```
+
+**What Notifications Will You Receive?**
+- ✅ Successful deployments
+- ❌ Failed deployments  
+- 🔒 Security alerts
+- 🤖 AI code review summaries
+- 💰 Cost optimization recommendations
+
+**Note**: Slack notifications are completely optional. Your infrastructure works perfectly without them!
+
+---
+
 ##### Step 8: Test the AI-Powered Workflows
 
 ```bash
@@ -789,7 +855,7 @@ pip3 install -r requirements.txt
 aws configure
 # Enter your AWS Access Key ID
 # Enter your AWS Secret Access Key
-# Default region: us-west-2
+# Default region: us-east-1
 # Default output format: json
 
 # Verify
@@ -817,7 +883,7 @@ Navigate to your GitHub repository:
 Add these secrets:
 - `AWS_ACCESS_KEY_ID`: Your AWS access key
 - `AWS_SECRET_ACCESS_KEY`: Your AWS secret key
-- `AWS_REGION`: us-west-2 (or your preferred region)
+- `AWS_REGION`: us-east-1 (or your preferred region)
 
 ### Step 10: Enable Branch Protection
 
