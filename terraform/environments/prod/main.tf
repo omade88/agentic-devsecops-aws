@@ -72,11 +72,16 @@ module "security" {
 module "lambda_functions" {
   source = "../../modules/lambda-functions"
 
-  environment = var.environment
-  vpc_id = aws_vpc.main.id
-  security_group_id = module.security.lambda_security_group_id
-  sns_email = var.sns_email
+  environment      = var.environment
+  project_name     = var.project_name
+  sns_email        = var.sns_email
   auto_fix_enabled = var.auto_fix_enabled
+
+  tags = {
+    Environment = var.environment
+    Project     = var.project_name
+    ManagedBy   = "Terraform"
+  }
 }
 
 output "vpc_id" {
