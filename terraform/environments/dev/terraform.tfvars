@@ -24,7 +24,7 @@ project_name = "agentic-devsecops"
 
 # Lambda Auto-Remediation Configuration
 # IMPORTANT: Replace with your actual email address
-sns_email = "your-email@example.com"  # Update this!
+sns_email = "omadetech@gmail.com"  # Update this!
 
 # Auto-fix mode: false = dry-run (detect only), true = auto-fix issues
 auto_fix_enabled = false  # Start with dry-run mode for safety
