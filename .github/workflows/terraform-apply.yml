@@ -34,9 +34,7 @@ jobs:
           terraform_version: 1.6.0
 
       - name: Terraform Init
-        run: |
-          # Initialize without backend for CI/CD
-          terraform init -backend=false
+        run: terraform init
 
       - name: Terraform Apply
         run: terraform apply -auto-approve

@@ -1,3 +1,11 @@
+# AWS Provider Configuration
+# Region is set via variable to support multi-region deployments
+provider "aws" {
+  region = var.region
+}
+
+# Main VPC - Isolated network for staging environment
+# DNS support enabled for service discovery and hostname resolution
 resource "aws_vpc" "main" {
   cidr_block = var.vpc_cidr
   enable_dns_support = true

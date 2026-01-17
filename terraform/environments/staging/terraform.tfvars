@@ -1,8 +1,17 @@
-variable_name = "value"
-region = "us-west-2"
-vpc_cidr = "10.0.0.0/16"
-public_subnet_cidr = "10.0.1.0/24"
-private_subnet_cidr = "10.0.2.0/24"
-instance_type = "t2.micro"
-ami_id = "ami-0c55b159cbfafe1f0"
-allowed_ip_ranges = ["0.0.0.0/0"]
+# Staging Environment Configuration
+environment = "staging"
+region = "us-east-1"
+
+# Network Configuration - Different CIDR from dev to avoid conflicts
+vpc_cidr = "10.1.0.0/16"
+public_subnet_cidrs = ["10.1.1.0/24", "10.1.2.0/24"]
+private_subnet_cidrs = ["10.1.3.0/24", "10.1.4.0/24"]
+
+# Compute Configuration
+instance_type = "t3.micro"  # Free tier eligible
+ami_id = "ami-0453ec754f44f9a4a"  # Amazon Linux 2023 us-east-1
+
+# Security Configuration
+# IMPORTANT: Replace with your actual IP address
+# Get your IP: curl https://api.ipify.org
+allowed_ip_ranges = ["203.0.113.45/32", "198.51.100.0/24"]
