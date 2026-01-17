@@ -167,4 +167,3 @@ This project is licensed under the MIT License. See the LICENSE file for more de
 - Open Policy Agent documentation
 
 For more information, please refer to the respective documentation of the tools used in this project.
-# Test change

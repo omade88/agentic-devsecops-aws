@@ -88,13 +88,249 @@ This project uses **100% FREE** AI tools to power your DevSecOps workflow:
 
 ## Prerequisites
 
-### Required (Must Have)
+Before you begin, ensure you have the following prerequisites ready. This checklist ensures a smooth setup experience.
 
-- **OS**: Linux, macOS, or Windows WSL2
-- **RAM**: 8GB minimum (16GB recommended for AI models)
-- **Disk**: 10GB free space (for AI models)
-- **AWS Account**: Free tier eligible
-- **GitHub Account**: Free tier (2000 min/month Actions)
+---
+
+### 🖥️ System Requirements
+
+#### Operating System
+- **Linux**: Ubuntu 20.04+, Debian 11+, or any modern Linux distribution
+- **macOS**: macOS 11 (Big Sur) or later
+- **Windows**: 
+  - Option 1: **Git Bash** (Recommended - lightweight, fast)
+  - Option 2: **WSL2 with Ubuntu** (Full Linux environment)
+  - **NOT supported**: PowerShell or CMD alone
+
+#### Hardware
+- **CPU**: 64-bit processor (x86_64 or ARM64)
+- **RAM**: 
+  - Minimum: 8GB
+  - Recommended: 16GB (for running AI models smoothly)
+  - With GPU: 8GB is sufficient
+- **Disk Space**:
+  - AI Models (Ollama + LLaMA 3.1): ~5GB
+  - Terraform, Security Tools: ~500MB
+  - Python dependencies: ~200MB
+  - **Total**: 10GB free space minimum
+- **GPU** (Optional): NVIDIA GPU with CUDA support (speeds up AI inference)
+
+#### Network
+- **Internet Speed**: Stable connection for downloading 5GB+ AI model
+- **Firewall**: Allow outbound HTTPS (443) for:
+  - AWS API calls
+  - GitHub API/repos
+  - Docker Hub (if using containers)
+  - Ollama model downloads
+
+---
+
+### ☁️ Cloud & Services Prerequisites
+
+#### 1. AWS Account (Required)
+- ✅ **Active AWS Account** (Free tier eligible)
+- ✅ **IAM User** with programmatic access:
+  - Access Key ID
+  - Secret Access Key
+- ✅ **IAM Policies Attached**:
+  - `AmazonEC2FullAccess`
+  - `AmazonVPCFullAccess`
+  - `AmazonS3FullAccess`
+  - `IAMFullAccess`
+  - `CloudWatchFullAccess`
+  - `AWSLambda_FullAccess`
+  - `AmazonEventBridgeFullAccess`
+  - `AmazonDynamoDBFullAccess`
+- ✅ **S3 Bucket** for Terraform state (unique name)
+- ✅ **DynamoDB Table** for state locking (LockID partition key)
+- ✅ **Region**: `us-east-1` recommended (or your preferred region)
+
+**Cost**: $0/month (within free tier limits)
+
+#### 2. GitHub Account (Required)
+- ✅ **GitHub Account** (Free tier)
+- ✅ **Repository Created** (public or private)
+- ✅ **GitHub Actions Enabled** (2000 minutes/month free)
+- ✅ **Repository Secrets** configured (AWS credentials)
+
+**Cost**: $0/month (2000 Actions minutes free)
+
+#### 3. Slack or Discord (Optional)
+- 🔔 **Slack Workspace** (for notifications)
+  - Free tier workspace
+  - Webhook URL from incoming webhook app
+- 🔔 **Discord Server** (alternative to Slack)
+  - Free server
+  - Webhook URL from channel settings
+
+**Cost**: $0/month (free tier)
+
+---
+
+### 🛠️ Required Software & Tools
+
+The following tools will be **automatically installed** by the setup script, but verify you can install them:
+
+#### 1. Git (Required)
+- **Version**: 2.30+
+- **Installation**:
+  - Linux/macOS: Pre-installed or via package manager
+  - Windows: [Git for Windows](https://git-scm.com/download/win) (includes Git Bash)
+- **Verify**: `git --version`
+
+#### 2. Python (Required)
+- **Version**: Python 3.8+
+- **pip**: Included with Python 3.4+
+- **Installation**:
+  - Linux: `sudo apt install python3 python3-pip`
+  - macOS: `brew install python3`
+  - Windows: [Python.org](https://www.python.org/downloads/) (check "Add to PATH")
+- **Verify**: `python3 --version && pip3 --version`
+
+#### 3. curl & wget (Required)
+- **Purpose**: Download files and make API calls
+- **Installation**:
+  - Linux: `sudo apt install curl wget`
+  - macOS: Pre-installed
+  - Windows Git Bash: Included
+- **Verify**: `curl --version && wget --version`
+
+#### 4. unzip (Required)
+- **Purpose**: Extract downloaded archives
+- **Installation**:
+  - Linux: `sudo apt install unzip`
+  - macOS: Pre-installed
+  - Windows Git Bash: Included
+- **Verify**: `unzip -v`
+
+---
+
+### 🔧 Tools Installed by Setup Script
+
+These will be **automatically installed** when you run `./scripts/setup-ai.sh`:
+
+#### Core Tools
+- ✅ **Terraform** 1.6.0+ (Infrastructure as Code)
+- ✅ **AWS CLI** v2 (AWS automation)
+- ✅ **Ollama** (AI runtime for LLaMA models)
+- ✅ **LLaMA 3.1:8b** model (~4.7GB download)
+
+#### Security Scanners
+- ✅ **TFLint** (Terraform linter)
+- ✅ **tfsec** (Terraform security scanner)
+- ✅ **Checkov** (Infrastructure-as-Code security scanner)
+- ✅ **Trivy** (Vulnerability scanner)
+
+#### Policy Engine
+- ✅ **OPA** (Open Policy Agent)
+- ✅ **Conftest** (Policy testing)
+
+#### Python Packages
+- ✅ **boto3** (AWS SDK for Python)
+- ✅ **requests** (HTTP library)
+- ✅ Other dependencies from `requirements.txt`
+
+**Note**: The setup script handles all installations automatically based on your OS.
+
+---
+
+### 📋 Pre-Installation Checklist
+
+Before running the automated setup, verify:
+
+- [ ] **Operating System**: Linux, macOS, or Windows Git Bash/WSL2
+- [ ] **Git installed**: `git --version` works
+- [ ] **Python 3.8+ installed**: `python3 --version` works
+- [ ] **pip installed**: `pip3 --version` works
+- [ ] **curl/wget installed**: Both commands work
+- [ ] **AWS Account created**: You have access to AWS Console
+- [ ] **IAM User created**: Access Key ID + Secret Key saved
+- [ ] **S3 Bucket created**: For Terraform state storage
+- [ ] **DynamoDB Table created**: For state locking
+- [ ] **GitHub Account**: Repository ready
+- [ ] **8GB RAM minimum**: Check system resources
+- [ ] **10GB free disk**: Check available space (`df -h`)
+- [ ] **Internet connection**: Stable for large downloads
+
+---
+
+### ⚙️ Installation Order
+
+The automated setup follows this sequence:
+
+1. **System Detection** → Identifies your OS (Linux/macOS/Windows)
+2. **Package Manager Update** → Updates apt/brew/chocolatey
+3. **Core Dependencies** → Installs Python, pip, git, curl
+4. **Terraform** → Downloads and installs Terraform 1.6.0
+5. **AWS CLI** → Installs AWS CLI v2
+6. **Security Tools** → Installs TFLint, tfsec, Checkov, Trivy
+7. **Ollama** → Installs Ollama AI runtime
+8. **LLaMA Model** → Downloads LLaMA 3.1:8b (~4.7GB)
+9. **OPA** → Installs Open Policy Agent
+10. **Python Dependencies** → Installs boto3, requests, etc.
+11. **Validation** → Verifies all tools installed correctly
+
+**Estimated Time**: 10-15 minutes (depending on internet speed)
+
+---
+
+### 🚨 Common Issues & Solutions
+
+#### Issue: "Permission denied" when running scripts
+```bash
+# Solution: Make scripts executable
+chmod +x scripts/setup-ai.sh
+```
+
+#### Issue: Python not found
+```bash
+# Windows: Add Python to PATH during installation
+# Linux/macOS: Install via package manager
+sudo apt install python3 python3-pip  # Ubuntu/Debian
+brew install python3                   # macOS
+```
+
+#### Issue: Insufficient disk space
+```bash
+# Check available space
+df -h
+
+# Free up space (remove old packages, downloads, etc.)
+# Minimum 10GB required for full setup
+```
+
+#### Issue: AWS credentials not working
+```bash
+# Verify credentials
+aws sts get-caller-identity
+
+# Reconfigure if needed
+aws configure
+```
+
+#### Issue: Ollama installation fails on Windows
+```bash
+# Download manually from: https://ollama.com/download/windows
+# Run OllamaSetup.exe installer
+# Then: ollama pull llama3.1:8b
+```
+
+---
+
+### 🎯 What Happens Next?
+
+After completing the prerequisites:
+
+1. **Clone the repository** → Your local workspace
+2. **Run setup script** → Automated tool installation
+3. **Configure AWS** → Connect to your AWS account
+4. **Deploy infrastructure** → Terraform creates VPC, Lambda, etc.
+5. **Test AI workflows** → Create PR, watch AI review
+6. **Monitor & maintain** → Check Lambda logs, costs
+
+**You're now ready to proceed with the Quick Start!** 👇
+
+---
 
 ### Optional (Nice to Have)
 
