@@ -1,7 +1,11 @@
+# AWS Provider Configuration
+# Region is set via variable to support multi-region deployments
 provider "aws" {
   region = var.region
 }
 
+# Main VPC - Isolated network for dev environment
+# DNS support enabled for service discovery and hostname resolution
 resource "aws_vpc" "main" {
   cidr_block = var.vpc_cidr
   enable_dns_support = true
@@ -12,6 +16,8 @@ resource "aws_vpc" "main" {
   }
 }
 
+# Public Subnets - For resources requiring internet access
+# Distributed across multiple availability zones for high availability
 resource "aws_subnet" "public" {
   count = var.public_subnet_count
   vpc_id = aws_vpc.main.id
@@ -23,6 +29,7 @@ resource "aws_subnet" "public" {
   }
 }
 
+# Internet Gateway - Enables internet connectivity for VPC
 resource "aws_internet_gateway" "main" {
   vpc_id = aws_vpc.main.id
 
@@ -31,6 +38,7 @@ resource "aws_internet_gateway" "main" {
   }
 }
 
+# Public Route Table - Routes traffic to internet gateway
 resource "aws_route_table" "public" {
   vpc_id = aws_vpc.main.id
 
@@ -44,6 +52,7 @@ resource "aws_route_table" "public" {
   }
 }
 
+# Associate public subnets with public route table
 resource "aws_route_table_association" "public" {
   count = var.public_subnet_count
   subnet_id = aws_subnet.public[count.index].id
