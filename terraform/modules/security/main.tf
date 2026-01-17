@@ -1,7 +1,7 @@
 resource "aws_security_group" "allow_ssh" {
-  name        = "allow_ssh"
+  name        = "${var.environment}-allow-ssh"
   description = "Allow SSH inbound traffic"
-  vpc_id     = var.vpc_id
+  vpc_id      = var.vpc_id
 
   ingress {
     from_port   = 22
@@ -16,12 +16,17 @@ resource "aws_security_group" "allow_ssh" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
+
+  tags = {
+    Name        = "${var.environment}-allow-ssh"
+    Environment = var.environment
+  }
 }
 
 resource "aws_security_group" "allow_http" {
-  name        = "allow_http"
+  name        = "${var.environment}-allow-http"
   description = "Allow HTTP inbound traffic"
-  vpc_id     = var.vpc_id
+  vpc_id      = var.vpc_id
 
   ingress {
     from_port   = 80
@@ -36,10 +41,15 @@ resource "aws_security_group" "allow_http" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
+
+  tags = {
+    Name        = "${var.environment}-allow-http"
+    Environment = var.environment
+  }
 }
 
 resource "aws_iam_role" "ec2_role" {
-  name = "ec2_role"
+  name = "${var.environment}-ec2-role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -53,11 +63,16 @@ resource "aws_iam_role" "ec2_role" {
       },
     ]
   })
+
+  tags = {
+    Name        = "${var.environment}-ec2-role"
+    Environment = var.environment
+  }
 }
 
 resource "aws_iam_policy" "ec2_policy" {
-  name        = "ec2_policy"
-  description = "Policy for EC2 instances"
+  name        = "${var.environment}-ec2-policy"
+  description = "Policy for EC2 instances in ${var.environment}"
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -72,6 +87,11 @@ resource "aws_iam_policy" "ec2_policy" {
       },
     ]
   })
+
+  tags = {
+    Name        = "${var.environment}-ec2-policy"
+    Environment = var.environment
+  }
 }
 
 resource "aws_iam_role_policy_attachment" "attach_ec2_policy" {

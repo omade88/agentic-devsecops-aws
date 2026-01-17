@@ -1,3 +1,13 @@
+variable "vpc_id" {
+  description = "VPC ID where security groups will be created"
+  type        = string
+}
+
+variable "environment" {
+  description = "Environment name (dev, staging, prod)"
+  type        = string
+}
+
 variable "allowed_ip_ranges" {
   description = "List of allowed IP ranges for inbound traffic"
   type        = list(string)
