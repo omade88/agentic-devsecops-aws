@@ -535,13 +535,11 @@ ls -lh scripts/setup-ai.sh
 # Navigate to dev environment
 cd terraform/environments/dev
 
-# Create terraform.tfvars file
-cat > terraform.tfvars << EOF
-environment    = "dev"
-project_name   = "agentic-devsecops"
-aws_region     = "us-east-1"
-vpc_cidr       = "10.0.0.0/16"
-EOF
+# Review and update terraform.tfvars with your IP address
+# The file already exists with all required configuration
+# IMPORTANT: Replace the example IPs in allowed_ip_ranges with your actual public IP
+# Get your IP: curl https://api.ipify.org
+# Update: allowed_ip_ranges = ["YOUR.IP.ADDRESS/32"]
 
 # Initialize Terraform
 terraform init
