@@ -505,6 +505,7 @@ artifacts/
 # But exclude these specific marketing/personal files
 LINKEDIN_POST.md
 INTERVIEW_SUCCESS_STORY.md
+YOUTUBE_VIDEO_SCRIPT.md
 
 # Templates
 !**/templates/
