@@ -24,7 +24,7 @@ echo "Detected OS: ${MACHINE}"
 # Install Ollama
 install_ollama() {
     echo "Installing Ollama..."
-    
+
     if [ "$MACHINE" == "Linux" ]; then
         curl -fsSL https://ollama.ai/install.sh | sh
     elif [ "$MACHINE" == "Mac" ]; then
@@ -38,7 +38,7 @@ install_ollama() {
         echo "Or use WSL2 for Linux installation"
         exit 1
     fi
-    
+
     echo "✅ Ollama installed successfully!"
 }
 
@@ -129,7 +129,7 @@ pr_review:
     - best_practices
     - cost_optimization
     - compliance
-  
+
 # Auto-fix Settings
 auto_fix:
   enabled: false  # Set to true to enable automatic fixes

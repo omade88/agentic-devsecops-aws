@@ -1,3 +1,15 @@
+# Terraform Configuration
+terraform {
+  required_version = ">= 1.0"
+
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 6.0"
+    }
+  }
+}
+
 # AWS Provider Configuration
 # Region is set via variable to support multi-region deployments
 provider "aws" {
@@ -7,8 +19,8 @@ provider "aws" {
 # Main VPC - Isolated network for dev environment
 # DNS support enabled for service discovery and hostname resolution
 resource "aws_vpc" "main" {
-  cidr_block = var.vpc_cidr
-  enable_dns_support = true
+  cidr_block           = var.vpc_cidr
+  enable_dns_support   = true
   enable_dns_hostnames = true
 
   tags = {
@@ -19,9 +31,9 @@ resource "aws_vpc" "main" {
 # Public Subnets - For resources requiring internet access
 # Distributed across multiple availability zones for high availability
 resource "aws_subnet" "public" {
-  count = var.public_subnet_count
-  vpc_id = aws_vpc.main.id
-  cidr_block = element(var.public_subnet_cidrs, count.index)
+  count             = var.public_subnet_count
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = element(var.public_subnet_cidrs, count.index)
   availability_zone = element(var.availability_zones, count.index)
 
   tags = {
@@ -54,8 +66,8 @@ resource "aws_route_table" "public" {
 
 # Associate public subnets with public route table
 resource "aws_route_table_association" "public" {
-  count = var.public_subnet_count
-  subnet_id = aws_subnet.public[count.index].id
+  count          = var.public_subnet_count
+  subnet_id      = aws_subnet.public[count.index].id
   route_table_id = aws_route_table.public.id
 }
 

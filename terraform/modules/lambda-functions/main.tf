@@ -4,7 +4,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 6.0"  # Updated to match dev environment
+      version = "~> 6.0" # Updated to match dev environment
     }
     archive = {
       source  = "hashicorp/archive"
@@ -13,10 +13,25 @@ terraform {
   }
 }
 
+# KMS Key for SNS encryption
+resource "aws_kms_key" "sns" {
+  description             = "KMS key for SNS topic encryption"
+  deletion_window_in_days = 10
+  enable_key_rotation     = true
+
+  tags = var.tags
+}
+
+resource "aws_kms_alias" "sns" {
+  name          = "alias/${var.project_name}-${var.environment}-sns"
+  target_key_id = aws_kms_key.sns.key_id
+}
+
 # SNS Topic for Notifications
 resource "aws_sns_topic" "notifications" {
-  name = "${var.project_name}-${var.environment}-notifications"
-  
+  name              = "${var.project_name}-${var.environment}-notifications"
+  kms_master_key_id = aws_kms_key.sns.id
+
   tags = merge(var.tags, {
     Name = "${var.project_name}-${var.environment}-notifications"
   })
@@ -47,6 +62,7 @@ resource "aws_iam_role" "lambda_role" {
 }
 
 # IAM Policy for Lambda
+#tfsec:ignore:aws-iam-no-policy-wildcards - Lambda requires dynamic access to EC2 instances for auto-remediation
 resource "aws_iam_role_policy" "lambda_policy" {
   name = "${var.project_name}-${var.environment}-lambda-policy"
   role = aws_iam_role.lambda_role.id
@@ -69,15 +85,26 @@ resource "aws_iam_role_policy" "lambda_policy" {
           "ec2:DescribeInstances",
           "ec2:DescribeSecurityGroups",
           "ec2:DescribeVolumes",
+          "ec2:DescribeVpcs"
+        ]
+        Resource = "*"
+      },
+      {
+        Effect = "Allow"
+        Action = [
           "ec2:CreateTags",
           "ec2:RevokeSecurityGroupIngress",
           "ec2:ModifyInstanceAttribute",
           "ec2:ModifyInstanceMetadataOptions",
           "ec2:CreateSecurityGroup",
-          "ec2:CreateSnapshot",
-          "ec2:DescribeVpcs"
+          "ec2:CreateSnapshot"
         ]
-        Resource = "*"
+        Resource = [
+          "arn:aws:ec2:*:*:instance/*",
+          "arn:aws:ec2:*:*:security-group/*",
+          "arn:aws:ec2:*:*:volume/*",
+          "arn:aws:ec2:*:*:snapshot/*"
+        ]
       },
       {
         Effect = "Allow"
@@ -89,7 +116,7 @@ resource "aws_iam_role_policy" "lambda_policy" {
           "s3:GetPublicAccessBlock",
           "s3:PutPublicAccessBlock"
         ]
-        Resource = "*"
+        Resource = "arn:aws:s3:::*"
       },
       {
         Effect = "Allow"
@@ -97,6 +124,14 @@ resource "aws_iam_role_policy" "lambda_policy" {
           "sns:Publish"
         ]
         Resource = aws_sns_topic.notifications.arn
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "xray:PutTraceSegments",
+          "xray:PutTelemetryRecords"
+        ]
+        Resource = "*"
       }
     ]
   })
@@ -120,12 +155,16 @@ resource "aws_lambda_function" "auto_remediation" {
 
   source_code_hash = data.archive_file.auto_remediation.output_base64sha256
 
+  tracing_config {
+    mode = "Active"
+  }
+
   environment {
     variables = {
-      SNS_TOPIC_ARN     = aws_sns_topic.notifications.arn
-      AUTO_FIX_ENABLED  = var.auto_fix_enabled
-      DRY_RUN           = var.auto_fix_enabled ? "false" : "true"
-      ENVIRONMENT       = var.environment
+      SNS_TOPIC_ARN    = aws_sns_topic.notifications.arn
+      AUTO_FIX_ENABLED = var.auto_fix_enabled
+      DRY_RUN          = var.auto_fix_enabled ? "false" : "true"
+      ENVIRONMENT      = var.environment
     }
   }
 
@@ -134,10 +173,63 @@ resource "aws_lambda_function" "auto_remediation" {
   })
 }
 
+# KMS Key for CloudWatch Logs
+resource "aws_kms_key" "cloudwatch" {
+  description             = "KMS key for CloudWatch Logs encryption"
+  deletion_window_in_days = 10
+  enable_key_rotation     = true
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Sid    = "Enable IAM User Permissions"
+        Effect = "Allow"
+        Principal = {
+          AWS = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"
+        }
+        Action   = "kms:*"
+        Resource = "*"
+      },
+      {
+        Sid    = "Allow CloudWatch Logs"
+        Effect = "Allow"
+        Principal = {
+          Service = "logs.amazonaws.com"
+        }
+        Action = [
+          "kms:Encrypt",
+          "kms:Decrypt",
+          "kms:ReEncrypt*",
+          "kms:GenerateDataKey*",
+          "kms:CreateGrant",
+          "kms:DescribeKey"
+        ]
+        Resource = "*"
+        Condition = {
+          ArnLike = {
+            "kms:EncryptionContext:aws:logs:arn" = "arn:aws:logs:*:${data.aws_caller_identity.current.account_id}:*"
+          }
+        }
+      }
+    ]
+  })
+
+  tags = var.tags
+}
+
+resource "aws_kms_alias" "cloudwatch" {
+  name          = "alias/${var.project_name}-${var.environment}-cloudwatch"
+  target_key_id = aws_kms_key.cloudwatch.key_id
+}
+
+data "aws_caller_identity" "current" {}
+
 # CloudWatch Log Group for Auto-Remediation
 resource "aws_cloudwatch_log_group" "auto_remediation" {
   name              = "/aws/lambda/${aws_lambda_function.auto_remediation.function_name}"
   retention_in_days = 14
+  kms_key_id        = aws_kms_key.cloudwatch.arn
 
   tags = var.tags
 }
@@ -160,6 +252,10 @@ resource "aws_lambda_function" "security_response" {
 
   source_code_hash = data.archive_file.security_response.output_base64sha256
 
+  tracing_config {
+    mode = "Active"
+  }
+
   environment {
     variables = {
       SNS_TOPIC_ARN = aws_sns_topic.notifications.arn
@@ -176,6 +272,7 @@ resource "aws_lambda_function" "security_response" {
 resource "aws_cloudwatch_log_group" "security_response" {
   name              = "/aws/lambda/${aws_lambda_function.security_response.function_name}"
   retention_in_days = 14
+  kms_key_id        = aws_kms_key.cloudwatch.arn
 
   tags = var.tags
 }

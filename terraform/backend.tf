@@ -1,9 +1,9 @@
 terraform {
   backend "s3" {
-    bucket         = "your-terraform-state-bucket"  # Replace with your S3 bucket name
+    bucket         = "agentic-devsecops-terraform-state" # Replace with your S3 bucket name
     key            = "terraform/state/terraform.tfstate"
     region         = "us-east-1"
-    dynamodb_table = "your-terraform-state-lock"  # Replace with your DynamoDB table name
+    dynamodb_table = "terraform-lock-table" # Replace with your DynamoDB table name
     encrypt        = true
   }
 }

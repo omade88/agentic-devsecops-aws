@@ -1,19 +1,13 @@
 resource "aws_instance" "example" {
-  ami           = var.ami_id
-  instance_type = var.instance_type
-  key_name      = var.key_name
+  ami                    = var.ami_id
+  instance_type          = var.instance_type
+  key_name               = var.key_name
+  subnet_id              = var.subnet_id
+  vpc_security_group_ids = var.security_group_ids
 
   tags = {
     Name = "ExampleInstance"
   }
 
-  user_data = file("${path.module}/../../workloads/linux/user-data.sh")
-}
-
-output "instance_id" {
-  value = aws_instance.example.id
-}
-
-output "public_ip" {
-  value = aws_instance.example.public_ip
+  user_data = var.user_data != "" ? var.user_data : null
 }

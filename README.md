@@ -1,6 +1,6 @@
 # 🤖 Agentic AI DevSecOps on AWS
 
-**PR-Driven Infrastructure with AI-Powered Guardrails**  
+**PR-Driven Infrastructure with AI-Powered Guardrails**
 *100% FREE for Personal Projects* | GitHub Actions + Terraform + Local AI
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -16,11 +16,11 @@
 
 A **production-ready DevSecOps pipeline** that uses **FREE AI** to automate:
 
-✅ **AI Code Reviews** - Local LLaMA 3.1 reviews every PR  
-✅ **Auto-Remediation** - Fixes security issues automatically  
-✅ **Policy Generation** - Natural language → OPA/Sentinel policies  
-✅ **Security Scanning** - TFLint, tfsec, Checkov, Trivy  
-✅ **ChatOps** - Discord/Slack notifications  
+✅ **AI Code Reviews** - Local LLaMA 3.1 reviews every PR
+✅ **Auto-Remediation** - Fixes security issues automatically
+✅ **Policy Generation** - Natural language → OPA/Sentinel policies
+✅ **Security Scanning** - TFLint, tfsec, Checkov, Trivy
+✅ **ChatOps** - Discord/Slack notifications
 ✅ **Cost: $0/month** - Stays within AWS/GitHub free tiers
 
 ---
@@ -53,7 +53,7 @@ chmod +x scripts/setup-ai.sh && ./scripts/setup-ai.sh
 Pull Request → GitHub Actions → AI Review → Security Scans → Auto-Remediation → Deploy
                     ↓                ↓              ↓                ↓
                 Local AI        TFLint/tfsec   OPA Policies   AWS Lambda (Free)
-               (LLaMA 3.1)                                     
+               (LLaMA 3.1)
 ```
 
 ### Components

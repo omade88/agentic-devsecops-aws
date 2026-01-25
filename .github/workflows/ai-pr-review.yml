@@ -17,7 +17,7 @@ jobs:
   ai-code-review:
     runs-on: ubuntu-latest
     name: AI Code Analysis & Review
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -60,79 +60,79 @@ jobs:
               """Analyze Terraform file for common issues"""
               issues = []
               recommendations = []
-              
+
               try:
                   with open(filepath, 'r') as f:
                       content = f.read()
-                  
+
                   # Security checks
                   if '0.0.0.0/0' in content and 'port = 22' in content:
                       issues.append(f"⚠️ Security Risk: SSH port 22 open to 0.0.0.0/0 in {filepath}")
-                  
+
                   if 'encrypted = false' in content or ('aws_ebs_volume' in content and 'encrypted' not in content):
                       issues.append(f"🔒 Security: EBS volume should be encrypted in {filepath}")
-                  
+
                   if 'aws_instance' in content and 'http_tokens' not in content:
                       issues.append(f"🛡️ Security: EC2 instance should enforce IMDSv2 in {filepath}")
-                  
+
                   if 'aws_s3_bucket' in content:
                       if 'versioning' not in content:
                           recommendations.append(f"💡 Best Practice: Enable S3 versioning in {filepath}")
                       if 'server_side_encryption_configuration' not in content:
                           recommendations.append(f"🔒 Security: Enable S3 encryption in {filepath}")
-                  
+
                   # Tag compliance
                   if 'resource "aws_' in content and 'tags' not in content:
                       issues.append(f"🏷️ Compliance: Missing required tags in {filepath}")
-                  
+
                   # Best practices
                   if 'resource "aws_instance"' in content:
                       if 'monitoring = true' not in content:
                           recommendations.append(f"📊 Best Practice: Enable detailed monitoring in {filepath}")
-                  
+
               except Exception as e:
                   print(f"Error analyzing {filepath}: {str(e)}")
-              
+
               return issues, recommendations
 
           def main():
               changed_files = os.environ.get('CHANGED_FILES', '').split('\n')
               all_issues = []
               all_recommendations = []
-              
+
               for filepath in changed_files:
                   if filepath.endswith('.tf'):
                       issues, recommendations = analyze_terraform_file(filepath)
                       all_issues.extend(issues)
                       all_recommendations.extend(recommendations)
-              
+
               # Generate review comment
               comment = "## 🤖 AI-Powered Code Review\n\n"
-              
+
               if all_issues:
                   comment += "### ⚠️ Issues Found\n\n"
                   for issue in all_issues:
                       comment += f"- {issue}\n"
                   comment += "\n"
-              
+
               if all_recommendations:
                   comment += "### 💡 Recommendations\n\n"
                   for rec in all_recommendations:
                       comment += f"- {rec}\n"
                   comment += "\n"
-              
+
               if not all_issues and not all_recommendations:
                   comment += "✅ **No issues found!** Code looks good.\n\n"
-              
+
               comment += "---\n"
               comment += "*AI Review powered by rule-based analysis. For advanced AI insights, set up Ollama locally.*\n"
-              
+
               # Save to file for GitHub comment
               with open('ai_review_comment.txt', 'w') as f:
                   f.write(comment)
-              
+
               print(comment)
-              
+
               # Exit with error if critical issues found
               if any('Security Risk' in issue for issue in all_issues):
                   print("::error::Critical security issues found")
@@ -154,13 +154,13 @@ jobs:
           script: |
             const fs = require('fs');
             let comment = '';
-            
+
             try {
               comment = fs.readFileSync('ai_review_comment.txt', 'utf8');
             } catch (error) {
               comment = '## 🤖 AI Review\n\nNo issues detected in this PR.';
             }
-            
+
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
@@ -171,7 +171,7 @@ jobs:
   security-enhanced-scan:
     runs-on: ubuntu-latest
     name: Enhanced Security Scanning
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -217,7 +217,7 @@ jobs:
   cost-estimation:
     runs-on: ubuntu-latest
     name: Cost Estimation
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4

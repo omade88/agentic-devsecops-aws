@@ -1,4 +1,4 @@
-# 🤖 AI-Powered DevSecOps Setup Guide (FREE Version)
+﻿# ðŸ¤– AI-Powered DevSecOps Setup Guide (FREE Version)
 
 ## Complete Guide to Setting Up Local AI for Infrastructure Automation
 
@@ -6,7 +6,7 @@
 
 ## Table of Contents
 
-1. [Quick Command Reference](#quick-command-reference) ⭐ **START HERE**
+1. [Quick Command Reference](#quick-command-reference) â­ **START HERE**
 2. [Overview](#overview)
 3. [Prerequisites](#prerequisites)
 4. [Quick Start (5 Minutes)](#quick-start)
@@ -19,7 +19,7 @@
 
 ## Quick Command Reference
 
-**⭐ Copy and paste these commands to deploy the entire project from scratch!**
+**â­ Copy and paste these commands to deploy the entire project from scratch!**
 
 ### Step 1: Initial Setup (5 minutes)
 
@@ -114,11 +114,13 @@ terraform init
 # Review plan
 terraform plan
 
-# Deploy (creates 21 AWS resources)
+# Deploy (creates 25 AWS resources)
 terraform apply -auto-approve
 
+# âš ï¸ If you get KMS permission error, add inline KMS policy (see Real-World Deployment section)
+
 # Expected output:
-# Apply complete! Resources: 21 added, 0 changed, 0 destroyed.
+# Apply complete! Resources: 25 added, 0 changed, 0 destroyed.
 ```
 
 ### Step 6: Verify Deployment
@@ -136,7 +138,7 @@ aws events list-rules | grep security
 # Check CloudWatch logs
 aws logs describe-log-groups | grep lambda
 
-# ⚠️ CHECK YOUR EMAIL for SNS subscription confirmation!
+# âš ï¸ CHECK YOUR EMAIL for SNS subscription confirmation!
 ```
 
 ### Step 7: Configure GitHub Secrets
@@ -219,7 +221,7 @@ aws s3 rb s3://your-terraform-state-bucket-$(whoami) --force
 aws dynamodb delete-table --table-name terraform-state-lock
 ```
 
-**✅ Complete!** You now have a fully functional AI-powered DevSecOps pipeline!
+**âœ… Complete!** You now have a fully functional AI-powered DevSecOps pipeline!
 
 ---
 
@@ -229,66 +231,66 @@ This project uses **100% FREE** AI tools to power your DevSecOps workflow:
 
 ### What You Get (All FREE!)
 
-✅ **Local AI Code Review** (Ollama + LLaMA 3.1)  
-✅ **Automated Security Scanning** (TFLint, tfsec, Checkov, Trivy)  
-✅ **AI Policy Generation** (Natural language → OPA/Sentinel)  
-✅ **Auto-Remediation** (AWS Lambda - free tier)  
-✅ **ChatOps Notifications** (Discord/Slack webhooks)  
-✅ **PR-Driven Deployments** (GitHub Actions - 2000 min/month free)
+âœ… **Local AI Code Review** (Ollama + LLaMA 3.1)
+âœ… **Automated Security Scanning** (TFLint, tfsec, Checkov, Trivy)
+âœ… **AI Policy Generation** (Natural language â†’ OPA/Sentinel)
+âœ… **Auto-Remediation** (AWS Lambda - free tier)
+âœ… **ChatOps Notifications** (Discord/Slack webhooks)
+âœ… **PR-Driven Deployments** (GitHub Actions - 2000 min/month free)
 
 ### Architecture
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                   GitHub Repository                          │
-│  ┌────────────────────────────────────────────────────┐     │
-│  │  Pull Request Created                              │     │
-│  └──────────────┬─────────────────────────────────────┘     │
-│                 ▼                                            │
-│  ┌────────────────────────────────────────────────────┐     │
-│  │  GitHub Actions Workflows (FREE)                   │     │
-│  │  ├─ AI Code Review (Ollama)                        │     │
-│  │  ├─ Security Scans (TFLint, tfsec, Checkov)        │     │
-│  │  ├─ Terraform Validation                           │     │
-│  │  └─ OPA Policy Checks                              │     │
-│  └──────────────┬─────────────────────────────────────┘     │
-└─────────────────┼──────────────────────────────────────────┘
-                  ▼
-┌─────────────────────────────────────────────────────────────┐
-│                   Local AI (Your Machine)                    │
-│  ┌────────────────────────────────────────────────────┐     │
-│  │  Ollama + LLaMA 3.1 (FREE)                         │     │
-│  │  ├─ Code analysis                                  │     │
-│  │  ├─ Security recommendations                       │     │
-│  │  ├─ Policy generation                              │     │
-│  │  └─ Best practice suggestions                      │     │
-│  └──────────────┬─────────────────────────────────────┘     │
-└─────────────────┼──────────────────────────────────────────┘
-                  ▼
-┌─────────────────────────────────────────────────────────────┐
-│                   AWS (Free Tier)                            │
-│  ┌────────────────────────────────────────────────────┐     │
-│  │  Lambda Functions (1M requests/month FREE)         │     │
-│  │  ├─ Auto-remediation (fix security issues)         │     │
-│  │  ├─ Security response (isolate threats)            │     │
-│  │  └─ Cost optimization                              │     │
-│  └──────────────┬─────────────────────────────────────┘     │
-│                 ▼                                            │
-│  ┌────────────────────────────────────────────────────┐     │
-│  │  EventBridge (FREE tier)                           │     │
-│  │  ├─ Security group changes                         │     │
-│  │  ├─ EC2 state changes                              │     │
-│  │  └─ S3 bucket modifications                        │     │
-│  └──────────────┬─────────────────────────────────────┘     │
-└─────────────────┼──────────────────────────────────────────┘
-                  ▼
-┌─────────────────────────────────────────────────────────────┐
-│               ChatOps (Discord/Slack - FREE)                 │
-│  ├─ Deployment notifications                                │
-│  ├─ Security alerts                                         │
-│  ├─ Cost optimization recommendations                       │
-│  └─ PR review summaries                                     │
-└─────────────────────────────────────────────────────────────┘
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚                   GitHub Repository                          â”‚
+â”‚  â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”     â”‚
+â”‚  â”‚  Pull Request Created                              â”‚     â”‚
+â”‚  â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜     â”‚
+â”‚                 â–¼                                            â”‚
+â”‚  â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”     â”‚
+â”‚  â”‚  GitHub Actions Workflows (FREE)                   â”‚     â”‚
+â”‚  â”‚  â”œâ”€ AI Code Review (Ollama)                        â”‚     â”‚
+â”‚  â”‚  â”œâ”€ Security Scans (TFLint, tfsec, Checkov)        â”‚     â”‚
+â”‚  â”‚  â”œâ”€ Terraform Validation                           â”‚     â”‚
+â”‚  â”‚  â””â”€ OPA Policy Checks                              â”‚     â”‚
+â”‚  â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜     â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+                  â–¼
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚                   Local AI (Your Machine)                    â”‚
+â”‚  â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”     â”‚
+â”‚  â”‚  Ollama + LLaMA 3.1 (FREE)                         â”‚     â”‚
+â”‚  â”‚  â”œâ”€ Code analysis                                  â”‚     â”‚
+â”‚  â”‚  â”œâ”€ Security recommendations                       â”‚     â”‚
+â”‚  â”‚  â”œâ”€ Policy generation                              â”‚     â”‚
+â”‚  â”‚  â””â”€ Best practice suggestions                      â”‚     â”‚
+â”‚  â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜     â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+                  â–¼
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚                   AWS (Free Tier)                            â”‚
+â”‚  â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”     â”‚
+â”‚  â”‚  Lambda Functions (1M requests/month FREE)         â”‚     â”‚
+â”‚  â”‚  â”œâ”€ Auto-remediation (fix security issues)         â”‚     â”‚
+â”‚  â”‚  â”œâ”€ Security response (isolate threats)            â”‚     â”‚
+â”‚  â”‚  â””â”€ Cost optimization                              â”‚     â”‚
+â”‚  â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜     â”‚
+â”‚                 â–¼                                            â”‚
+â”‚  â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”     â”‚
+â”‚  â”‚  EventBridge (FREE tier)                           â”‚     â”‚
+â”‚  â”‚  â”œâ”€ Security group changes                         â”‚     â”‚
+â”‚  â”‚  â”œâ”€ EC2 state changes                              â”‚     â”‚
+â”‚  â”‚  â””â”€ S3 bucket modifications                        â”‚     â”‚
+â”‚  â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜     â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+                  â–¼
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚               ChatOps (Discord/Slack - FREE)                 â”‚
+â”‚  â”œâ”€ Deployment notifications                                â”‚
+â”‚  â”œâ”€ Security alerts                                         â”‚
+â”‚  â”œâ”€ Cost optimization recommendations                       â”‚
+â”‚  â””â”€ PR review summaries                                     â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
 ```
 
 ---
@@ -299,19 +301,19 @@ Before you begin, ensure you have the following prerequisites ready. This checkl
 
 ---
 
-### 🖥️ System Requirements
+### ðŸ–¥ï¸ System Requirements
 
 #### Operating System
 - **Linux**: Ubuntu 20.04+, Debian 11+, or any modern Linux distribution
 - **macOS**: macOS 11 (Big Sur) or later
-- **Windows**: 
+- **Windows**:
   - Option 1: **Git Bash** (Recommended - lightweight, fast)
   - Option 2: **WSL2 with Ubuntu** (Full Linux environment)
   - **NOT supported**: PowerShell or CMD alone
 
 #### Hardware
 - **CPU**: 64-bit processor (x86_64 or ARM64)
-- **RAM**: 
+- **RAM**:
   - Minimum: 8GB
   - Recommended: 16GB (for running AI models smoothly)
   - With GPU: 8GB is sufficient
@@ -332,14 +334,14 @@ Before you begin, ensure you have the following prerequisites ready. This checkl
 
 ---
 
-### ☁️ Cloud & Services Prerequisites
+### â˜ï¸ Cloud & Services Prerequisites
 
 #### 1. AWS Account (Required)
-- ✅ **Active AWS Account** (Free tier eligible)
-- ✅ **IAM User** with programmatic access:
+- âœ… **Active AWS Account** (Free tier eligible)
+- âœ… **IAM User** with programmatic access:
   - Access Key ID
   - Secret Access Key
-- ✅ **IAM Policies Attached**:
+- âœ… **IAM Policies Attached**:
   - `AmazonEC2FullAccess`
   - `AmazonVPCFullAccess`
   - `AmazonS3FullAccess`
@@ -348,25 +350,25 @@ Before you begin, ensure you have the following prerequisites ready. This checkl
   - `AWSLambda_FullAccess`
   - `AmazonEventBridgeFullAccess`
   - `AmazonDynamoDBFullAccess`
-- ✅ **S3 Bucket** for Terraform state (unique name)
-- ✅ **DynamoDB Table** for state locking (LockID partition key)
-- ✅ **Region**: `us-east-1` recommended (or your preferred region)
+- âœ… **S3 Bucket** for Terraform state (unique name)
+- âœ… **DynamoDB Table** for state locking (LockID partition key)
+- âœ… **Region**: `us-east-1` recommended (or your preferred region)
 
 **Cost**: $0/month (within free tier limits)
 
 #### 2. GitHub Account (Required)
-- ✅ **GitHub Account** (Free tier)
-- ✅ **Repository Created** (public or private)
-- ✅ **GitHub Actions Enabled** (2000 minutes/month free)
-- ✅ **Repository Secrets** configured (AWS credentials)
+- âœ… **GitHub Account** (Free tier)
+- âœ… **Repository Created** (public or private)
+- âœ… **GitHub Actions Enabled** (2000 minutes/month free)
+- âœ… **Repository Secrets** configured (AWS credentials)
 
 **Cost**: $0/month (2000 Actions minutes free)
 
 #### 3. Slack or Discord (Optional)
-- 🔔 **Slack Workspace** (for notifications)
+- ðŸ”” **Slack Workspace** (for notifications)
   - Free tier workspace
   - Webhook URL from incoming webhook app
-- 🔔 **Discord Server** (alternative to Slack)
+- ðŸ”” **Discord Server** (alternative to Slack)
   - Free server
   - Webhook URL from channel settings
 
@@ -374,7 +376,7 @@ Before you begin, ensure you have the following prerequisites ready. This checkl
 
 ---
 
-### 🛠️ Required Software & Tools
+### ðŸ› ï¸ Required Software & Tools
 
 The following tools will be **automatically installed** by the setup script, but verify you can install them:
 
@@ -412,36 +414,36 @@ The following tools will be **automatically installed** by the setup script, but
 
 ---
 
-### 🔧 Tools Installed by Setup Script
+### ðŸ”§ Tools Installed by Setup Script
 
 These will be **automatically installed** when you run `./scripts/setup-ai.sh`:
 
 #### Core Tools
-- ✅ **Terraform** 1.6.0+ (Infrastructure as Code)
-- ✅ **AWS CLI** v2 (AWS automation)
-- ✅ **Ollama** (AI runtime for LLaMA models)
-- ✅ **LLaMA 3.1:8b** model (~4.7GB download)
+- âœ… **Terraform** 1.6.0+ (Infrastructure as Code)
+- âœ… **AWS CLI** v2 (AWS automation)
+- âœ… **Ollama** (AI runtime for LLaMA models)
+- âœ… **LLaMA 3.1:8b** model (~4.7GB download)
 
 #### Security Scanners
-- ✅ **TFLint** (Terraform linter)
-- ✅ **tfsec** (Terraform security scanner)
-- ✅ **Checkov** (Infrastructure-as-Code security scanner)
-- ✅ **Trivy** (Vulnerability scanner)
+- âœ… **TFLint** (Terraform linter)
+- âœ… **tfsec** (Terraform security scanner)
+- âœ… **Checkov** (Infrastructure-as-Code security scanner)
+- âœ… **Trivy** (Vulnerability scanner)
 
 #### Policy Engine
-- ✅ **OPA** (Open Policy Agent)
-- ✅ **Conftest** (Policy testing)
+- âœ… **OPA** (Open Policy Agent)
+- âœ… **Conftest** (Policy testing)
 
 #### Python Packages
-- ✅ **boto3** (AWS SDK for Python)
-- ✅ **requests** (HTTP library)
-- ✅ Other dependencies from `requirements.txt`
+- âœ… **boto3** (AWS SDK for Python)
+- âœ… **requests** (HTTP library)
+- âœ… Other dependencies from `requirements.txt`
 
 **Note**: The setup script handles all installations automatically based on your OS.
 
 ---
 
-### 📋 Pre-Installation Checklist
+### ðŸ“‹ Pre-Installation Checklist
 
 Before running the automated setup, verify:
 
@@ -461,27 +463,27 @@ Before running the automated setup, verify:
 
 ---
 
-### ⚙️ Installation Order
+### âš™ï¸ Installation Order
 
 The automated setup follows this sequence:
 
-1. **System Detection** → Identifies your OS (Linux/macOS/Windows)
-2. **Package Manager Update** → Updates apt/brew/chocolatey
-3. **Core Dependencies** → Installs Python, pip, git, curl
-4. **Terraform** → Downloads and installs Terraform 1.6.0
-5. **AWS CLI** → Installs AWS CLI v2
-6. **Security Tools** → Installs TFLint, tfsec, Checkov, Trivy
-7. **Ollama** → Installs Ollama AI runtime
-8. **LLaMA Model** → Downloads LLaMA 3.1:8b (~4.7GB)
-9. **OPA** → Installs Open Policy Agent
-10. **Python Dependencies** → Installs boto3, requests, etc.
-11. **Validation** → Verifies all tools installed correctly
+1. **System Detection** â†’ Identifies your OS (Linux/macOS/Windows)
+2. **Package Manager Update** â†’ Updates apt/brew/chocolatey
+3. **Core Dependencies** â†’ Installs Python, pip, git, curl
+4. **Terraform** â†’ Downloads and installs Terraform 1.6.0
+5. **AWS CLI** â†’ Installs AWS CLI v2
+6. **Security Tools** â†’ Installs TFLint, tfsec, Checkov, Trivy
+7. **Ollama** â†’ Installs Ollama AI runtime
+8. **LLaMA Model** â†’ Downloads LLaMA 3.1:8b (~4.7GB)
+9. **OPA** â†’ Installs Open Policy Agent
+10. **Python Dependencies** â†’ Installs boto3, requests, etc.
+11. **Validation** â†’ Verifies all tools installed correctly
 
 **Estimated Time**: 10-15 minutes (depending on internet speed)
 
 ---
 
-### 🚨 Common Issues & Solutions
+### ðŸš¨ Common Issues & Solutions
 
 #### Issue: "Permission denied" when running scripts
 ```bash
@@ -550,20 +552,105 @@ ollama run llama3.1:8b "Hello, are you ready?"
 - Ollama runs as a Windows service after installation
 - No need for `ollama serve` on Windows (starts automatically)
 
+#### Issue: OPA installation on Windows
+
+The setup script may fail to install OPA on Windows due to permission issues. Here's how to install it manually:
+
+**Option 1: PowerShell (Recommended)**
+
+```powershell
+# Create bin directory if it doesn't exist
+New-Item -ItemType Directory -Force -Path "$HOME\bin"
+
+# Download OPA for Windows
+Invoke-WebRequest -Uri "https://openpolicyagent.org/downloads/latest/opa_windows_amd64.exe" -OutFile "$HOME\bin\opa.exe"
+
+# Add to PATH for current session
+$env:Path += ";$HOME\bin"
+
+# Verify installation
+opa version
+# Expected: Version: 1.12.x or later
+
+# Make PATH permanent (add to PowerShell profile)
+Add-Content $PROFILE "`n# Add user bin to PATH`n`$env:Path += ';$HOME\bin'"
+
+# Test OPA policies
+cd terraform/environments/dev
+opa test ../../../policies/opa/
+```
+
+**Option 2: Git Bash**
+
+```bash
+# Create bin directory if it doesn't exist
+mkdir -p ~/bin
+
+# Download OPA for Windows
+curl -L -o ~/bin/opa.exe https://openpolicyagent.org/downloads/latest/opa_windows_amd64.exe
+
+# Make executable
+chmod +x ~/bin/opa.exe
+
+# Add to PATH for current session
+export PATH="$HOME/bin:$PATH"
+
+# Verify installation
+opa version
+# Expected: Version: 1.12.x or later
+
+# Make PATH permanent (add to .bashrc)
+echo 'export PATH="$HOME/bin:$PATH"' >> ~/.bashrc
+
+# Test OPA policies
+cd terraform/environments/dev
+opa test ../../../policies/opa/
+```
+
+**Fix OPA Policy Syntax for v1:**
+
+If you get `rego_parse_error: 'if' keyword is required` errors, update your policy files:
+
+```bash
+# The newer OPA v1 requires 'if' keyword before rule bodies
+# Edit policies/opa/policy.rego and add 'if' before each rule body:
+
+# OLD syntax (deprecated):
+allow {
+    input.method = "GET"
+}
+
+# NEW syntax (OPA v1):
+allow if {
+    input.method = "GET"
+}
+```
+
+**Permanent PATH Setup (Windows):**
+
+To make OPA available permanently across all terminals:
+1. Press `Win + X` â†’ System
+2. Click "Advanced system settings"
+3. Click "Environment Variables"
+4. Under "User variables", select `Path` â†’ Click "Edit"
+5. Click "New" â†’ Add: `C:\Users\<your-username>\bin`
+6. Click OK on all dialogs
+7. Restart PowerShell/Git Bash
+
 ---
 
-### 🎯 What Happens Next?
+### ðŸŽ¯ What Happens Next?
 
 After completing the prerequisites:
 
-1. **Clone the repository** → Your local workspace
-2. **Run setup script** → Automated tool installation
-3. **Configure AWS** → Connect to your AWS account
-4. **Deploy infrastructure** → Terraform creates VPC, Lambda, etc.
-5. **Test AI workflows** → Create PR, watch AI review
-6. **Monitor & maintain** → Check Lambda logs, costs
+1. **Clone the repository** â†’ Your local workspace
+2. **Run setup script** â†’ Automated tool installation
+3. **Configure AWS** â†’ Connect to your AWS account
+4. **Deploy infrastructure** â†’ Terraform creates VPC, Lambda, etc.
+5. **Test AI workflows** â†’ Create PR, watch AI review
+6. **Monitor & maintain** â†’ Check Lambda logs, costs
 
-**You're now ready to proceed with the Quick Start!** 👇
+**You're now ready to proceed with the Quick Start!** ðŸ‘‡
 
 ---
 
@@ -571,6 +658,142 @@ After completing the prerequisites:
 
 - Discord or Slack account (for notifications)
 - GPU (speeds up AI inference, but not required)
+
+---
+
+## ðŸ’° Cost Breakdown (Actual Experience)
+
+**After completing this guide, here's your real monthly cost**:
+
+| Service | Cost | Notes |
+|---------|------|-------|
+| **Ollama AI** | $0/month | Runs locally on your machine |
+| **GitHub Actions** | $0/month | 2000 free minutes/month |
+| **Terraform State (S3)** | <$0.10/month | Small state files |
+| **DynamoDB (State Lock)** | $0/month | On-demand, minimal reads/writes |
+| **VPC** | $0/month | No NAT Gateway (using public subnets) |
+| **Lambda Functions (2)** | $0/month | Free tier: 1M requests/month |
+| **CloudWatch Logs** | ~$0.50/month | 14-day retention, minimal logs |
+| **KMS Keys (2)** | $2/month | $1/key/month |
+| **SNS Topic** | <$0.01/month | Email notifications |
+| **EventBridge Rules (2)** | $0/month | Free |
+| **CloudTrail** | ~$2/month | Management events only |
+| **TOTAL** | **~$4.50/month** | **Very affordable!** |
+
+**Free Tier Comparison**:
+- âœ… First 12 months: Most services covered by AWS Free Tier
+- âœ… After 12 months: ~$4.50/month for production-grade DevSecOps
+
+**Cost Savings**:
+- âŒ EC2 for AI: $10-50/month (AVOIDED by using local Ollama)
+- âŒ Managed NAT Gateway: $32/month (AVOIDED by using public subnets)
+- âŒ ChatGPT API: $20-100/month (AVOIDED by using local LLaMA 3.1)
+
+**Total Savings**: ~$60-180/month! ðŸŽ‰
+
+---
+
+## ðŸ’¡ Real-World Deployment Experience
+
+**This section documents the actual deployment process with all issues encountered and solutions.**
+
+### Common Issues You'll Encounter (And How We Fixed Them)
+
+#### Issue 1: KMS Permission Denied (99% of users hit this)
+**Error Message:**
+```
+Error: creating KMS Key: User: arn:aws:iam::YOUR_ACCOUNT:user/agentic-ai
+is not authorized to perform: kms:TagResource
+```
+
+**Root Cause**: The 10 AWS managed policies don't include KMS permissions.
+
+**Solution**: Add inline KMS policy (takes 30 seconds):
+```powershell
+# PowerShell
+$kmsPolicy = @'
+{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Action":["kms:*"],"Resource":"*"}]}
+'@
+$kmsPolicy | Out-File kms-policy.json -Encoding ASCII
+aws iam put-user-policy --user-name agentic-ai --policy-name KMSAccess --policy-document file://kms-policy.json
+Remove-Item kms-policy.json
+```
+
+#### Issue 2: Lambda Won't Trigger (CloudTrail Required)
+**Symptom**: Security group changes don't trigger Lambda function.
+
+**Root Cause**: EventBridge requires CloudTrail to receive AWS API call events.
+
+**Solution**: Enable CloudTrail (~$2/month):
+```powershell
+# PowerShell - Complete CloudTrail setup (2 minutes)
+$ACCOUNT_ID = (aws sts get-caller-identity --query Account --output text)
+aws s3 mb s3://agentic-devsecops-cloudtrail-logs-$ACCOUNT_ID --region us-east-1
+
+# Create CloudTrail with proper S3 permissions
+aws cloudtrail create-trail --name agentic-devsecops-trail --s3-bucket-name agentic-devsecops-cloudtrail-logs-$ACCOUNT_ID
+aws cloudtrail start-logging --name agentic-devsecops-trail
+```
+
+#### Issue 3: Terraform Plan Syntax Error (PowerShell vs Bash)
+**Error**: `Too many command line arguments`
+
+**Root Cause**: PowerShell doesn't accept `=` in arguments like Bash does.
+
+**Wrong**: `terraform plan -var-file=terraform.tfvars`
+**Correct**: `terraform plan -var-file terraform.tfvars` (no equals sign)
+
+#### Issue 4: OPA Installation Fails on Windows
+**Error**: `sudo: command not found` or `permission denied`
+
+**Solution**: Manual PowerShell installation:
+```powershell
+New-Item -ItemType Directory -Force -Path "$HOME\bin"
+Invoke-WebRequest -Uri "https://openpolicyagent.org/downloads/latest/opa_windows_amd64.exe" -OutFile "$HOME\bin\opa.exe"
+$env:Path += ";$HOME\bin"
+Add-Content $PROFILE "`n`$env:Path += ';$HOME\bin'"
+```
+
+### Actual Deployment Timeline
+
+| Phase | Duration | What Happens |
+|-------|----------|--------------|
+| **Prerequisites** | 5 min | AWS account, IAM user, S3 bucket, DynamoDB table |
+| **Tool Installation** | 10-15 min | Terraform, AWS CLI, Python, Ollama, OPA |
+| **Terraform Init** | 1 min | Download providers and modules |
+| **Terraform Plan** | 30 sec | Validate 25 resources |
+| **First Apply (Fails)** | 2 min | **KMS permission error** |
+| **Fix KMS + Retry** | 3 min | Add inline policy, re-apply |
+| **CloudTrail Setup** | 5 min | Enable logging for Lambda triggers |
+| **Test Ollama** | 2 min | Verify AI code reviews work |
+| **Total Time** | **30-35 min** | Fully operational infrastructure |
+
+### Real Cost After Deployment
+
+```
+Monthly AWS Bill Breakdown:
+â”œâ”€ VPC (public subnets)      $0.00   (no NAT Gateway)
+â”œâ”€ Lambda (2 functions)      $0.00   (free tier: 1M requests/month)
+â”œâ”€ S3 (Terraform state)      $0.05   (tiny state files)
+â”œâ”€ DynamoDB (state lock)     $0.00   (on-demand, minimal usage)
+â”œâ”€ CloudWatch Logs           $0.50   (14-day retention)
+â”œâ”€ KMS Keys (2)              $2.00   ($1/key/month)
+â”œâ”€ CloudTrail                $2.00   (management events)
+â”œâ”€ SNS (email)               $0.01   (minimal notifications)
+â””â”€ EventBridge               $0.00   (free)
+                             â”€â”€â”€â”€â”€
+TOTAL:                       ~$4.56/month
+
+Ollama (Local AI):           $0.00   (runs on your laptop)
+GitHub Actions:              $0.00   (2000 free minutes/month)
+
+GRAND TOTAL:                 ~$4.56/month ðŸŽ‰
+```
+
+**Avoided Costs** by using local Ollama instead of cloud AI:
+- âŒ EC2 instance for AI: $10-50/month
+- âŒ ChatGPT API calls: $20-100/month
+- âŒ Total savings: **$30-150/month**
 
 ---
 
@@ -595,64 +818,266 @@ This automated approach will set up your complete Agentic AI DevSecOps environme
 
 ##### Step 1: Prepare AWS Credentials
 
-1. **Log in to AWS Console**: https://console.aws.amazon.com
-
-2. **Create IAM User for Terraform**:
-   - Navigate to **IAM → Users → Add users**
-   - Username: `terraform-deployer`
-   - Select **"Access key - Programmatic access"**
-   - Click **Next: Permissions**
-
-3. **Attach Policies**:
-   - Click **"Attach existing policies directly"**
-   - Select these policies:
-     - `AmazonEC2FullAccess`
-     - `AmazonVPCFullAccess`
-     - `AmazonS3FullAccess`
-     - `IAMFullAccess`
-     - `CloudWatchFullAccess`
-     - `AWSLambda_FullAccess`
-     - `AmazonEventBridgeFullAccess`
-     - `AmazonDynamoDBFullAccess`
-   - Click **Next** → **Create user**
-
-4. **Save Your Credentials**:
-   - ⚠️ **CRITICAL**: Download the CSV file or copy:
-     - `Access Key ID` (e.g., AKIAIOSFODNN7EXAMPLE)
-     - `Secret Access Key` (e.g., wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY)
-   - You won't see the Secret Key again!
-
-5. **Create S3 Bucket for Terraform State**:
-   - Go to **S3 → Create bucket**
-   - Bucket name: `agentic-devsecops-terraform-state-<your-initials>` (must be globally unique)
-   - Region: `us-east-1` (or your preferred region)
-   - Enable **"Bucket Versioning"**
-   - Enable **"Default encryption"** (SSE-S3)
-   - Click **Create bucket**
-
-6. **Create DynamoDB Table for State Locking**:
-   - Go to **DynamoDB → Create table**
-   - Table name: `terraform-state-lock`
-   - Partition key: `LockID` (String)
-   - Use default settings
-   - Click **Create table**
+You have **TWO OPTIONS**: Use AWS Console (easier for beginners) OR use AWS CLI (faster for experienced users).
 
 ---
 
+### **OPTION A: AWS Console (Recommended for Beginners)**
+
+#### **1.1: Create IAM User via Console**
+
+1. **Log in to AWS Console**: https://console.aws.amazon.com
+2. **Navigate to IAM**: Search for "IAM" in the top search bar â†’ Click **IAM**
+3. **Create User**:
+   - Click **Users** (left sidebar) â†’ **Create user**
+   - **User name**: `agentic-ai` (or your preferred name)
+   - âœ… Check **"Provide user access to the AWS Management Console"** - Optional
+   - âœ… Check **"I want to create an IAM user"**
+   - Click **Next**
+
+4. **Attach Policies Directly**:
+   - Select **"Attach policies directly"**
+   - Search and select these **10 managed policies**:
+     1. `AmazonEC2FullAccess`
+     2. `AmazonVPCFullAccess`
+     3. `AmazonS3FullAccess`
+     4. `IAMFullAccess`
+     5. `CloudWatchLogsFullAccess`
+     6. `CloudWatchEventsFullAccess`
+     7. `AWSLambda_FullAccess`
+     8. `AmazonEventBridgeFullAccess`
+     9. `AmazonDynamoDBFullAccess`
+     10. `AmazonSNSFullAccess`
+
+   âš ï¸ **Note**: You'll add **KMS** and **CloudTrail** permissions later via inline policies (Step 8.5 and 8.8)
+
+   - Click **Next** â†’ **Create user**
+
+5. **Create Access Keys**:
+   - Click on the newly created user (`agentic-ai`)
+   - Go to **"Security credentials"** tab
+   - Scroll to **"Access keys"** section
+   - Click **"Create access key"**
+   - Select **"Command Line Interface (CLI)"**
+   - âœ… Check **"I understand the above recommendation..."**
+   - Click **Next** â†’ **Create access key**
+
+6. **ðŸ’¾ SAVE YOUR CREDENTIALS IMMEDIATELY**:
+   ```
+   Access Key ID: AKIAIOSFODNN7EXAMPLE
+   Secret Access Key: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+   ```
+   - Click **"Download .csv file"** (recommended)
+   - âš ï¸ **CRITICAL**: You cannot retrieve the Secret Access Key later!
+   - Store in a password manager (1Password, LastPass, etc.)
+
+#### **1.2: Create S3 Bucket via Console**
+
+1. **Navigate to S3**: Search "S3" â†’ Click **S3**
+2. **Create Bucket**:
+   - Click **"Create bucket"**
+   - **Bucket name**: `agentic-devsecops-terraform-state-<YOUR-INITIALS>-<RANDOM-NUMBER>`
+     - Example: `agentic-devsecops-terraform-state-jd-8472`
+     - Must be globally unique (try adding random numbers if taken)
+   - **Region**: `us-east-1` (or your preferred region)
+   - **Block Public Access**: Leave all checkboxes âœ… ENABLED (default - secure!)
+   - **Bucket Versioning**: Click **Enable** (required for state recovery)
+   - **Default encryption**:
+     - Select **Server-side encryption with Amazon S3 managed keys (SSE-S3)**
+     - Click **Enable**
+   - Click **"Create bucket"**
+
+3. **Verify Bucket Created**:
+   - You should see your bucket in the list
+   - Click on it â†’ Check "Versioning" shows **Enabled**
+
+#### **1.3: Create DynamoDB Table via Console**
+
+1. **Navigate to DynamoDB**: Search "DynamoDB" â†’ Click **DynamoDB**
+2. **Create Table**:
+   - Click **"Create table"**
+   - **Table name**: `terraform-state-lock`
+   - **Partition key**: `LockID` (exactly as written, case-sensitive)
+   - **Partition key type**: Select **String**
+   - **Table settings**: Leave as **Default settings** (on-demand pricing)
+   - Click **"Create table"**
+
+3. **Wait for Table Creation** (takes 10-30 seconds):
+   - Status will change from "Creating" to **Active**
+   - Once active, you're ready to proceed!
+
+---
+
+### **OPTION B: AWS CLI (For Experienced Users)**
+
+#### **Prerequisites**:
+- You must have **root user** or **admin user** credentials already configured
+- Run `aws configure` first with admin credentials
+
+#### **1.1: Create IAM User via CLI**
+
+```bash
+# PowerShell:
+# Create IAM user
+aws iam create-user --user-name agentic-ai
+
+# Attach managed policies (all 10 required policies)
+aws iam attach-user-policy --user-name agentic-ai --policy-arn arn:aws:iam::aws:policy/AmazonEC2FullAccess
+aws iam attach-user-policy --user-name agentic-ai --policy-arn arn:aws:iam::aws:policy/AmazonVPCFullAccess
+aws iam attach-user-policy --user-name agentic-ai --policy-arn arn:aws:iam::aws:policy/AmazonS3FullAccess
+aws iam attach-user-policy --user-name agentic-ai --policy-arn arn:aws:iam::aws:policy/IAMFullAccess
+aws iam attach-user-policy --user-name agentic-ai --policy-arn arn:aws:iam::aws:policy/CloudWatchLogsFullAccess
+aws iam attach-user-policy --user-name agentic-ai --policy-arn arn:aws:iam::aws:policy/CloudWatchEventsFullAccess
+aws iam attach-user-policy --user-name agentic-ai --policy-arn arn:aws:iam::aws:policy/AWSLambda_FullAccess
+aws iam attach-user-policy --user-name agentic-ai --policy-arn arn:aws:iam::aws:policy/AmazonEventBridgeFullAccess
+aws iam attach-user-policy --user-name agentic-ai --policy-arn arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess
+aws iam attach-user-policy --user-name agentic-ai --policy-arn arn:aws:iam::aws:policy/AmazonSNSFullAccess
+
+# Create access key
+aws iam create-access-key --user-name agentic-ai
+
+# Expected output (SAVE THIS IMMEDIATELY):
+# {
+#     "AccessKey": {
+#         "UserName": "agentic-ai",
+#         "AccessKeyId": "AKIAIOSFODNN7EXAMPLE",
+#         "Status": "Active",
+#         "SecretAccessKey": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+#         "CreateDate": "2024-01-15T10:30:00Z"
+#     }
+# }
+
+# âš ï¸ SAVE AccessKeyId and SecretAccessKey immediately!
+
+# Verify policies attached
+aws iam list-attached-user-policies --user-name agentic-ai
+# Expected: Should list all 10 policies
+
+# Git Bash (same commands work):
+aws iam create-user --user-name agentic-ai
+aws iam attach-user-policy --user-name agentic-ai --policy-arn arn:aws:iam::aws:policy/AmazonEC2FullAccess
+# ... (repeat all attach-user-policy commands)
+aws iam create-access-key --user-name agentic-ai
+```
+
+#### **1.2: Create S3 Bucket via CLI**
+
+```bash
+# PowerShell & Git Bash:
+# Set your bucket name (must be globally unique!)
+$BUCKET_NAME = "agentic-devsecops-terraform-state-jd-8472"  # PowerShell
+# OR
+BUCKET_NAME="agentic-devsecops-terraform-state-jd-8472"  # Git Bash
+
+# Create S3 bucket in us-east-1
+aws s3 mb s3://$BUCKET_NAME --region us-east-1
+# Expected: make_bucket: agentic-devsecops-terraform-state-jd-8472
+
+# Enable versioning (REQUIRED for Terraform state recovery)
+aws s3api put-bucket-versioning --bucket $BUCKET_NAME --versioning-configuration Status=Enabled
+
+# Enable server-side encryption
+aws s3api put-bucket-encryption --bucket $BUCKET_NAME --server-side-encryption-configuration '{
+  "Rules": [
+    {
+      "ApplyServerSideEncryptionByDefault": {
+        "SSEAlgorithm": "AES256"
+      },
+      "BucketKeyEnabled": false
+    }
+  ]
+}'
+
+# Verify bucket created and versioning enabled
+aws s3api get-bucket-versioning --bucket $BUCKET_NAME
+# Expected: { "Status": "Enabled" }
+
+# Block public access (security best practice)
+aws s3api put-public-access-block --bucket $BUCKET_NAME --public-access-block-configuration \
+  "BlockPublicAcls=true,IgnorePublicAcls=true,BlockPublicPolicy=true,RestrictPublicBuckets=true"
+
+# Verify bucket exists
+aws s3 ls | grep agentic-devsecops
+# Expected: Shows your bucket in the list
+```
+
+#### **1.3: Create DynamoDB Table via CLI**
+
+```bash
+# PowerShell & Git Bash:
+# Create DynamoDB table for Terraform state locking
+aws dynamodb create-table \
+  --table-name terraform-state-lock \
+  --attribute-definitions AttributeName=LockID,AttributeType=S \
+  --key-schema AttributeName=LockID,KeyType=HASH \
+  --billing-mode PAY_PER_REQUEST \
+  --region us-east-1
+
+# Expected output:
+# {
+#     "TableDescription": {
+#         "TableName": "terraform-state-lock",
+#         "TableStatus": "CREATING",
+#         "KeySchema": [...],
+#         "BillingModeSummary": {
+#             "BillingMode": "PAY_PER_REQUEST"
+#         }
+#     }
+# }
+
+# Wait for table to become active (takes 10-30 seconds)
+aws dynamodb wait table-exists --table-name terraform-state-lock
+
+# Verify table is active
+aws dynamodb describe-table --table-name terraform-state-lock --query "Table.TableStatus"
+# Expected: "ACTIVE"
+
+# List tables to confirm
+aws dynamodb list-tables
+# Expected: Shows "terraform-state-lock" in the list
+```
+
+---
+
+### **ðŸ“‹ Step 1 Completion Checklist**
+
+Before proceeding to Step 2, verify you have:
+
+- [ ] âœ… IAM user created: `agentic-ai` (or your chosen name)
+- [ ] âœ… 10 managed policies attached to user
+- [ ] âœ… Access Key ID saved securely
+- [ ] âœ… Secret Access Key saved securely
+- [ ] âœ… S3 bucket created with unique name
+- [ ] âœ… S3 bucket versioning enabled
+- [ ] âœ… S3 bucket encryption enabled
+- [ ] âœ… DynamoDB table created: `terraform-state-lock`
+- [ ] âœ… DynamoDB table status: ACTIVE
+- [ ] âœ… All resources in same region (us-east-1 recommended)
+
+**Save these values for later steps**:
+```bash
+AWS_ACCESS_KEY_ID=AKIAIOSFODNN7EXAMPLE
+AWS_SECRET_ACCESS_KEY=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+S3_BUCKET_NAME=agentic-devsecops-terraform-state-jd-8472
+DYNAMODB_TABLE=terraform-state-lock
+AWS_REGION=us-east-1
+```
+
+---
 ##### Step 2: Choose Your Deployment Environment
 
 **IMPORTANT**: You will run all commands on your **LOCAL MACHINE** (laptop/desktop), not on AWS EC2.
 
 **Why Local and Not EC2?**
 
-✅ **Local Machine (Recommended)**:
+âœ… **Local Machine (Recommended)**:
 - Ollama AI models run locally (free, no compute costs)
 - Easy development workflow (edit code, test, commit)
 - Direct access to your IDE and tools
 - GitHub Actions handles AWS deployments remotely
 - No EC2 costs ($0/month vs $10-50/month for EC2)
 
-❌ **EC2 Instance (NOT Recommended)**:
+âŒ **EC2 Instance (NOT Recommended)**:
 - Additional costs (~$10-50/month for compute)
 - Requires SSH access and remote development
 - More complex setup (VPN, security groups, SSH keys)
@@ -660,35 +1085,35 @@ This automated approach will set up your complete Agentic AI DevSecOps environme
 
 **Architecture Flow**:
 ```
-┌─────────────────────────────────────────────────────┐
-│  YOUR LOCAL MACHINE (Development)                   │
-│  ├─ Clone repo                                      │
-│  ├─ Ollama + LLaMA 3.1 (AI runs here)              │
-│  ├─ AWS CLI (configured with credentials)          │
-│  ├─ Terraform (deploys to AWS from here)           │
-│  ├─ Git (push code to GitHub)                      │
-│  └─ Code editor (VS Code, etc.)                    │
-└──────────────┬──────────────────────────────────────┘
-               │
-               ▼ (git push)
-┌─────────────────────────────────────────────────────┐
-│  GITHUB (Code Repository & CI/CD)                   │
-│  ├─ GitHub Actions (runs workflows)                │
-│  ├─ Security scans                                  │
-│  └─ Terraform apply (via Actions)                  │
-└──────────────┬──────────────────────────────────────┘
-               │
-               ▼ (terraform apply)
-┌─────────────────────────────────────────────────────┐
-│  AWS (Production Infrastructure)                    │
-│  ├─ Lambda functions                                │
-│  ├─ VPC, EC2, Security Groups                      │
-│  ├─ EventBridge, CloudWatch                        │
-│  └─ S3, DynamoDB                                    │
-└─────────────────────────────────────────────────────┘
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚  YOUR LOCAL MACHINE (Development)                   â”‚
+â”‚  â”œâ”€ Clone repo                                      â”‚
+â”‚  â”œâ”€ Ollama + LLaMA 3.1 (AI runs here)              â”‚
+â”‚  â”œâ”€ AWS CLI (configured with credentials)          â”‚
+â”‚  â”œâ”€ Terraform (deploys to AWS from here)           â”‚
+â”‚  â”œâ”€ Git (push code to GitHub)                      â”‚
+â”‚  â””â”€ Code editor (VS Code, etc.)                    â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+               â”‚
+               â–¼ (git push)
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚  GITHUB (Code Repository & CI/CD)                   â”‚
+â”‚  â”œâ”€ GitHub Actions (runs workflows)                â”‚
+â”‚  â”œâ”€ Security scans                                  â”‚
+â”‚  â””â”€ Terraform apply (via Actions)                  â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+               â”‚
+               â–¼ (terraform apply)
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚  AWS (Production Infrastructure)                    â”‚
+â”‚  â”œâ”€ Lambda functions                                â”‚
+â”‚  â”œâ”€ VPC, EC2, Security Groups                      â”‚
+â”‚  â”œâ”€ EventBridge, CloudWatch                        â”‚
+â”‚  â””â”€ S3, DynamoDB                                    â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
 ```
 
-**Summary**: 
+**Summary**:
 - **Setup & Development**: Your local machine
 - **CI/CD & Automation**: GitHub Actions (free)
 - **Production Infrastructure**: AWS (deployed via Terraform)
@@ -700,7 +1125,7 @@ This automated approach will set up your complete Agentic AI DevSecOps environme
 Choose your operating system:
 
 <details>
-<summary><b>🐧 Linux (Ubuntu/Debian)</b></summary>
+<summary><b>ðŸ§ Linux (Ubuntu/Debian)</b></summary>
 
 ```bash
 # Update package manager
@@ -717,7 +1142,7 @@ curl --version
 </details>
 
 <details>
-<summary><b>🍎 macOS</b></summary>
+<summary><b>ðŸŽ macOS</b></summary>
 
 ```bash
 # Install Homebrew (if not already installed)
@@ -734,7 +1159,7 @@ curl --version
 </details>
 
 <details>
-<summary><b>🪟 Windows (Option 1: Git Bash - Recommended for Windows Users)</b></summary>
+<summary><b>ðŸªŸ Windows (Option 1: Git Bash - Recommended for Windows Users)</b></summary>
 
 **Git Bash** provides a Linux-like terminal on Windows without WSL2. This is the easiest option for Windows users.
 
@@ -743,13 +1168,13 @@ curl --version
 # Visit: https://git-scm.com/download/win
 # Download the installer (64-bit recommended)
 # During installation:
-#   ✅ Check "Git Bash Here"
-#   ✅ Check "Git from the command line and also from 3rd-party software"
-#   ✅ Use default options for everything else
+#   âœ… Check "Git Bash Here"
+#   âœ… Check "Git from the command line and also from 3rd-party software"
+#   âœ… Use default options for everything else
 
 # Step 2: Launch Git Bash
-# Right-click anywhere → "Git Bash Here"
-# Or: Start Menu → "Git Bash"
+# Right-click anywhere â†’ "Git Bash Here"
+# Or: Start Menu â†’ "Git Bash"
 
 # Step 3: Verify Git Bash is working
 git --version
@@ -758,7 +1183,7 @@ git --version
 # Step 4: Install Python (if not already installed)
 # Download Python from: https://www.python.org/downloads/
 # During installation:
-#   ⚠️ IMPORTANT: Check "Add Python to PATH"
+#   âš ï¸ IMPORTANT: Check "Add Python to PATH"
 #   Install with default options
 
 # Step 5: Verify Python in Git Bash
@@ -788,23 +1213,23 @@ EOF
 # Reload bash configuration
 source ~/.bashrc
 
-# ✅ Git Bash is ready!
+# âœ… Git Bash is ready!
 # You can now run all Linux commands in the rest of this guide
 ```
 
 **Advantages of Git Bash**:
-- ✅ No system restart required (unlike WSL2)
-- ✅ Lightweight and fast
-- ✅ Native Windows integration
-- ✅ Run Linux commands directly (bash, curl, grep, etc.)
-- ✅ Perfect for this project
+- âœ… No system restart required (unlike WSL2)
+- âœ… Lightweight and fast
+- âœ… Native Windows integration
+- âœ… Run Linux commands directly (bash, curl, grep, etc.)
+- âœ… Perfect for this project
 
 **Note**: All commands in this guide work in Git Bash!
 
 </details>
 
 <details>
-<summary><b>🪟 Windows (Option 2: WSL2 - Ubuntu)</b></summary>
+<summary><b>ðŸªŸ Windows (Option 2: WSL2 - Ubuntu)</b></summary>
 
 **WSL2** provides a full Linux environment on Windows. Use this if you prefer a complete Linux subsystem.
 
@@ -920,7 +1345,7 @@ aws s3 ls
 # Should show your terraform state bucket from Step 1
 ```
 
-✅ **Success**: You can now deploy infrastructure to AWS from your local machine!
+âœ… **Success**: You can now deploy infrastructure to AWS from your local machine!
 
 ---
 
@@ -965,7 +1390,7 @@ aws s3api get-bucket-versioning --bucket your-terraform-state-bucket
 # Expected: "Status": "Enabled"
 ```
 
-✅ **Backend configured**: Terraform will use S3 for state storage!
+âœ… **Backend configured**: Terraform will use S3 for state storage!
 
 **Note**: If you created your own S3 bucket in Step 1 with a different name (e.g., `my-company-terraform-state`), you'll need to update `backend.tf`:
 
@@ -995,16 +1420,16 @@ ls -lh scripts/setup-ai.sh
 ./scripts/setup-ai.sh
 
 # The script will automatically:
-# ✅ Detect your OS (Linux/macOS/WSL2)
-# ✅ Install Python 3, pip, git, curl
-# ✅ Install Terraform 1.6.0
-# ✅ Install security tools (TFLint, tfsec, Checkov, Trivy)
-# ✅ Install Ollama (local AI runtime)
-# ✅ Download LLaMA 3.1:8b model (~4.7GB, one-time)
-# ✅ Install OPA (Open Policy Agent)
-# ✅ Install Python dependencies (requests, boto3, etc.)
-# ✅ Set up pre-commit hooks for git
-# ✅ Validate all installations
+# âœ… Detect your OS (Linux/macOS/WSL2)
+# âœ… Install Python 3, pip, git, curl
+# âœ… Install Terraform 1.6.0
+# âœ… Install security tools (TFLint, tfsec, Checkov, Trivy)
+# âœ… Install Ollama (local AI runtime)
+# âœ… Download LLaMA 3.1:8b model (~4.7GB, one-time)
+# âœ… Install OPA (Open Policy Agent)
+# âœ… Install Python dependencies (requests, boto3, etc.)
+# âœ… Set up pre-commit hooks for git
+# âœ… Validate all installations
 
 # This will take 10-15 minutes depending on your internet speed
 ```
@@ -1018,9 +1443,9 @@ ls -lh scripts/setup-ai.sh
 
 ---
 
-##### Step 6: Initialize and Deploy Infrastructure
+##### Step 8: Initialize and Deploy Infrastructure
 
-**6.1: Review Terraform Configuration**
+**8.1: Review Terraform Configuration**
 
 ```bash
 # Navigate to dev environment
@@ -1043,9 +1468,9 @@ cat terraform.tfvars
 # auto_fix_enabled = false  # Dry-run mode (safe)
 ```
 
-**6.2: Update Required Configuration**
+**8.2: Update Required Configuration**
 
-⚠️ **IMPORTANT**: You must update these values:
+âš ï¸ **IMPORTANT**: You must update these values:
 
 ```bash
 # 1. Get your public IP address
@@ -1067,7 +1492,7 @@ nano terraform.tfvars  # or: vim, code, notepad, etc.
 # Save and exit (Ctrl+X, Y, Enter in nano)
 ```
 
-**6.3: Initialize Terraform**
+**8.3: Initialize Terraform**
 
 ```bash
 # Initialize Terraform (downloads providers and modules)
@@ -1078,28 +1503,28 @@ terraform init
 # - lambda_functions in ../../modules/lambda-functions
 # - security in ../../modules/security
 # - vpc in ../../modules/vpc
-# 
+#
 # Initializing the backend...
 # Successfully configured the backend "s3"!
-# 
+#
 # Initializing provider plugins...
 # - Using hashicorp/aws v6.28.0
 # - Using hashicorp/archive v2.7.1
-# 
+#
 # Terraform has been successfully initialized!
 ```
 
-**6.4: Review Infrastructure Plan**
+**8.4: Review Infrastructure Plan**
 
 ```bash
 # Generate and review the execution plan
 terraform plan
 
 # Expected output summary:
-# Plan: 21 to add, 0 to change, 0 to destroy.
+# Plan: 25 to add, 0 to change, 0 to destroy.
 
 # Resources to be created:
-# 
+#
 # VPC & Networking (7 resources):
 #   - aws_vpc.main (10.0.0.0/16)
 #   - aws_subnet.public[0] (10.0.1.0/24, us-east-1a)
@@ -1108,7 +1533,7 @@ terraform plan
 #   - aws_subnet.private[1] (10.0.4.0/24, us-east-1b)
 #   - aws_internet_gateway.main
 #   - aws_route_table.public + associations
-# 
+#
 # Lambda Functions (14 resources):
 #   - aws_lambda_function.auto_remediation (Python 3.11, 256MB)
 #   - aws_lambda_function.security_response (Python 3.11, 256MB)
@@ -1123,56 +1548,172 @@ terraform plan
 #   - aws_sns_topic_subscription.email (your-email@example.com)
 ```
 
-**6.5: Deploy Infrastructure**
+**8.5: Deploy Infrastructure**
 
 ```bash
-# Apply the configuration (creates AWS resources)
-terraform apply
+# PowerShell:
+terraform apply -var-file terraform.tfvars
 
-# Review the plan again, then type 'yes' when prompted
-# 
+# Git Bash:
+terraform apply -var-file terraform.tfvars
+
+# Review the plan, then type 'yes' when prompted
+#
 # Do you want to perform these actions?
 #   Terraform will perform the actions described above.
 #   Only 'yes' will be accepted to approve.
-# 
+#
 #   Enter a value: yes
 
-# ⏳ Deployment in progress... (5-10 minutes)
-# 
-# Expected output:
-# module.vpc.aws_vpc.main: Creating...
-# module.vpc.aws_vpc.main: Creation complete after 3s
-# module.vpc.aws_internet_gateway.main: Creating...
-# module.vpc.aws_subnet.public[0]: Creating...
-# module.vpc.aws_subnet.public[1]: Creating...
-# ...
-# module.lambda_functions.aws_lambda_function.auto_remediation: Creating...
-# module.lambda_functions.aws_lambda_function.security_response: Creating...
-# module.lambda_functions.aws_sns_topic.notifications: Creating...
-# module.lambda_functions.aws_sns_topic_subscription.email: Creating...
-# ...
-# 
-# Apply complete! Resources: 21 added, 0 changed, 0 destroyed.
+# â³ Deployment in progress...
+#
+# VPC resources will create first (3-5 seconds):
+# aws_vpc.main: Creating...
+# aws_vpc.main: Creation complete after 3s [id=vpc-xxxxx]
+# aws_subnet.public[0]: Creating...
+# aws_subnet.public[1]: Creating...
+# aws_internet_gateway.main: Creating...
+# aws_route_table.public: Creating...
+# aws_route_table_association.public[0]: Creating...
+# aws_route_table_association.public[1]: Creating...
 ```
 
-**6.6: Verify Deployment Success**
+âš ï¸ **COMMON ERROR**: KMS Permission Denied
+
+If you see this error:
+```
+Error: creating KMS Key: operation error KMS: CreateKey, https response error
+StatusCode: 400, api error AccessDeniedException: User: arn:aws:iam::YOUR_ACCOUNT:user/agentic-ai
+is not authorized to perform: kms:TagResource because no identity-based policy allows
+the kms:TagResource action
+```
+
+**Fix (PowerShell)**:
+```powershell
+# Create KMS policy file
+@'
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": ["kms:*"],
+      "Resource": "*"
+    }
+  ]
+}
+'@ | Out-File -FilePath kms-policy.json -Encoding ASCII
+
+# Add KMS permissions
+aws iam put-user-policy --user-name agentic-ai --policy-name KMSAccess --policy-document file://kms-policy.json
+
+# Verify policy added
+aws iam list-user-policies --user-name agentic-ai
+# Expected: {"PolicyNames": ["KMSAccess"]}
+
+# Clean up
+Remove-Item kms-policy.json
+
+# Retry deployment
+terraform apply -var-file terraform.tfvars
+```
+
+**Fix (Git Bash)**:
+```bash
+# Create KMS policy file
+cat > kms-policy.json <<'EOF'
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": ["kms:*"],
+      "Resource": "*"
+    }
+  ]
+}
+EOF
+
+# Add KMS permissions
+aws iam put-user-policy --user-name agentic-ai --policy-name KMSAccess --policy-document file://kms-policy.json
+
+# Verify
+aws iam list-user-policies --user-name agentic-ai
+
+# Clean up and retry
+rm kms-policy.json
+terraform apply -var-file terraform.tfvars
+```
+
+**After fixing KMS permissions, deployment will complete**:
+```
+# KMS keys will create (10-15 seconds each):
+module.lambda_functions.aws_kms_key.sns: Creating...
+module.lambda_functions.aws_kms_key.cloudwatch: Creating...
+module.lambda_functions.aws_kms_key.sns: Creation complete after 10s
+module.lambda_functions.aws_kms_key.cloudwatch: Creation complete after 14s
+
+# Lambda functions and other resources:
+module.lambda_functions.aws_sns_topic.notifications: Creating...
+module.lambda_functions.aws_lambda_function.auto_remediation: Creating...
+module.lambda_functions.aws_lambda_function.security_response: Creating...
+module.lambda_functions.aws_cloudwatch_log_group.auto_remediation: Creating...
+module.lambda_functions.aws_cloudwatch_event_target.security_group_changes: Creating...
+
+# âœ… Success message:
+Apply complete! Resources: 25 added, 0 changed, 0 destroyed.
+```
+
+**8.6: Verify Deployment Success**
 
 ```bash
-# Check VPC creation
-aws ec2 describe-vpcs --filters "Name=tag:Name,Values=agentic-devsecops-dev-vpc"
+# PowerShell & Git Bash - Run these comprehensive checks:
 
-# Check Lambda functions
-aws lambda list-functions --query "Functions[?contains(FunctionName, 'agentic')].FunctionName"
+# 1. Check VPC creation
+aws ec2 describe-vpcs --filters "Name=tag:Name,Values=agentic-devsecops-dev-vpc" --query "Vpcs[0].[VpcId,CidrBlock,State]" --output table
+# Expected: vpc-xxxxx | 10.0.0.0/16 | available
 
-# Check SNS topic
-aws sns list-topics --query "Topics[?contains(TopicArn, 'agentic-devsecops-dev-notifications')]"
+# 2. Check Lambda functions (should show 2 functions)
+aws lambda list-functions --query "Functions[?contains(FunctionName, 'agentic')].{Name:FunctionName,Runtime:Runtime,Status:State}" --output table
+# Expected:
+# agentic-devsecops-dev-auto-remediation | python3.11 | Active
+# agentic-devsecops-dev-security-response | python3.11 | Active
 
-# Expected output: All resources created successfully!
+# 3. Check KMS keys (should show 2 keys with rotation enabled)
+aws kms list-aliases --query "Aliases[?contains(AliasName, 'agentic-devsecops')].AliasName" --output table
+# Expected:
+# alias/agentic-devsecops-dev-cloudwatch
+# alias/agentic-devsecops-dev-sns
+
+# 4. Check EventBridge rules (should show 2 rules)
+aws events list-rules --query "Rules[?contains(Name, 'agentic-devsecops')].{Name:Name,State:State}" --output table
+# Expected:
+# agentic-devsecops-dev-ec2-state-changes | ENABLED
+# agentic-devsecops-dev-security-group-changes | ENABLED
+
+# 5. Check SNS topic
+aws sns list-topics --query "Topics[?contains(TopicArn, 'agentic-devsecops-dev-notifications')]" --output text
+# Expected: arn:aws:sns:us-east-1:YOUR_ACCOUNT:agentic-devsecops-dev-notifications
+
+# 6. Check CloudWatch Log Groups
+aws logs describe-log-groups --query "logGroups[?contains(logGroupName, 'agentic-devsecops')].{Name:logGroupName,RetentionDays:retentionInDays}" --output table
+# Expected:
+# /aws/lambda/agentic-devsecops-dev-auto-remediation | 14
+# /aws/lambda/agentic-devsecops-dev-security-response | 14
+
+# 7. Count total resources
+echo "VPCs: $(aws ec2 describe-vpcs --filters "Name=tag:Name,Values=*agentic*" --query 'Vpcs | length(@)')"
+echo "Subnets: $(aws ec2 describe-subnets --filters "Name=tag:Name,Values=*agentic*" --query 'Subnets | length(@)')"
+echo "Lambda Functions: $(aws lambda list-functions --query 'Functions[?contains(FunctionName, `agentic`)] | length(@)')"
+echo "EventBridge Rules: $(aws events list-rules --query 'Rules[?contains(Name, `agentic`)] | length(@)')"
+# Expected: VPCs=1, Subnets=2, Lambda Functions=2, EventBridge Rules=2
+
+# âœ… If all checks pass: You have 25 resources deployed successfully!
 ```
 
-**6.7: Important Next Step**
+**8.7: Important Next Step**
 
-⚠️ **CHECK YOUR EMAIL**: You should receive an SNS subscription confirmation email within 1-2 minutes.
+âš ï¸ **CHECK YOUR EMAIL**: You should receive an SNS subscription confirmation email within 1-2 minutes.
 
 ```
 From: AWS Notifications <no-reply@sns.amazonaws.com>
@@ -1189,16 +1730,190 @@ To confirm this subscription, click or visit the link below:
 
 ---
 
+**8.8: Enable CloudTrail (Required for Lambda Auto-Remediation)**
+
+âš ï¸ **CRITICAL**: The Lambda functions need **CloudTrail** to detect security group changes. Without CloudTrail, EventBridge won't receive API call events.
+
+**Cost Impact**: CloudTrail adds ~$2/month for management events.
+
+**PowerShell Setup**:
+```powershell
+# Step 1: Add CloudTrail permissions to IAM user
+@'
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "cloudtrail:*",
+        "s3:CreateBucket",
+        "s3:PutBucketPolicy",
+        "s3:PutObject"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
+'@ | Out-File -FilePath cloudtrail-policy.json -Encoding ASCII
+
+aws iam put-user-policy --user-name agentic-ai --policy-name CloudTrailAccess --policy-document file://cloudtrail-policy.json
+
+# Step 2: Get your AWS account ID
+$ACCOUNT_ID = (aws sts get-caller-identity --query Account --output text)
+Write-Host "Account ID: $ACCOUNT_ID"
+
+# Step 3: Create S3 bucket for CloudTrail logs
+aws s3 mb s3://agentic-devsecops-cloudtrail-logs-$ACCOUNT_ID --region us-east-1
+
+# Step 4: Create S3 bucket policy for CloudTrail
+@"
+{
+  ""Version"": ""2012-10-17"",
+  ""Statement"": [
+    {
+      ""Sid"": ""AWSCloudTrailAclCheck"",
+      ""Effect"": ""Allow"",
+      ""Principal"": {
+        ""Service"": ""cloudtrail.amazonaws.com""
+      },
+      ""Action"": ""s3:GetBucketAcl"",
+      ""Resource"": ""arn:aws:s3:::agentic-devsecops-cloudtrail-logs-$ACCOUNT_ID""
+    },
+    {
+      ""Sid"": ""AWSCloudTrailWrite"",
+      ""Effect"": ""Allow"",
+      ""Principal"": {
+        ""Service"": ""cloudtrail.amazonaws.com""
+      },
+      ""Action"": ""s3:PutObject"",
+      ""Resource"": ""arn:aws:s3:::agentic-devsecops-cloudtrail-logs-$ACCOUNT_ID/AWSLogs/$ACCOUNT_ID/*"",
+      ""Condition"": {
+        ""StringEquals"": {
+          ""s3:x-amz-acl"": ""bucket-owner-full-control""
+        }
+      }
+    }
+  ]
+}
+"@ | Out-File -FilePath s3-cloudtrail-policy.json -Encoding ASCII
+
+aws s3api put-bucket-policy --bucket agentic-devsecops-cloudtrail-logs-$ACCOUNT_ID --policy file://s3-cloudtrail-policy.json
+
+# Step 5: Create CloudTrail
+aws cloudtrail create-trail --name agentic-devsecops-trail --s3-bucket-name agentic-devsecops-cloudtrail-logs-$ACCOUNT_ID
+
+# Step 6: Start logging
+aws cloudtrail start-logging --name agentic-devsecops-trail
+
+# Step 7: Verify CloudTrail is active
+aws cloudtrail get-trail-status --name agentic-devsecops-trail --query IsLogging
+# Expected: true
+
+# Clean up policy files
+Remove-Item cloudtrail-policy.json, s3-cloudtrail-policy.json
+
+Write-Host "âœ… CloudTrail enabled! Lambda will now receive security group change events."
+```
+
+**Git Bash Setup**:
+```bash
+# Step 1: Add CloudTrail permissions
+cat > cloudtrail-policy.json <<'EOF'
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "cloudtrail:*",
+        "s3:CreateBucket",
+        "s3:PutBucketPolicy",
+        "s3:PutObject"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
+EOF
+
+aws iam put-user-policy --user-name agentic-ai --policy-name CloudTrailAccess --policy-document file://cloudtrail-policy.json
+
+# Step 2: Get AWS account ID
+ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
+echo "Account ID: $ACCOUNT_ID"
+
+# Step 3: Create S3 bucket
+aws s3 mb s3://agentic-devsecops-cloudtrail-logs-$ACCOUNT_ID --region us-east-1
+
+# Step 4: Create S3 bucket policy
+cat > s3-cloudtrail-policy.json <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "AWSCloudTrailAclCheck",
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "cloudtrail.amazonaws.com"
+      },
+      "Action": "s3:GetBucketAcl",
+      "Resource": "arn:aws:s3:::agentic-devsecops-cloudtrail-logs-$ACCOUNT_ID"
+    },
+    {
+      "Sid": "AWSCloudTrailWrite",
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "cloudtrail.amazonaws.com"
+      },
+      "Action": "s3:PutObject",
+      "Resource": "arn:aws:s3:::agentic-devsecops-cloudtrail-logs-$ACCOUNT_ID/AWSLogs/$ACCOUNT_ID/*",
+      "Condition": {
+        "StringEquals": {
+          "s3:x-amz-acl": "bucket-owner-full-control"
+        }
+      }
+    }
+  ]
+}
+EOF
+
+aws s3api put-bucket-policy --bucket agentic-devsecops-cloudtrail-logs-$ACCOUNT_ID --policy file://s3-cloudtrail-policy.json
+
+# Step 5: Create CloudTrail
+aws cloudtrail create-trail --name agentic-devsecops-trail --s3-bucket-name agentic-devsecops-cloudtrail-logs-$ACCOUNT_ID
+
+# Step 6: Start logging
+aws cloudtrail start-logging --name agentic-devsecops-trail
+
+# Step 7: Verify
+aws cloudtrail get-trail-status --name agentic-devsecops-trail --query IsLogging
+# Expected: true
+
+# Clean up
+rm cloudtrail-policy.json s3-cloudtrail-policy.json
+
+echo "âœ… CloudTrail enabled!"
+```
+
+**What CloudTrail Does:**
+- ðŸ“ Logs all AWS API calls (who did what, when)
+- ðŸ”” Sends events to EventBridge
+- âš¡ Triggers Lambda when security groups change
+- ðŸ”’ Provides audit trail for compliance
+
+**Note**: CloudTrail events can take 5-15 minutes to appear in EventBridge after an API call.
+
 ---
 
-##### Step 7: Configure GitHub Repository Secrets
+##### Step 9: Configure GitHub Repository Secrets
 
 1. **Go to your GitHub repository**:
    - URL: `https://github.com/<your-username>/agentic-devsecops-aws`
 
 2. **Navigate to Settings**:
    - Click **Settings** tab
-   - Click **Secrets and variables** → **Actions**
+   - Click **Secrets and variables** â†’ **Actions**
 
 3. **Add these secrets** (click **New repository secret** for each):
 
@@ -1216,7 +1931,7 @@ To confirm this subscription, click or visit the link below:
 
 ---
 
-##### Step 7.1: (Optional) Set Up Slack Notifications
+##### Step 9.1: (Optional) Set Up Slack Notifications
 
 If you want to receive deployment and security notifications in Slack, follow these steps:
 
@@ -1246,7 +1961,7 @@ If you want to receive deployment and security notifications in Slack, follow th
 - Click the **"Copy"** button to copy the full URL
 
 **5. Add to GitHub Secrets**:
-- Go back to: **Settings** → **Secrets and variables** → **Actions**
+- Go back to: **Settings** â†’ **Secrets and variables** â†’ **Actions**
 - Click **"New repository secret"**
 - **Name**: `SLACK_WEBHOOK_URL`
 - **Value**: Paste your webhook URL
@@ -1266,23 +1981,199 @@ export SLACK_WEBHOOK_URL="https://hooks.slack.com/services/YOUR/WEBHOOK/URL"
 
 # Test notification
 python3 slack-webhook.py
-# Expected output: ✅ Test notification sent successfully!
+# Expected output: âœ… Test notification sent successfully!
 
 # You should see a test message in your Slack channel!
 ```
 
 **What Notifications Will You Receive?**
-- ✅ Successful deployments
-- ❌ Failed deployments  
-- 🔒 Security alerts
-- 🤖 AI code review summaries
-- 💰 Cost optimization recommendations
+- âœ… Successful deployments
+- âŒ Failed deployments
+- ðŸ”’ Security alerts
+- ðŸ¤– AI code review summaries
+- ðŸ’° Cost optimization recommendations
 
 **Note**: Slack notifications are completely optional. Your infrastructure works perfectly without them!
 
 ---
 
-##### Step 8: Test the AI-Powered Workflows
+##### Step 9.2: Test Ollama AI (Local Code Review)**
+
+**Ollama** is your local AI that performs security code reviews without cloud API costs.
+
+**Step 1: Verify Ollama Installation**
+
+```bash
+# PowerShell:
+ollama --version
+# Expected: ollama version is 0.14.1 or later
+
+# Check installed models
+ollama list
+# Expected: llama3.1:8b (4.9 GB)
+
+# Git Bash:
+ollama --version
+ollama list
+```
+
+**Step 2: Test Basic AI Response**
+
+```bash
+# PowerShell:
+ollama run llama3.1:8b "What are the top 3 AWS security best practices?"
+
+# Git Bash:
+ollama run llama3.1:8b "What are the top 3 AWS security best practices?"
+```
+
+**Expected AI response** (within 2-5 seconds):
+```
+Here are the top 3 AWS security best practices:
+
+1. **Implement Least Privilege Access**: Use IAM policies to grant users and
+   services only the minimum permissions needed. Avoid using root credentials.
+
+2. **Enable Multi-Factor Authentication (MFA)**: Require MFA for all users,
+   especially those with administrative access.
+
+3. **Encrypt Data at Rest and in Transit**: Use AWS KMS for encryption keys,
+   enable encryption on S3 buckets, RDS databases, and use TLS/SSL for data
+   in transit.
+```
+
+**Step 3: Test Security Code Analysis**
+
+```bash
+# PowerShell:
+ollama run llama3.1:8b @'
+Review this Terraform code for security issues:
+
+resource "aws_security_group" "test" {
+  name = "test-sg"
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+What are the risks and recommendations?
+'@
+
+# Git Bash:
+ollama run llama3.1:8b 'Review this Terraform code for security issues:
+
+resource "aws_security_group" "test" {
+  name = "test-sg"
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+What are the risks and recommendations?'
+```
+
+**Expected AI analysis**:
+```
+The Terraform code has a critical security vulnerability:
+
+**Risk**: SSH (port 22) is open to the entire internet (0.0.0.0/0), allowing
+anyone to attempt connections. This exposes the server to:
+- Brute force attacks
+- Unauthorized access attempts
+- Compliance violations (PCI-DSS, HIPAA)
+- Potential data breaches
+
+**Recommendations**:
+1. Restrict SSH to specific IP addresses:
+   cidr_blocks = ["YOUR_IP/32"]
+
+2. Use a bastion host/jump box for remote access
+
+3. Implement key-based authentication instead of passwords
+
+4. Enable VPC Flow Logs to monitor access attempts
+
+5. Use AWS Systems Manager Session Manager as an alternative to SSH
+```
+
+**Step 4: Performance Test**
+
+```bash
+# Quick response test (should respond in 2-5 seconds)
+# PowerShell:
+Measure-Command { ollama run llama3.1:8b "List 3 AWS Lambda best practices" }
+
+# Git Bash:
+time ollama run llama3.1:8b "List 3 AWS Lambda best practices"
+```
+
+**Expected timing**:
+- First query: 3-7 seconds (model loading)
+- Subsequent queries: 1-3 seconds (model cached)
+
+**Step 5: Test AI Code Reviewer Script**
+
+âš ï¸ **Note**: The Python script has encoding issues on Windows PowerShell. Use direct Ollama commands instead.
+
+```bash
+# Working alternative - Direct AI review:
+ollama run llama3.1:8b @'
+Analyze this Lambda function for security issues:
+
+import boto3
+import os
+
+def lambda_handler(event, context):
+    s3 = boto3.client("s3")
+    bucket = os.environ["BUCKET_NAME"]
+    s3.put_object(Bucket=bucket, Key="test.txt", Body="Hello")
+    return {"statusCode": 200}
+
+What security improvements would you recommend?
+'@
+```
+
+**Expected AI recommendations**:
+```
+Security improvements for this Lambda function:
+
+1. **Add error handling**: Wrap S3 operations in try-except blocks
+2. **Validate environment variables**: Check if BUCKET_NAME exists before use
+3. **Use least privilege IAM**: Restrict S3 permissions to specific bucket/prefix
+4. **Add logging**: Use CloudWatch Logs for audit trail
+5. **Encrypt data**: Use SSE-KMS for S3 object encryption
+6. **Input validation**: Sanitize any user input before processing
+```
+
+**Ollama Status Summary**:
+- âœ… **Installation**: Working (version 0.14.1+)
+- âœ… **Model**: LLaMA 3.1:8b loaded (4.9 GB)
+- âœ… **Response Time**: 2-5 seconds per query
+- âœ… **Security Analysis**: Accurate vulnerability detection
+- âœ… **Cost**: $0/month (runs locally)
+- âœ… **Use Cases**: Code review, security analysis, compliance checks
+
+**Interactive AI Session**:
+```bash
+# Start interactive chat (exit with /bye)
+ollama run llama3.1:8b
+
+# Example prompts to try:
+>>> Explain AWS Lambda cold starts
+>>> How do I secure an S3 bucket?
+>>> What's the difference between security groups and NACLs?
+>>> Review this IAM policy for least privilege
+```
+
+---
+
+##### Step 10: Test the AI-Powered Workflows
 
 ```bash
 # Return to project root
@@ -1302,17 +2193,17 @@ git push origin test/ai-review
 # Create Pull Request on GitHub
 # Go to: https://github.com/<your-username>/agentic-devsecops-aws/pulls
 # Click "New pull request"
-# Select: base: main ← compare: test/ai-review
+# Select: base: main â† compare: test/ai-review
 # Click "Create pull request"
 ```
 
 **What happens next**:
-1. ✅ **GitHub Actions workflows trigger automatically**
-2. ✅ **Security scans run** (TFLint, tfsec, Checkov, Trivy)
-3. ✅ **Terraform validation** checks syntax and configuration
-4. ✅ **OPA policies** validate compliance rules
-5. ✅ **Results appear** as workflow status on PR
-6. ✅ **Notifications sent** to Discord/Slack (if configured)
+1. âœ… **GitHub Actions workflows trigger automatically**
+2. âœ… **Security scans run** (TFLint, tfsec, Checkov, Trivy)
+3. âœ… **Terraform validation** checks syntax and configuration
+4. âœ… **OPA policies** validate compliance rules
+5. âœ… **Results appear** as workflow status on PR
+6. âœ… **Notifications sent** to Discord/Slack (if configured)
 
 **Note about AI Code Review:**
 - The AI review runs **locally** on your machine, not in GitHub Actions
@@ -1320,19 +2211,19 @@ git push origin test/ai-review
 - This keeps costs at $0 (no cloud AI API calls needed)
 
 **Workflow Files Fixed (Latest Version):**
-- ✅ **terraform-plan.yml**: Now uses correct working directory (`terraform/environments/dev`)
-- ✅ **terraform-apply.yml**: Manual trigger only (safety feature), proper AWS credentials
-- ✅ **Updated actions**: Using latest versions (v4 for checkout, v3 for Terraform)
-- ✅ **Terraform version**: 1.6.0 (matches local version)
-- ✅ **Added validation step**: Catches errors before planning
+- âœ… **terraform-plan.yml**: Now uses correct working directory (`terraform/environments/dev`)
+- âœ… **terraform-apply.yml**: Manual trigger only (safety feature), proper AWS credentials
+- âœ… **Updated actions**: Using latest versions (v4 for checkout, v3 for Terraform)
+- âœ… **Terraform version**: 1.6.0 (matches local version)
+- âœ… **Added validation step**: Catches errors before planning
 
 ---
 
-##### Step 9: Deploy and Monitor AWS Lambda Functions
+##### Step 11: Deploy and Monitor AWS Lambda Functions
 
-**9.1: Verify Lambda Deployment**
+**11.1: Verify Lambda Deployment**
 
-After running `terraform apply` in Step 6, verify your Lambda functions are deployed:
+After running `terraform apply` in Step 8, verify your Lambda functions are deployed:
 
 ```bash
 # Check Lambda functions
@@ -1355,9 +2246,9 @@ aws lambda get-function --function-name agentic-devsecops-dev-auto-remediation
 # - State: Active
 ```
 
-**9.2: Confirm SNS Email Subscription**
+**11.2: Confirm SNS Email Subscription**
 
-⚠️ **IMPORTANT**: You must confirm your email subscription to receive notifications!
+âš ï¸ **IMPORTANT**: You must confirm your email subscription to receive notifications!
 
 ```bash
 # 1. Check your email inbox (the one you configured in terraform.tfvars)
@@ -1384,7 +2275,7 @@ aws sns list-subscriptions-by-topic \
 # }
 ```
 
-**9.3: View Lambda Resources Created**
+**11.3: View Lambda Resources Created**
 
 The `terraform apply` created 14 Lambda-related resources:
 
@@ -1404,7 +2295,7 @@ The `terraform apply` created 14 Lambda-related resources:
 | **SNS Topic** | `notifications` | Email/Slack notifications |
 | **SNS Subscription** | Email subscription | Sends emails to your address |
 
-**9.4: Monitor Lambda Logs (Real-Time)**
+**11.4: Monitor Lambda Logs (Real-Time)**
 
 ```bash
 # Tail auto-remediation logs (Ctrl+C to exit)
@@ -1422,7 +2313,7 @@ aws logs tail /aws/lambda/agentic-devsecops-dev-auto-remediation \
     --follow
 ```
 
-**9.5: Test Auto-Remediation (Dry-Run Mode)**
+**11.5: Test Auto-Remediation (Dry-Run Mode)**
 
 By default, `auto_fix_enabled = false` means Lambda will **detect but not fix** issues (safe for testing).
 
@@ -1445,28 +2336,35 @@ aws ec2 authorize-security-group-ingress \
     --port 22 \
     --cidr 0.0.0.0/0
 
-# This triggers EventBridge → Lambda within seconds!
+# This triggers: API call â†’ CloudTrail â†’ EventBridge â†’ Lambda
+# â³ Note: CloudTrail events take 5-15 minutes to appear in EventBridge
+# This is normal AWS CloudTrail delivery latency!
 ```
 
 **Test 2: Check Lambda Execution**
 
 ```bash
-# Wait 30-60 seconds for Lambda to process the event
+# â³ Wait 5-15 minutes for CloudTrail to deliver the event to EventBridge
+# This is normal AWS CloudTrail latency - NOT a bug!
 
-# View Lambda logs (should show detection)
-aws logs tail /aws/lambda/agentic-devsecops-dev-auto-remediation --since 5m
+# Check if CloudTrail is logging
+aws cloudtrail get-trail-status --name agentic-devsecops-trail --query "IsLogging"
+# Expected: true
+
+# View Lambda logs (after the CloudTrail delay)
+aws logs tail /aws/lambda/agentic-devsecops-dev-auto-remediation --since 20m
 
 # Expected log output:
-# 🔍 DETECTION MODE: Auto-fix is DISABLED
-# 🚨 Security Issue Detected!
-# ├─ Type: Overly permissive security group
-# ├─ Resource: sg-xxxxx (test-insecure-sg)
-# ├─ Issue: SSH (port 22) open to 0.0.0.0/0
-# ├─ Risk Level: HIGH
-# └─ Recommendation: Restrict to specific IP ranges
-# 
-# ⚠️  Would fix in production mode (auto_fix_enabled = true)
-# 📧 Sending notification to SNS...
+# ðŸ” DETECTION MODE: Auto-fix is DISABLED
+# ðŸš¨ Security Issue Detected!
+# â”œâ”€ Type: Overly permissive security group
+# â”œâ”€ Resource: sg-xxxxx (test-insecure-sg)
+# â”œâ”€ Issue: SSH (port 22) open to 0.0.0.0/0
+# â”œâ”€ Risk Level: HIGH
+# â””â”€ Recommendation: Restrict to specific IP ranges
+#
+# âš ï¸  Would fix in production mode (auto_fix_enabled = true)
+# ðŸ“§ Sending notification to SNS...
 ```
 
 **Test 3: Check Your Email**
@@ -1500,9 +2398,9 @@ aws ec2 describe-security-groups --group-ids $SG_ID --query "SecurityGroups[0].I
 # Expected output shows SSH still open to 0.0.0.0/0 (not fixed in dry-run)
 ```
 
-**9.6: Test Auto-Remediation (Production Mode - Auto-Fix)**
+**11.6: Test Auto-Remediation (Production Mode - Auto-Fix)**
 
-⚠️ **WARNING**: This will automatically modify AWS resources!
+âš ï¸ **WARNING**: This will automatically modify AWS resources!
 
 ```bash
 # Navigate to terraform dev environment
@@ -1512,7 +2410,7 @@ cd terraform/environments/dev
 nano terraform.tfvars  # or: vim, code, etc.
 
 # Change this line:
-# auto_fix_enabled = false  →  auto_fix_enabled = true
+# auto_fix_enabled = false  â†’  auto_fix_enabled = true
 
 # Apply the change
 terraform apply
@@ -1540,18 +2438,18 @@ aws ec2 authorize-security-group-ingress \
 aws logs tail /aws/lambda/agentic-devsecops-dev-auto-remediation --since 5m
 
 # Expected log output:
-# ✅ AUTO-FIX MODE: Enabled
-# 🚨 Security Issue Detected!
-# ├─ Type: Overly permissive security group
-# ├─ Resource: sg-xxxxx (test-insecure-sg)
-# ├─ Issue: RDP (port 3389) open to 0.0.0.0/0
-# ├─ Risk Level: CRITICAL
-# └─ Action: REMOVING insecure rule
-# 
-# 🔧 Fixing security issue...
-# ✅ Successfully removed insecure ingress rule
-# ✅ Applied least-privilege access
-# 📧 Notification sent
+# âœ… AUTO-FIX MODE: Enabled
+# ðŸš¨ Security Issue Detected!
+# â”œâ”€ Type: Overly permissive security group
+# â”œâ”€ Resource: sg-xxxxx (test-insecure-sg)
+# â”œâ”€ Issue: RDP (port 3389) open to 0.0.0.0/0
+# â”œâ”€ Risk Level: CRITICAL
+# â””â”€ Action: REMOVING insecure rule
+#
+# ðŸ”§ Fixing security issue...
+# âœ… Successfully removed insecure ingress rule
+# âœ… Applied least-privilege access
+# ðŸ“§ Notification sent
 ```
 
 **Verify the fix was applied:**
@@ -1563,7 +2461,7 @@ aws ec2 describe-security-groups --group-ids $SG_ID --query "SecurityGroups[0].I
 # RDP 0.0.0.0/0 rule should be gone!
 ```
 
-**9.7: Clean Up Test Resources**
+**11.7: Clean Up Test Resources**
 
 ```bash
 # Delete test security group
@@ -1574,7 +2472,7 @@ aws ec2 describe-security-groups --group-ids $SG_ID
 # Expected: An error: "does not exist" (this is correct!)
 ```
 
-**9.8: Monitor Lambda Performance**
+**11.8: Monitor Lambda Performance**
 
 ```bash
 # Get Lambda metrics (invocation count, errors, duration)
@@ -1608,7 +2506,7 @@ aws cloudwatch get-metric-statistics \
     --statistics Average
 ```
 
-**9.9: View Lambda in AWS Console**
+**11.9: View Lambda in AWS Console**
 
 **Option 1: Command Line (opens in browser)**
 ```bash
@@ -1632,7 +2530,7 @@ echo "Lambda Console: https://console.aws.amazon.com/lambda/home?region=us-east-
    - **Configuration** tab: Memory, timeout, environment variables
    - **Logs** tab: CloudWatch logs (same as CLI)
 
-**9.10: Cost Tracking (Lambda)**
+**11.10: Cost Tracking (Lambda)**
 
 Lambda is **FREE** for personal use:
 - **Free Tier**: 1 million requests/month + 400,000 GB-seconds compute
@@ -1648,12 +2546,12 @@ Lambda is **FREE** for personal use:
 
 ---
 
-##### Step 10: Verify AI Assistant is Running
+##### Step 12: Verify AI Assistant is Running
 
-**10.1: Install Ollama and Pull LLaMA Model**
+**12.1: Install Ollama and Pull LLaMA Model**
 
 <details>
-<summary><b>🪟 Windows (PowerShell)</b></summary>
+<summary><b>ðŸªŸ Windows (PowerShell)</b></summary>
 
 ```powershell
 # Install Ollama via Chocolatey
@@ -1678,7 +2576,7 @@ ollama run llama3.1:8b "Hello, are you ready?"
 </details>
 
 <details>
-<summary><b>🐧 Linux / 🍎 macOS</b></summary>
+<summary><b>ðŸ§ Linux / ðŸŽ macOS</b></summary>
 
 ```bash
 # Install Ollama
@@ -1745,25 +2643,25 @@ python3 pr-reviewer.py
 
 **Expected Output:**
 ```
-🤖 AI-Powered PR Reviewer (Ollama)
+ðŸ¤– AI-Powered PR Reviewer (Ollama)
 ==================================================
-✅ Connected to Ollama at http://localhost:11434
-📦 Using model: llama3.1:8b
+âœ… Connected to Ollama at http://localhost:11434
+ðŸ“¦ Using model: llama3.1:8b
 
-📝 Analyzing 1 file(s)...
+ðŸ“ Analyzing 1 file(s)...
 
-🔍 Analyzing: /path/to/terraform/environments/dev/variables.tf
-  ✅ Complete
+ðŸ” Analyzing: /path/to/terraform/environments/dev/variables.tf
+  âœ… Complete
 
 ==================================================
-✅ Review complete! Output saved to: ai_review_output.md
+âœ… Review complete! Output saved to: ai_review_output.md
 
 Preview:
-## 🤖 AI-Powered Code Review (Ollama)
+## ðŸ¤– AI-Powered Code Review (Ollama)
 
 **Model:** `llama3.1:8b`
 
-✅ **No issues found!** Code looks good.
+âœ… **No issues found!** Code looks good.
 
 ---
 *AI-powered review using free local models via Ollama.*
@@ -1781,7 +2679,7 @@ python3 policy-generator.py --interactive
 
 # Example output:
 # package terraform.security
-# 
+#
 # deny[msg] {
 #     resource := input.resource_changes[_]
 #     resource.type == "aws_security_group_rule"
@@ -1803,7 +2701,7 @@ cat ai_review_output.md
 **Troubleshooting AI Reviewer:**
 
 - **"No Terraform files changed"**: Create a commit with Terraform changes (see Option 2 above)
-- **"Ollama is not running"**: 
+- **"Ollama is not running"**:
   - Windows: Restart PowerShell, Ollama service starts automatically
   - Linux/Mac: Run `ollama serve &` in background
 - **"Model not found"**: Run `ollama pull llama3.1:8b` again
@@ -1812,11 +2710,11 @@ cat ai_review_output.md
 
 ---
 
-#### Setup Complete! 🎉
+#### Setup Complete! ðŸŽ‰
 
 Your Agentic AI DevSecOps environment is now fully operational:
 
-✅ **AWS Infrastructure Deployed**:
+âœ… **AWS Infrastructure Deployed**:
 - VPC with public/private subnets (10.0.0.0/16)
 - Internet Gateway and route tables
 - Security groups with least-privilege access
@@ -1825,34 +2723,34 @@ Your Agentic AI DevSecOps environment is now fully operational:
 - CloudWatch log groups (14-day retention)
 - SNS notifications to your email
 
-✅ **Lambda Auto-Remediation**:
+âœ… **Lambda Auto-Remediation**:
 - 2 Lambda functions (auto-remediation, security-response)
 - Python 3.11 runtime, 256MB memory, 300s timeout
 - EventBridge triggers (security group + EC2 changes)
 - IAM roles with appropriate permissions
 - Dry-run mode enabled (safe for testing)
 
-✅ **Local AI Ready**:
+âœ… **Local AI Ready**:
 - Ollama v0.14.1 installed
 - LLaMA 3.1:8b model (~4.7GB) downloaded
 - AI code reviewer working
 - Policy generator available
 
-✅ **Security Tools Installed**:
+âœ… **Security Tools Installed**:
 - TFLint (Terraform linting)
 - tfsec (security scanning)
 - Checkov (compliance checking)
 - Trivy (vulnerability scanning)
 - OPA (policy validation)
 
-✅ **GitHub Integration**:
+âœ… **GitHub Integration**:
 - Repository: <your-username>/agentic-devsecops-aws
 - GitHub Actions workflows running
 - S3 backend for Terraform state
 - DynamoDB state locking
 - Automated security scans on PRs
 
-✅ **ChatOps (Optional)**:
+âœ… **ChatOps (Optional)**:
 - Slack webhook configured (if you completed Step 7.1)
 - SNS email notifications active
 
@@ -1861,7 +2759,7 @@ Your Agentic AI DevSecOps environment is now fully operational:
 - EventBridge: 14M events free (using ~1K/month)
 - CloudWatch: 10 metrics free (using 5)
 - S3: 5GB free (using <1GB)
-- Total: **$0/month** 🎉
+- Total: **$0/month** ðŸŽ‰
 
 ---
 
@@ -1882,27 +2780,27 @@ Your Agentic AI DevSecOps environment is now fully operational:
 **Infrastructure Details:**
 ```
 VPC (10.0.0.0/16, us-east-1)
-├── Public Subnets
-│   ├── 10.0.1.0/24 (us-east-1a)
-│   └── 10.0.2.0/24 (us-east-1b)
-├── Private Subnets
-│   ├── 10.0.3.0/24 (us-east-1a)
-│   └── 10.0.4.0/24 (us-east-1b)
-├── Internet Gateway
-└── Route Tables
+â”œâ”€â”€ Public Subnets
+â”‚   â”œâ”€â”€ 10.0.1.0/24 (us-east-1a)
+â”‚   â””â”€â”€ 10.0.2.0/24 (us-east-1b)
+â”œâ”€â”€ Private Subnets
+â”‚   â”œâ”€â”€ 10.0.3.0/24 (us-east-1a)
+â”‚   â””â”€â”€ 10.0.4.0/24 (us-east-1b)
+â”œâ”€â”€ Internet Gateway
+â””â”€â”€ Route Tables
 
 Lambda Auto-Remediation
-├── Function: auto-remediation (Python 3.11, 256MB)
-│   ├── Trigger: EventBridge (security group changes)
-│   ├── Trigger: EventBridge (EC2 state changes)
-│   ├── Logs: CloudWatch (/aws/lambda/...-auto-remediation)
-│   └── Permissions: EC2, S3, CloudWatch access
-├── Function: security-response (Python 3.11, 256MB)
-│   ├── Logs: CloudWatch (/aws/lambda/...-security-response)
-│   └── Permissions: EC2, IAM, CloudWatch access
-├── SNS Topic: agentic-devsecops-dev-notifications
-│   └── Email: your-email@example.com (confirmed ✅)
-└── Mode: Dry-run (auto_fix_enabled = false)
+â”œâ”€â”€ Function: auto-remediation (Python 3.11, 256MB)
+â”‚   â”œâ”€â”€ Trigger: EventBridge (security group changes)
+â”‚   â”œâ”€â”€ Trigger: EventBridge (EC2 state changes)
+â”‚   â”œâ”€â”€ Logs: CloudWatch (/aws/lambda/...-auto-remediation)
+â”‚   â””â”€â”€ Permissions: EC2, S3, CloudWatch access
+â”œâ”€â”€ Function: security-response (Python 3.11, 256MB)
+â”‚   â”œâ”€â”€ Logs: CloudWatch (/aws/lambda/...-security-response)
+â”‚   â””â”€â”€ Permissions: EC2, IAM, CloudWatch access
+â”œâ”€â”€ SNS Topic: agentic-devsecops-dev-notifications
+â”‚   â””â”€â”€ Email: your-email@example.com (confirmed âœ…)
+â””â”€â”€ Mode: Dry-run (auto_fix_enabled = false)
 ```
 
 ---
@@ -1911,48 +2809,48 @@ Lambda Auto-Remediation
 
 **Immediate Actions (Required):**
 
-1. **✅ Confirm SNS Email Subscription**
+1. **âœ… Confirm SNS Email Subscription**
    - Check inbox for "AWS Notification - Subscription Confirmation"
    - Click confirmation link
-   - Verify in AWS Console: SNS → Subscriptions → Status should show "Confirmed"
+   - Verify in AWS Console: SNS â†’ Subscriptions â†’ Status should show "Confirmed"
 
-2. **🧪 Test Lambda Auto-Remediation (Dry-Run)**
+2. **ðŸ§ª Test Lambda Auto-Remediation (Dry-Run)**
    ```bash
    # Create insecure security group to trigger Lambda
    cd terraform/environments/dev
-   
+
    # See Step 9.5 for complete testing instructions
    # Lambda will DETECT but not fix (safe mode)
    ```
 
-3. **📊 Monitor Lambda Logs**
+3. **ðŸ“Š Monitor Lambda Logs**
    ```bash
    # Watch Lambda execution in real-time
    aws logs tail /aws/lambda/agentic-devsecops-dev-auto-remediation --follow
-   
+
    # Press Ctrl+C to stop
    ```
 
 **Learning & Exploration:**
 
-4. **🤖 Test AI Code Review**
+4. **ðŸ¤– Test AI Code Review**
    ```bash
    # Create a test PR with Terraform changes
    git checkout -b test/lambda-monitoring
    echo "# Monitor Lambda performance" >> README.md
    git add . && git commit -m "docs: Add Lambda monitoring notes"
    git push origin test/lambda-monitoring
-   
+
    # Open PR on GitHub, watch AI analysis
    ```
 
-5. **🔒 Create Infrastructure Changes** 
+5. **ðŸ”’ Create Infrastructure Changes**
    - Modify Terraform files in `terraform/modules/`
-   - Open PR → Watch automated security scans
+   - Open PR â†’ Watch automated security scans
    - See TFLint, tfsec, Checkov, Trivy results
    - Review AI-generated recommendations
 
-6. **📜 Customize OPA Policies**
+6. **ðŸ“œ Customize OPA Policies**
    - Edit policies in `policies/templates/`
    - Examples:
      - `ec2-compliance.rego` - EC2 compliance rules
@@ -1960,7 +2858,7 @@ Lambda Auto-Remediation
      - `security-group.rego` - Security group validation
    - Test with: `opa test policies/`
 
-7. **💬 Set Up ChatOps** (Optional but Recommended)
+7. **ðŸ’¬ Set Up ChatOps** (Optional but Recommended)
    - Complete Step 7.1 for Slack integration
    - Receive notifications for:
      - Lambda auto-remediations
@@ -1968,53 +2866,53 @@ Lambda Auto-Remediation
      - Deployment status
      - Cost optimization recommendations
 
-8. **🚀 Enable Auto-Fix Mode** (When Ready)
+8. **ðŸš€ Enable Auto-Fix Mode** (When Ready)
    ```bash
    # After testing dry-run mode
    cd terraform/environments/dev
    nano terraform.tfvars
-   # Change: auto_fix_enabled = false → true
+   # Change: auto_fix_enabled = false â†’ true
    terraform apply
-   
+
    # Lambda will now AUTOMATICALLY FIX security issues!
    ```
 
 **Advanced Usage:**
 
-9. **📈 Monitor Costs in AWS**
+9. **ðŸ“ˆ Monitor Costs in AWS**
    - Go to: https://console.aws.amazon.com/billing/home#/freetier
    - Filter: Lambda, EventBridge, CloudWatch
    - Expected: All within free tier ($0/month)
 
-10. **🔄 Deploy to Staging** (Optional)
+10. **ðŸ”„ Deploy to Staging** (Optional)
     ```bash
     # Configure staging environment
     cd terraform/environments/staging
-    
+
     # Update terraform.tfvars with staging values
     nano terraform.tfvars
     # Use different VPC CIDR: 10.1.0.0/16
     # Use different email or same
-    
+
     # Deploy staging
     terraform init
     terraform plan
     terraform apply
     ```
 
-11. **🏭 Production Deployment** (Portfolio Ready)
+11. **ðŸ­ Production Deployment** (Portfolio Ready)
     ```bash
     # Deploy to production when ready to showcase
     cd terraform/environments/prod
-    
+
     # Update terraform.tfvars
     # Use production-grade settings
     # Enable auto-fix for production
-    
+
     terraform init && terraform plan && terraform apply
     ```
 
-12. **📚 Document Your Learning**
+12. **ðŸ“š Document Your Learning**
     - Take screenshots of Lambda logs
     - Document auto-remediation examples
     - Create architecture diagrams
@@ -2153,8 +3051,8 @@ git push -u origin main
 
 ### Step 9: Configure GitHub Secrets
 
-Navigate to your GitHub repository:  
-`Settings → Secrets and variables → Actions → New repository secret`
+Navigate to your GitHub repository:
+`Settings â†’ Secrets and variables â†’ Actions â†’ New repository secret`
 
 Add these secrets:
 - `AWS_ACCESS_KEY_ID`: Your AWS access key
@@ -2163,12 +3061,12 @@ Add these secrets:
 
 ### Step 10: Enable Branch Protection
 
-Navigate to: `Settings → Branches → Add rule`
+Navigate to: `Settings â†’ Branches â†’ Add rule`
 
 For `main` branch:
-- ✅ Require pull request reviews (1 approval)
-- ✅ Require status checks to pass
-- ✅ Require branches to be up to date
+- âœ… Require pull request reviews (1 approval)
+- âœ… Require status checks to pass
+- âœ… Require branches to be up to date
 - Select: `validate`, `terraform`, `security-scan`
 
 ---
@@ -2206,10 +3104,10 @@ git push origin feature/add-s3-bucket
 ```
 
 **AI will detect:**
-- ❌ Missing encryption
-- ❌ No versioning enabled
-- ❌ Public access not blocked
-- ❌ Missing required tags
+- âŒ Missing encryption
+- âŒ No versioning enabled
+- âŒ Public access not blocked
+- âŒ Missing required tags
 
 ### Feature 2: AI Policy Generation
 
@@ -2258,11 +3156,11 @@ ollama serve &
 python3 pr-reviewer.py
 
 # Output:
-# 🤖 AI-Powered PR Reviewer (Ollama)
-# ✅ Connected to Ollama
-# 📦 Using model: llama3.1:8b
-# 🔍 Analyzing: terraform/environments/dev/main.tf
-# ✅ Complete
+# ðŸ¤– AI-Powered PR Reviewer (Ollama)
+# âœ… Connected to Ollama
+# ðŸ“¦ Using model: llama3.1:8b
+# ðŸ” Analyzing: terraform/environments/dev/main.tf
+# âœ… Complete
 ```
 
 ### Feature 4: Auto-Remediation
@@ -2278,10 +3176,10 @@ chmod +x scripts/deploy-lambdas.sh
 # Confirm deployment
 
 # Lambda functions will now automatically:
-# ✅ Close open security groups
-# ✅ Add missing tags to EC2 instances
-# ✅ Enable S3 encryption
-# ✅ Enforce IMDSv2 on EC2
+# âœ… Close open security groups
+# âœ… Add missing tags to EC2 instances
+# âœ… Enable S3 encryption
+# âœ… Enforce IMDSv2 on EC2
 ```
 
 **Configure auto-fix behavior:**
@@ -2302,7 +3200,7 @@ auto_fix_enabled = true
 
 ```bash
 # Get Discord webhook URL
-# Server Settings → Integrations → Webhooks → New Webhook
+# Server Settings â†’ Integrations â†’ Webhooks â†’ New Webhook
 
 export DISCORD_WEBHOOK_URL="https://discord.com/api/webhooks/..."
 
@@ -2310,14 +3208,14 @@ export DISCORD_WEBHOOK_URL="https://discord.com/api/webhooks/..."
 cd chatops
 python3 discord-bot.py
 
-# ✅ Test notification sent successfully!
+# âœ… Test notification sent successfully!
 ```
 
 **Set up Slack notifications:**
 
 ```bash
 # Get Slack webhook URL
-# Slack App → Incoming Webhooks → Add New Webhook
+# Slack App â†’ Incoming Webhooks â†’ Add New Webhook
 
 export SLACK_WEBHOOK_URL="https://hooks.slack.com/services/..."
 
@@ -2362,7 +3260,7 @@ Edit `.github/workflows/terraform-apply.yml`:
 | **Ollama (Local AI)** | Unlimited | Unlimited | $0 |
 | **TFLint/tfsec/OPA** | Open source | Unlimited | $0 |
 | **Discord/Slack** | Webhooks | Unlimited | $0 |
-| **TOTAL** | | | **$0/month** 🎉 |
+| **TOTAL** | | | **$0/month** ðŸŽ‰ |
 
 ### If You Exceed Free Tier
 
@@ -2377,6 +3275,46 @@ Worst case scenario (very heavy usage):
 ---
 
 ## Troubleshooting
+
+### Issue: Lambda not triggering on security group changes
+
+**Symptom**: You created a non-compliant security group, but Lambda didn't execute.
+
+**Root Cause**: EventBridge requires **CloudTrail** to receive AWS API call events.
+
+**Solution**:
+```bash
+# 1. Check if CloudTrail is enabled
+aws cloudtrail describe-trails --query "trailList[?Name=='agentic-devsecops-trail']"
+
+# If no trail exists, enable CloudTrail (see Step 6.8)
+# 2. Verify logging is active
+aws cloudtrail get-trail-status --name agentic-devsecops-trail --query "IsLogging"
+# Expected: true
+
+# 3. Wait 5-15 minutes for CloudTrail event delivery
+# This is normal AWS latency - NOT a bug!
+
+# 4. Check EventBridge rules are enabled
+aws events list-rules --query "Rules[?contains(Name, 'security-group-changes')].State"
+# Expected: ENABLED
+
+# 5. Check Lambda logs after the CloudTrail delay
+aws logs tail /aws/lambda/agentic-devsecops-dev-auto-remediation --since 20m --follow
+```
+
+### Issue: Python AI reviewer script encoding error (Windows)
+
+**Symptom**: `UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f916'`
+
+**Root Cause**: Windows PowerShell uses cp1252 encoding, can't handle Unicode emojis in Python script.
+
+**Solution**: Use direct Ollama commands instead:
+```powershell
+# Instead of: python pr-reviewer.py
+# Use direct Ollama:
+ollama run llama3.1:8b "Review this Terraform code: [paste code]"
+```
 
 ### Issue: Ollama not connecting
 
@@ -2423,7 +3361,7 @@ terraform init
 ### Issue: GitHub Actions failing
 
 **Check secrets:**
-- Go to: `Settings → Secrets → Actions`
+- Go to: `Settings â†’ Secrets â†’ Actions`
 - Verify: `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_REGION`
 
 **Check workflow logs:**
@@ -2689,10 +3627,10 @@ ollama --version
 ollama pull llama3.1:8b
 
 # 5. Use Git Bash for git/terraform work
-# Right-click in project folder → "Git Bash Here"
+# Right-click in project folder â†’ "Git Bash Here"
 
 # 6. Use PowerShell for Ollama/AI work
-# In project folder: Shift+Right-click → "Open PowerShell window here"
+# In project folder: Shift+Right-click â†’ "Open PowerShell window here"
 ```
 
 **Line Ending Warning (Windows Git Bash):**
@@ -2710,11 +3648,11 @@ git config --global core.autocrlf true
 
 ## Next Steps
 
-1. ✅ **Run the setup script**: `./scripts/setup-ai.sh`
-2. ✅ **Test AI locally**: `python3 ai-assistant/pr-reviewer.py`
-3. ✅ **Deploy to AWS**: `./scripts/deploy-lambdas.sh`
-4. ✅ **Set up notifications**: Configure Discord/Slack webhooks
-5. ✅ **Create your first PR**: Test the full workflow
+1. âœ… **Run the setup script**: `./scripts/setup-ai.sh`
+2. âœ… **Test AI locally**: `python3 ai-assistant/pr-reviewer.py`
+3. âœ… **Deploy to AWS**: `./scripts/deploy-lambdas.sh`
+4. âœ… **Set up notifications**: Configure Discord/Slack webhooks
+5. âœ… **Create your first PR**: Test the full workflow
 
 ---
 
@@ -2741,7 +3679,7 @@ Need help? Check:
 
 ## Complete Project Workflow (End-to-End Commands)
 
-**🚀 Run this entire workflow to go from zero to fully deployed!**
+**ðŸš€ Run this entire workflow to go from zero to fully deployed!**
 
 ### Phase 1: Initial Setup (One-Time)
 
@@ -3000,4 +3938,82 @@ htop                                          # Monitor system resources
 
 ---
 
-**Congratulations! You now have a fully automated, AI-powered DevSecOps pipeline at ZERO cost!** 🚀
+**Congratulations! You now have a fully automated, AI-powered DevSecOps pipeline at ZERO cost!** ðŸš€
+---
+
+## ðŸ“‹ Deployment Success Checklist
+
+After completing this guide, verify you have:
+
+**Infrastructure (25 AWS Resources)**:
+- [x] 1 VPC (10.0.0.0/16)
+- [x] 2 Public subnets (10.0.1.0/24, 10.0.2.0/24)
+- [x] 1 Internet Gateway
+- [x] 2 Route table associations
+- [x] 2 Lambda functions (auto-remediation, security-response)
+- [x] 2 KMS keys with rotation enabled
+- [x] 2 CloudWatch Log Groups (14-day retention)
+- [x] 2 EventBridge rules (security-group-changes, ec2-state-changes)
+- [x] 2 Lambda permissions for EventBridge
+- [x] 1 IAM role for Lambda
+- [x] 1 IAM policy for Lambda
+- [x] 1 SNS topic (encrypted with KMS)
+- [x] 1 SNS email subscription (confirmed)
+
+**Security & Compliance**:
+- [x] CloudTrail enabled for API logging (~$2/month)
+- [x] KMS encryption for SNS and CloudWatch Logs
+- [x] Key rotation enabled on both KMS keys
+- [x] Pre-commit hooks installed (terraform fmt, validate, tflint, tfsec)
+- [x] OPA policies validated
+
+**Local AI (Zero Cost)**:
+- [x] Ollama 0.15.1+ installed
+- [x] LLaMA 3.1:8b model downloaded (4.9 GB)
+- [x] AI responding in 2-5 seconds
+- [x] Security code analysis working
+
+**Monitoring & Notifications**:
+- [x] SNS email subscription confirmed
+- [x] CloudWatch Logs collecting Lambda execution logs
+- [x] EventBridge rules enabled and monitoring
+
+**Testing Completed**:
+- [x] terraform validate passed
+- [x] terraform fmt passed
+- [x] tflint passed (0 warnings)
+- [x] tfsec passed (37 passed, 6 documented ignores)
+- [x] pre-commit hooks passing
+- [x] OPA tests passing
+- [x] Ollama AI code review tested
+- [x] Lambda trigger path verified (CloudTrail â†’ EventBridge â†’ Lambda)
+
+**Cost Verification**:
+- [x] Monthly AWS cost: ~$4.56/month
+  - KMS: $2.00
+  - CloudTrail: $2.00
+  - CloudWatch: $0.50
+  - S3/DynamoDB/SNS: $0.06
+- [x] Ollama AI: $0/month (local)
+- [x] GitHub Actions: $0/month (free tier)
+- [x] **Total: ~$4.56/month** âœ…
+
+**What You've Built**:
+1. **Infrastructure as Code**: Terraform managing 25 AWS resources
+2. **Automated Security**: Lambda functions auto-remediating security issues
+3. **Local AI**: Ollama running LLaMA 3.1 for $0/month code reviews
+4. **CI/CD Pipeline**: GitHub Actions automating deployments
+5. **Policy as Code**: OPA enforcing security policies
+6. **Real-time Monitoring**: CloudTrail â†’ EventBridge â†’ Lambda pipeline
+7. **Cost Optimization**: $4.56/month vs $60-180/month traditional approach
+
+**Next Steps**:
+1. Enable production mode: Set `auto_fix_enabled = true` in terraform.tfvars
+2. Customize security policies in `policies/opa/`
+3. Add more EventBridge rules for other AWS services
+4. Integrate Discord/Slack notifications (already configured in chatops/)
+5. Create additional environments (staging, prod) in terraform/environments/
+
+**ðŸŽ‰ You've saved $55-175/month by using local Ollama instead of cloud AI!**
+
+---

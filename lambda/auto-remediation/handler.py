@@ -21,43 +21,43 @@ AUTO_FIX_ENABLED = os.environ.get('AUTO_FIX_ENABLED', 'true').lower() == 'true'
 
 def lambda_handler(event, context):
     """Main Lambda handler"""
-    
+
     print(f"Received event: {json.dumps(event)}")
-    
+
     results = {
         'timestamp': datetime.utcnow().isoformat(),
         'fixes_applied': [],
         'errors': [],
         'dry_run': DRY_RUN
     }
-    
+
     try:
         # Determine event source
         if 'detail-type' in event:
             # EventBridge event
             detail_type = event['detail-type']
-            
+
             if 'Security Group' in detail_type:
                 result = fix_security_group_issues(event)
                 results['fixes_applied'].append(result)
-            
+
             elif 'EC2 Instance' in detail_type:
                 result = fix_ec2_instance_issues(event)
                 results['fixes_applied'].append(result)
-            
+
             elif 'S3' in detail_type:
                 result = fix_s3_bucket_issues(event)
                 results['fixes_applied'].append(result)
-        
+
         # Send notification
         if results['fixes_applied'] and SNS_TOPIC_ARN:
             send_notification(results)
-        
+
     except Exception as e:
         error_msg = f"Error in auto-remediation: {str(e)}"
         print(error_msg)
         results['errors'].append(error_msg)
-    
+
     return {
         'statusCode': 200,
         'body': json.dumps(results)
@@ -66,20 +66,20 @@ def lambda_handler(event, context):
 
 def fix_security_group_issues(event: Dict) -> Dict:
     """Fix security group misconfigurations"""
-    
+
     detail = event.get('detail', {})
     sg_id = detail.get('requestParameters', {}).get('groupId')
-    
+
     if not sg_id:
         return {'action': 'skip', 'reason': 'No security group ID found'}
-    
+
     fixes = []
-    
+
     try:
         # Get security group details
         response = ec2.describe_security_groups(GroupIds=[sg_id])
         sg = response['SecurityGroups'][0]
-        
+
         # Check for overly permissive rules
         for rule in sg.get('IpPermissions', []):
             # Check for SSH (22) open to 0.0.0.0/0
@@ -107,7 +107,7 @@ def fix_security_group_issues(event: Dict) -> Dict:
                                 'issue': 'SSH open to 0.0.0.0/0',
                                 'dry_run': DRY_RUN
                             })
-            
+
             # Check for RDP (3389) open to 0.0.0.0/0
             if rule.get('FromPort') == 3389:
                 for ip_range in rule.get('IpRanges', []):
@@ -132,14 +132,14 @@ def fix_security_group_issues(event: Dict) -> Dict:
                                 'issue': 'RDP open to 0.0.0.0/0',
                                 'dry_run': DRY_RUN
                             })
-        
+
         return {
             'resource_type': 'security_group',
             'resource_id': sg_id,
             'fixes': fixes,
             'count': len(fixes)
         }
-        
+
     except Exception as e:
         return {
             'resource_type': 'security_group',
@@ -150,25 +150,25 @@ def fix_security_group_issues(event: Dict) -> Dict:
 
 def fix_ec2_instance_issues(event: Dict) -> Dict:
     """Fix EC2 instance misconfigurations"""
-    
+
     detail = event.get('detail', {})
     instance_id = detail.get('instance-id') or detail.get('requestParameters', {}).get('instanceId')
-    
+
     if not instance_id:
         return {'action': 'skip', 'reason': 'No instance ID found'}
-    
+
     fixes = []
-    
+
     try:
         # Get instance details
         response = ec2.describe_instances(InstanceIds=[instance_id])
         instance = response['Reservations'][0]['Instances'][0]
-        
+
         # Check for missing tags
         tags = {tag['Key']: tag['Value'] for tag in instance.get('Tags', [])}
         required_tags = ['Environment', 'Owner', 'CostCenter']
         missing_tags = [tag for tag in required_tags if tag not in tags]
-        
+
         if missing_tags:
             if AUTO_FIX_ENABLED and not DRY_RUN:
                 # Add default tags
@@ -193,7 +193,7 @@ def fix_ec2_instance_issues(event: Dict) -> Dict:
                     'issue': f'Missing tags: {missing_tags}',
                     'dry_run': DRY_RUN
                 })
-        
+
         # Check for IMDSv2
         metadata_options = instance.get('MetadataOptions', {})
         if metadata_options.get('HttpTokens') != 'required':
@@ -214,14 +214,14 @@ def fix_ec2_instance_issues(event: Dict) -> Dict:
                     'issue': 'IMDSv2 not enforced',
                     'dry_run': DRY_RUN
                 })
-        
+
         return {
             'resource_type': 'ec2_instance',
             'resource_id': instance_id,
             'fixes': fixes,
             'count': len(fixes)
         }
-        
+
     except Exception as e:
         return {
             'resource_type': 'ec2_instance',
@@ -232,15 +232,15 @@ def fix_ec2_instance_issues(event: Dict) -> Dict:
 
 def fix_s3_bucket_issues(event: Dict) -> Dict:
     """Fix S3 bucket misconfigurations"""
-    
+
     detail = event.get('detail', {})
     bucket_name = detail.get('requestParameters', {}).get('bucketName')
-    
+
     if not bucket_name:
         return {'action': 'skip', 'reason': 'No bucket name found'}
-    
+
     fixes = []
-    
+
     try:
         # Check encryption
         try:
@@ -268,7 +268,7 @@ def fix_s3_bucket_issues(event: Dict) -> Dict:
                     'issue': 'Encryption not enabled',
                     'dry_run': DRY_RUN
                 })
-        
+
         # Check versioning
         versioning = s3.get_bucket_versioning(Bucket=bucket_name)
         if versioning.get('Status') != 'Enabled':
@@ -288,12 +288,12 @@ def fix_s3_bucket_issues(event: Dict) -> Dict:
                     'issue': 'Versioning not enabled',
                     'dry_run': DRY_RUN
                 })
-        
+
         # Block public access
         try:
             public_access = s3.get_public_access_block(Bucket=bucket_name)
             config = public_access['PublicAccessBlockConfiguration']
-            
+
             if not all([
                 config.get('BlockPublicAcls'),
                 config.get('IgnorePublicAcls'),
@@ -323,14 +323,14 @@ def fix_s3_bucket_issues(event: Dict) -> Dict:
                     })
         except:
             pass
-        
+
         return {
             'resource_type': 's3_bucket',
             'resource_id': bucket_name,
             'fixes': fixes,
             'count': len(fixes)
         }
-        
+
     except Exception as e:
         return {
             'resource_type': 's3_bucket',
@@ -341,7 +341,7 @@ def fix_s3_bucket_issues(event: Dict) -> Dict:
 
 def send_notification(results: Dict):
     """Send SNS notification about fixes"""
-    
+
     message = f"""Auto-Remediation Report
 
 Timestamp: {results['timestamp']}
@@ -350,15 +350,15 @@ Dry Run: {results['dry_run']}
 Fixes Applied: {len(results['fixes_applied'])}
 
 """
-    
+
     for fix in results['fixes_applied']:
         message += f"\n{json.dumps(fix, indent=2)}\n"
-    
+
     if results['errors']:
         message += f"\n\nErrors: {len(results['errors'])}\n"
         for error in results['errors']:
             message += f"- {error}\n"
-    
+
     try:
         sns.publish(
             TopicArn=SNS_TOPIC_ARN,

@@ -23,3 +23,9 @@ variable "security_group_ids" {
   description = "The security group IDs to associate with the EC2 instance"
   type        = list(string)
 }
+
+variable "user_data" {
+  description = "User data script to run on instance launch"
+  type        = string
+  default     = ""
+}

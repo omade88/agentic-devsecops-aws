@@ -24,3 +24,20 @@ variable "enable_dns_hostnames" {
   type        = bool
   default     = true
 }
+
+variable "public_subnet_count" {
+  description = "Number of public subnets to create"
+  type        = number
+  default     = 2
+}
+
+variable "private_subnet_count" {
+  description = "Number of private subnets to create"
+  type        = number
+  default     = 2
+}
+
+variable "availability_zones" {
+  description = "List of availability zones for subnet placement"
+  type        = list(string)
+}

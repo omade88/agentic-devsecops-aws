@@ -2,18 +2,18 @@ package example
 
 default allow = false
 
-allow {
+allow if {
     input.method = "GET"
     input.path = ["api", "v1", "resources"]
 }
 
-allow {
+allow if {
     input.method = "POST"
     input.path = ["api", "v1", "resources"]
     input.user.role == "admin"
 }
 
-allow {
+allow if {
     input.method = "DELETE"
     input.path = ["api", "v1", "resources", resource_id]
     input.user.role == "admin"

@@ -48,17 +48,17 @@ cd "$PROJECT_ROOT/lambda"
 for func_dir in */; do
     func_name=$(basename "$func_dir")
     echo "  - Packaging $func_name..."
-    
+
     cd "$func_dir"
-    
+
     # Install dependencies if requirements.txt exists
     if [ -f "requirements.txt" ]; then
         pip3 install -r requirements.txt -t .
     fi
-    
+
     # Create deployment package
     zip -r "../${func_name}.zip" . -x "*.pyc" "**/__pycache__/*"
-    
+
     cd ..
 done
 
@@ -77,22 +77,22 @@ read -p "Apply this plan? (yes/no): " APPLY
 if [ "$APPLY" = "yes" ]; then
     echo "Applying Terraform configuration..."
     terraform apply tfplan
-    
+
     echo ""
     echo "========================================"
     echo "✅ Deployment Complete!"
     echo "========================================"
     echo ""
-    
+
     # Show outputs
     terraform output
-    
+
     echo ""
     echo "Lambda functions deployed:"
     aws lambda list-functions \
         --query "Functions[?contains(FunctionName, 'agentic-devsecops')].FunctionName" \
         --output table
-    
+
 else
     echo "Deployment cancelled"
     rm tfplan

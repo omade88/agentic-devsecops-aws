@@ -287,27 +287,189 @@ Add the following secrets:
 - `AWS_SECRET_ACCESS_KEY`: Your AWS secret key
 - `AWS_REGION`: us-west-2
 
-**Step 1.3.3: Enable Branch Protection**
+**Step 1.3.3: Enable Branch Protection Rules**
 
-Navigate to: `GitHub Repository → Settings → Branches → Add rule`
+Branch protection prevents direct pushes to `main` and enforces PR-based workflow with automated checks.
 
-Configure for `main` branch:
-- ✅ Require pull request reviews before merging (1 approval)
-- ✅ Require status checks to pass before merging
-- ✅ Require branches to be up to date before merging
-- Select required status checks:
-  - `validate`
-  - `terraform`
-  - `security-scan`
-- ✅ Include administrators
+**⚠️ IMPORTANT:** GitHub has two systems - we need the **"classic branch protection rule"** (NOT "Rulesets").
+
+**Detailed Steps:**
+
+**1. Navigate to Branch Protection Settings:**
+   - Open your GitHub repository in browser
+   - Click **Settings** tab (top menu bar)
+   - Scroll down left sidebar → Click **Branches**
+   - **Look for the section titled "Branch protection rules"**
+   - Click **"Add classic branch protection rule"** button
+     - **Note:** GitHub renamed this to "classic" when they introduced the new "Rulesets" feature
+     - "Classic" is what we want - it's the standard, proven approach
+
+**2. Configure Branch Pattern:**
+   - In "Branch name pattern" field, enter: `main`
+   - This applies the rule to your main branch
+   - You should see: **"This rule will be applied to 1 branch"** (confirms it's targeting your main branch)
+
+**3. Enable Pull Request Requirements:**
+   - ✅ Check **"Require a pull request before merging"**
+     - ✅ Check **"Require approvals"**
+     - Set **"Required number of approvals before merging"** to: `1`
+     - ✅ Check **"Dismiss stale pull request approvals when new commits are pushed"** (recommended)
+
+**4. Enable Status Check Requirements:**
+   - ✅ Check **"Require status checks to pass before merging"**
+   - ✅ Check **"Require branches to be up to date before merging"**
+   - **About Status Checks (validate, terraform, security-scan):**
+     - **You won't see them yet!** These checks only appear after your GitHub Actions workflows have run at least once
+     - **For now:** Skip selecting specific status checks - you'll add them later
+     - **When to add them:** After you create your first Pull Request and the workflows run successfully
+     - **How to add them later:**
+       1. Come back to Settings → Branches → Edit your rule
+       2. Search for `validate`, `terraform`, `security-scan` in the status check search box
+       3. Click to add each one
+   - **It's OK to proceed without status checks initially** - the protection rule will still prevent direct pushes to main
+
+**5. Additional Protection Settings (Optional but Recommended):**
+   - Scroll down to find these additional options:
+   - ✅ Check **"Require linear history"** (prevents merge commits, keeps history clean)
+
+**6. Rules About Force Pushes and Deletions:**
+   - Find the section at the bottom
+   - **"Allow force pushes"** → Leave UNCHECKED (prevents force pushes)
+   - **"Allow deletions"** → Leave UNCHECKED (prevents branch deletion)
+
+**7. Apply Rules to Administrators (IMPORTANT):**
+   - **Note:** On GitHub Free/Personal accounts, protection rules automatically apply to everyone
+   - **For GitHub Pro/Team/Enterprise:**
+     - Look for **"Do not allow bypassing the above settings"**
+     - Or look for **"Restrict who can push to matching branches"**
+     - If you see an option about administrators, ensure it's checked
+   - **What this does:** Prevents even repository owners from bypassing the rules
+   - **Reality Check:** Since you're likely on a personal account, the rules will apply to you automatically
+
+**8. Save the Rule:**
+   - Scroll down and click **Create** (or **Save changes** if editing)
+
+**Expected Result:**
+You should see a green success message: "Branch protection rule created" and the rule listed under "Branch protection rules"
 
 **Step 1.3.4: Initialize Pre-commit Hooks**
 
-**All Platforms (PowerShell / Git Bash / Linux / macOS):**
+Pre-commit hooks automatically check your code before each commit, catching issues early.
+
+**What Pre-commit Does:**
+- Validates Terraform syntax
+- Formats Terraform files
+- Checks for trailing whitespace
+- Validates YAML files
+- Scans for secrets/credentials
+
+**Installation Steps:**
+
+**1. Navigate to Repository Directory:**
+
 ```bash
 cd agentic-devsecops-aws
+```
+
+**2. Install Pre-commit (if not already installed):**
+
+```bash
+# Check if pre-commit is installed
+pre-commit --version
+```
+
+**If you get "command not found":**
+```bash
+# Install pre-commit in your virtual environment
+python -m pip install pre-commit
+
+# Verify installation
+pre-commit --version
+```
+
+**Expected output:**
+```
+pre-commit 3.x.x
+```
+
+**3. Install Pre-commit Hooks:**
+
+```bash
 pre-commit install
+```
+
+**Expected output:**
+```
+pre-commit installed at .git/hooks/pre-commit
+```
+
+**4. Run Initial Check on All Files:**
+
+```bash
 pre-commit run --all-files
+```
+
+**Expected output (first run):**
+```
+[INFO] Initializing environment for https://github.com/antonbabenko/pre-commit-terraform
+[INFO] Installing environment for https://github.com/antonbabenko/pre-commit-terraform.
+[INFO] Once installed this environment will be reused.
+[INFO] This may take a few minutes...
+
+Terraform fmt............................................................Passed
+Terraform validate.......................................................Passed
+Terraform docs...........................................................Passed
+Terraform validate with tflint...........................................Passed
+check for added large files..............................................Passed
+check for merge conflicts................................................Passed
+check yaml...............................................................Passed
+detect private key.......................................................Passed
+trim trailing whitespace.................................................Passed
+```
+
+**If You See Failures:**
+Pre-commit will automatically fix most issues (like formatting). Run again:
+```bash
+pre-commit run --all-files
+```
+
+**5. Verify Installation:**
+
+Try making a test commit to verify hooks work:
+```bash
+git status
+# You should see clean working tree
+```
+
+**From Now On:**
+Every time you run `git commit`, pre-commit will automatically:
+- Check your code
+- Format Terraform files
+- Validate syntax
+- Stop the commit if issues are found
+
+**Troubleshooting:**
+
+**Issue: "command not found: pre-commit"**
+```bash
+# Install pre-commit
+python -m pip install pre-commit
+
+# Verify installation
+pre-commit --version
+```
+
+**Issue: Pre-commit hangs on Windows PowerShell**
+```bash
+# Switch to Git Bash instead
+# Pre-commit works more reliably in Git Bash on Windows
+```
+
+**Issue: TFLint not found in pre-commit**
+```bash
+# Pre-commit will download TFLint automatically
+# If it fails, you can skip TFLint checks temporarily:
+SKIP=terraform_tflint pre-commit run --all-files
 ```
 
 **Note for Windows users:** Pre-commit works in both PowerShell and Git Bash. If you encounter issues in PowerShell, try using Git Bash.
@@ -425,7 +587,7 @@ resource "aws_cloudwatch_metric_alarm" "ec2_cpu" {
   statistic           = "Average"
   threshold           = "80"
   alarm_description   = "This metric monitors ec2 cpu utilization"
-  
+
   dimensions = {
     InstanceId = module.ec2.instance_id
   }
@@ -1381,7 +1543,7 @@ resource "aws_cloudwatch_metric_alarm" "ec2_status_check" {
   threshold           = "0"
   alarm_description   = "EC2 instance status check failed"
   alarm_actions       = [aws_sns_topic.alerts.arn]
-  
+
   dimensions = {
     InstanceId = module.ec2.instance_id
   }
@@ -1502,6 +1664,6 @@ export TF_VAR_instance_type="t2.micro"
 
 ---
 
-**Document Version:** 1.0  
-**Last Updated:** January 15, 2026  
+**Document Version:** 1.0
+**Last Updated:** January 15, 2026
 **Next Review:** Quarterly

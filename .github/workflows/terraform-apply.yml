@@ -12,11 +12,11 @@ jobs:
     runs-on: ubuntu-latest
     # Only run if plan workflow succeeded
     if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
-    
+
     defaults:
       run:
         working-directory: terraform/environments/dev
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4

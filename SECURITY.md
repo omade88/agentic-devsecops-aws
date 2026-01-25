@@ -22,7 +22,7 @@ This repository contains infrastructure-as-code for AWS deployments. **NEVER com
    ```bash
    # Copy the example file
    cp .env.example .env
-   
+
    # Edit .env with your actual values
    # .env is in .gitignore and will NOT be committed
    ```

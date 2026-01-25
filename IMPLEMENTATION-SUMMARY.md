@@ -10,23 +10,23 @@
 
 ### 1. GitHub Actions Workflows (.github/workflows/)
 
-✅ **ai-pr-review.yml** - AI-powered code review on every PR  
-✅ **security-scan-enhanced.yml** - Multi-tool security scanning (TFLint, tfsec, Checkov, Trivy)  
-✅ **terraform-plan.yml** - Automated Terraform planning  
-✅ **terraform-apply.yml** - Automated Terraform deployment  
+✅ **ai-pr-review.yml** - AI-powered code review on every PR
+✅ **security-scan-enhanced.yml** - Multi-tool security scanning (TFLint, tfsec, Checkov, Trivy)
+✅ **terraform-plan.yml** - Automated Terraform planning
+✅ **terraform-apply.yml** - Automated Terraform deployment
 
 ### 2. AI Assistant (ai-assistant/)
 
-✅ **ollama-setup.sh** - Automated Ollama + LLaMA 3.1 installation  
-✅ **pr-reviewer.py** - Local AI code reviewer  
-✅ **policy-generator.py** - Generate OPA/Sentinel policies from natural language  
-✅ **requirements.txt** - Python dependencies  
+✅ **ollama-setup.sh** - Automated Ollama + LLaMA 3.1 installation
+✅ **pr-reviewer.py** - Local AI code reviewer
+✅ **policy-generator.py** - Generate OPA/Sentinel policies from natural language
+✅ **requirements.txt** - Python dependencies
 
 ### 3. AWS Lambda Functions (lambda/)
 
-✅ **auto-remediation/handler.py** - Auto-fix security issues  
-✅ **auto-remediation/event-patterns.json** - EventBridge patterns  
-✅ **security-response/handler.py** - Autonomous incident response  
+✅ **auto-remediation/handler.py** - Auto-fix security issues
+✅ **auto-remediation/event-patterns.json** - EventBridge patterns
+✅ **security-response/handler.py** - Autonomous incident response
 
 **Features:**
 - Closes open security groups automatically
@@ -38,10 +38,10 @@
 
 ### 4. Terraform Modules (terraform/modules/)
 
-✅ **lambda-functions/** - Complete IaC for deploying Lambda functions  
-✅ **vpc/** - VPC module  
-✅ **ec2/** - EC2 module  
-✅ **security/** - Security groups module  
+✅ **lambda-functions/** - Complete IaC for deploying Lambda functions
+✅ **vpc/** - VPC module
+✅ **ec2/** - EC2 module
+✅ **security/** - Security groups module
 
 **Features:**
 - SNS topic for notifications
@@ -52,9 +52,9 @@
 
 ### 5. OPA Policy Templates (policies/templates/)
 
-✅ **security-group.rego** - Security group compliance  
-✅ **ec2-compliance.rego** - EC2 instance compliance  
-✅ **s3-security.rego** - S3 bucket security  
+✅ **security-group.rego** - Security group compliance
+✅ **ec2-compliance.rego** - EC2 instance compliance
+✅ **s3-security.rego** - S3 bucket security
 
 **Enforced Rules:**
 - No SSH/RDP open to 0.0.0.0/0
@@ -66,9 +66,9 @@
 
 ### 6. ChatOps Integration (chatops/)
 
-✅ **discord-bot.py** - Discord webhook integration  
-✅ **slack-webhook.py** - Slack webhook integration  
-✅ **notifications.py** - Universal notification manager  
+✅ **discord-bot.py** - Discord webhook integration
+✅ **slack-webhook.py** - Slack webhook integration
+✅ **notifications.py** - Universal notification manager
 
 **Notification Types:**
 - Deployment status
@@ -78,16 +78,16 @@
 
 ### 7. Automation Scripts (scripts/)
 
-✅ **setup-ai.sh** - Complete automated setup  
-✅ **deploy-lambdas.sh** - Lambda deployment automation  
-✅ **setup.sh** - Infrastructure setup  
-✅ **validate.sh** - Validation automation  
+✅ **setup-ai.sh** - Complete automated setup
+✅ **deploy-lambdas.sh** - Lambda deployment automation
+✅ **setup.sh** - Infrastructure setup
+✅ **validate.sh** - Validation automation
 
 ### 8. Documentation (docs/)
 
-✅ **AI-SETUP-GUIDE.md** - Complete AI setup guide  
-✅ **step_by_step.md** - Detailed SOP  
-✅ **README.md** - Updated project overview  
+✅ **AI-SETUP-GUIDE.md** - Complete AI setup guide
+✅ **step_by_step.md** - Detailed SOP
+✅ **README.md** - Updated project overview
 
 ---
 
