@@ -500,11 +500,11 @@ artifacts/
 
 # Documentation
 !README.md
-!*.md
 # But exclude these specific marketing/personal files
 LINKEDIN_POST.md
 INTERVIEW_SUCCESS_STORY.md
 YOUTUBE_VIDEO_SCRIPT.md
+step_by_step.md
 
 # Templates
 !**/templates/
