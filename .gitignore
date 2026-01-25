@@ -157,9 +157,6 @@ tfplan
 .terraformrc
 terraform.rc
 
-# Terraform lock files (uncomment if you want to ignore)
-# .terraform.lock.hcl
-
 # ========================================
 # AWS
 # ========================================
