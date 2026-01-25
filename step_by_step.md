@@ -19,6 +19,82 @@
 ### 1.1 Prerequisites Installation
 
 **Step 1.1.1: Install Required Tools**
+
+**Windows (PowerShell - Recommended):**
+```powershell
+# Install Chocolatey if not already installed
+# Run PowerShell as Administrator first
+Set-ExecutionPolicy Bypass -Scope Process -Force
+[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
+iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+
+# Install Terraform
+choco install terraform -y
+
+# Verify installation
+terraform --version
+
+# Install AWS CLI
+choco install awscli -y
+
+# Verify AWS CLI
+aws --version
+
+# Install TFLint
+choco install tflint -y
+# Or manual: Download from https://github.com/terraform-linters/tflint/releases
+
+# Install tfsec
+choco install tfsec -y
+# Or manual: Download from https://github.com/aquasecurity/tfsec/releases
+
+# Install Python and pip (if not installed)
+choco install python -y
+
+# Install pre-commit
+python -m pip install pre-commit
+```
+
+**Windows (Git Bash - Alternative):**
+```bash
+# Install Terraform (Manual Download)
+# 1. Download Windows 64-bit version from: https://releases.hashicorp.com/terraform/1.6.0/
+cd ~/Downloads
+unzip terraform_1.6.0_windows_amd64.zip
+mkdir -p ~/bin
+mv terraform.exe ~/bin/
+export PATH="$HOME/bin:$PATH"
+echo 'export PATH="$HOME/bin:$PATH"' >> ~/.bashrc
+
+# Verify installation
+terraform --version
+
+# Install AWS CLI (if not installed via installer)
+# Download MSI from: https://awscli.amazonaws.com/AWSCLIV2.msi
+# Or use existing AWS CLI from PATH
+aws --version
+
+# Install TFLint (Manual Download)
+curl -L -o tflint.zip https://github.com/terraform-linters/tflint/releases/download/v0.50.0/tflint_windows_amd64.zip
+unzip tflint.zip -d ~/bin/
+rm tflint.zip
+
+# Install tfsec (Manual Download)
+curl -L -o tfsec.exe https://github.com/aquasecurity/tfsec/releases/download/v1.28.0/tfsec-windows-amd64.exe
+mv tfsec.exe ~/bin/
+
+# Install pre-commit
+python -m pip install pre-commit
+
+# Verify installations
+terraform --version
+aws --version
+tflint --version
+tfsec --version
+pre-commit --version
+```
+
+**Linux/macOS:**
 ```bash
 # Install Terraform
 wget https://releases.hashicorp.com/terraform/1.6.0/terraform_1.6.0_linux_amd64.zip
@@ -48,10 +124,32 @@ chmod 755 ./opa
 sudo mv opa /usr/local/bin/
 
 # Install pre-commit
-pip install pre-commit
+pip3 install pre-commit
 ```
 
 **Step 1.1.2: Verify Installations**
+
+**Windows (PowerShell):**
+```powershell
+terraform --version
+aws --version
+tflint --version
+tfsec --version
+python --version
+pre-commit --version
+```
+
+**Windows (Git Bash):**
+```bash
+terraform --version
+aws --version
+tflint --version
+tfsec --version
+python --version
+pre-commit --version
+```
+
+**Linux/macOS:**
 ```bash
 terraform --version
 aws --version
@@ -78,6 +176,37 @@ aws sts get-caller-identity
 ```
 
 **Step 1.2.3: Create S3 Bucket for Terraform State**
+
+**PowerShell:**
+```powershell
+# Create S3 bucket for state storage
+aws s3api create-bucket `
+    --bucket your-terraform-state-bucket-unique-name `
+    --region us-west-2 `
+    --create-bucket-configuration LocationConstraint=us-west-2
+
+# Enable versioning
+aws s3api put-bucket-versioning `
+    --bucket your-terraform-state-bucket-unique-name `
+    --versioning-configuration Status=Enabled
+
+# Enable encryption
+$encryptionConfig = @'
+{
+    "Rules": [{
+        "ApplyServerSideEncryptionByDefault": {
+            "SSEAlgorithm": "AES256"
+        }
+    }]
+}
+'@
+
+aws s3api put-bucket-encryption `
+    --bucket your-terraform-state-bucket-unique-name `
+    --server-side-encryption-configuration $encryptionConfig
+```
+
+**Git Bash / Linux / macOS:**
 ```bash
 # Create S3 bucket for state storage
 aws s3api create-bucket \
@@ -103,6 +232,18 @@ aws s3api put-bucket-encryption \
 ```
 
 **Step 1.2.4: Create DynamoDB Table for State Locking**
+
+**PowerShell:**
+```powershell
+aws dynamodb create-table `
+    --table-name terraform-lock-table `
+    --attribute-definitions AttributeName=LockID,AttributeType=S `
+    --key-schema AttributeName=LockID,KeyType=HASH `
+    --billing-mode PAY_PER_REQUEST `
+    --region us-west-2
+```
+
+**Git Bash / Linux / macOS:**
 ```bash
 aws dynamodb create-table \
     --table-name terraform-lock-table \
@@ -130,6 +271,8 @@ terraform {
 ### 1.3 GitHub Repository Setup
 
 **Step 1.3.1: Clone Repository**
+
+**All Platforms (PowerShell / Git Bash / Linux / macOS):**
 ```bash
 git clone https://github.com/yourusername/agentic-devsecops-aws.git
 cd agentic-devsecops-aws
@@ -159,11 +302,15 @@ Configure for `main` branch:
 - ✅ Include administrators
 
 **Step 1.3.4: Initialize Pre-commit Hooks**
+
+**All Platforms (PowerShell / Git Bash / Linux / macOS):**
 ```bash
 cd agentic-devsecops-aws
 pre-commit install
 pre-commit run --all-files
 ```
+
+**Note for Windows users:** Pre-commit works in both PowerShell and Git Bash. If you encounter issues in PowerShell, try using Git Bash.
 
 ---
 
