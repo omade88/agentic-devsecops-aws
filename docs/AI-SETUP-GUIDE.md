@@ -1,4 +1,4 @@
-﻿# ðŸ¤– AI-Powered DevSecOps Setup Guide (FREE Version)
+﻿# Agentic AI-Powered DevSecOps Setup Guide (FREE Version)
 
 ## Complete Guide to Setting Up Local AI for Infrastructure Automation
 

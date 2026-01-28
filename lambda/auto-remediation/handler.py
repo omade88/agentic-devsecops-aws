@@ -34,18 +34,25 @@ def lambda_handler(event, context):
     try:
         # Determine event source
         if 'detail-type' in event:
-            # EventBridge event
-            detail_type = event['detail-type']
+            # EventBridge event from CloudTrail
+            detail = event.get('detail', {})
+            event_name = detail.get('eventName', '')
 
-            if 'Security Group' in detail_type:
+            # Security Group events
+            if event_name in ['AuthorizeSecurityGroupIngress', 'AuthorizeSecurityGroupEgress', 'CreateSecurityGroup']:
+                print(f"Processing security group event: {event_name}")
                 result = fix_security_group_issues(event)
                 results['fixes_applied'].append(result)
 
-            elif 'EC2 Instance' in detail_type:
+            # EC2 Instance events
+            elif event_name in ['RunInstances', 'StartInstances']:
+                print(f"Processing EC2 event: {event_name}")
                 result = fix_ec2_instance_issues(event)
                 results['fixes_applied'].append(result)
 
-            elif 'S3' in detail_type:
+            # S3 events
+            elif 'Bucket' in event_name:
+                print(f"Processing S3 event: {event_name}")
                 result = fix_s3_bucket_issues(event)
                 results['fixes_applied'].append(result)
 
@@ -88,10 +95,12 @@ def fix_security_group_issues(event: Dict) -> Dict:
                     if ip_range.get('CidrIp') == '0.0.0.0/0':
                         if AUTO_FIX_ENABLED and not DRY_RUN:
                             # Remove the rule
+                            print(f"🔒 Revoking unrestricted SSH rule from {sg_id}")
                             ec2.revoke_security_group_ingress(
                                 GroupId=sg_id,
                                 IpPermissions=[rule]
                             )
+                            print(f"✅ Successfully revoked SSH rule (0.0.0.0/0 on port 22)")
                             fixes.append({
                                 'action': 'removed_rule',
                                 'sg_id': sg_id,
@@ -113,10 +122,12 @@ def fix_security_group_issues(event: Dict) -> Dict:
                 for ip_range in rule.get('IpRanges', []):
                     if ip_range.get('CidrIp') == '0.0.0.0/0':
                         if AUTO_FIX_ENABLED and not DRY_RUN:
+                            print(f"🔒 Revoking unrestricted RDP rule from {sg_id}")
                             ec2.revoke_security_group_ingress(
                                 GroupId=sg_id,
                                 IpPermissions=[rule]
                             )
+                            print(f"✅ Successfully revoked RDP rule (0.0.0.0/0 on port 3389)")
                             fixes.append({
                                 'action': 'removed_rule',
                                 'sg_id': sg_id,
@@ -360,10 +371,12 @@ Fixes Applied: {len(results['fixes_applied'])}
             message += f"- {error}\n"
 
     try:
-        sns.publish(
+        print(f"📧 Sending SNS notification to {SNS_TOPIC_ARN}")
+        response = sns.publish(
             TopicArn=SNS_TOPIC_ARN,
             Subject='AWS Auto-Remediation Report',
             Message=message
         )
+        print(f"✅ SNS notification sent successfully (MessageId: {response['MessageId']})")
     except Exception as e:
-        print(f"Error sending notification: {e}")
+        print(f"❌ Error sending notification: {e}")

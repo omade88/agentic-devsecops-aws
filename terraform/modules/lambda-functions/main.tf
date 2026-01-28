@@ -128,6 +128,14 @@ resource "aws_iam_role_policy" "lambda_policy" {
       {
         Effect = "Allow"
         Action = [
+          "kms:Decrypt",
+          "kms:GenerateDataKey"
+        ]
+        Resource = aws_kms_key.sns.arn
+      },
+      {
+        Effect = "Allow"
+        Action = [
           "xray:PutTraceSegments",
           "xray:PutTelemetryRecords"
         ]
