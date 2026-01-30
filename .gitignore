@@ -27,6 +27,10 @@ YOUTUBE_VIDEO_SCRIPT.md
 YOUTUBE_VIDEO_SCRIPT_COMPREHENSIVE.md
 step_by_step.md
 opa
+fix_encoding.py
+fix_all_emojis.py
+fix_emoji_node.js
+fix_utf8.py
 
 # ========================================
 # Python
