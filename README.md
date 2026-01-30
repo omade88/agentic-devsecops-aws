@@ -1,172 +1,174 @@
-# 🤖 Agentic AI DevSecOps on AWS
+# Agentic AI-Powered DevSecOps on AWS
 
-**PR-Driven Infrastructure with AI-Powered Guardrails**
-*100% FREE for Personal Projects* | GitHub Actions + Terraform + Local AI
+[![Terraform](https://img.shields.io/badge/Terraform-1.6+-purple?logo=terraform)](https://www.terraform.io/)
+[![AWS](https://img.shields.io/badge/AWS-Free_Tier-orange?logo=amazon-aws)](https://aws.amazon.com/)
+[![Python](https://img.shields.io/badge/Python-3.9+-blue?logo=python)](https://www.python.org/)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Terraform](https://img.shields.io/badge/Terraform-1.6+-purple.svg)](https://www.terraform.io/)
-[![AWS](https://img.shields.io/badge/AWS-Free%20Tier-orange.svg)](https://aws.amazon.com/free/)
-[![AI](https://img.shields.io/badge/AI-Ollama%20LLaMA%203.1-blue.svg)](https://ollama.ai/)
+> **Fully automated DevSecOps pipeline with AI-powered code review and Lambda auto-remediation - All running on AWS Free Tier!**
 
-> ⚠️ **SECURITY NOTICE**: This is a template repository. Before using, replace all placeholder values (email, bucket names, etc.) with your own. See [SECURITY.md](SECURITY.md) for details.
+## 🎯 What This Project Does
 
----
+This project demonstrates a **production-ready DevSecOps pipeline** that automatically:
 
-## 🎯 What Is This?
-
-A **production-ready DevSecOps pipeline** that uses **FREE AI** to automate:
-
-✅ **AI Code Reviews** - Local LLaMA 3.1 reviews every PR
-✅ **Auto-Remediation** - Fixes security issues automatically
-✅ **Policy Generation** - Natural language → OPA/Sentinel policies
-✅ **Security Scanning** - TFLint, tfsec, Checkov, Trivy
-✅ **ChatOps** - Discord/Slack notifications
-✅ **Cost: $0/month** - Stays within AWS/GitHub free tiers
-
----
+- 🤖 **Reviews code with AI** (using local Ollama LLaMA 3.1)
+- 🔒 **Detects security violations** in real-time via CloudTrail + EventBridge
+- ⚡ **Auto-remediates issues** with Lambda functions
+- 📊 **Enforces policies** using OPA (Open Policy Agent)
+- 💰 **Costs ~$4.56/month** (stays within AWS free tier for most use cases)
 
 ## 🚀 Quick Start
 
-### 1-Command Setup
+**Full deployment in ~30 minutes:**
 
 ```bash
-# Replace <your-username> with your GitHub username
-git clone https://github.com/<your-username>/agentic-devsecops-aws.git
+# 1. Clone the repository
+git clone https://github.com/omade88/agentic-devsecops-aws.git
 cd agentic-devsecops-aws
-chmod +x scripts/setup-ai.sh && ./scripts/setup-ai.sh
+
+# 2. Follow the comprehensive setup guide
+cat docs/AI-SETUP-GUIDE.md
+# Or view it on GitHub: docs/AI-SETUP-GUIDE.md
 ```
 
-### What Gets Installed (All FREE)
+## 📚 Documentation
 
-- **Ollama + LLaMA 3.1** - Local AI for code review
-- **Terraform** - Infrastructure as Code
-- **AWS CLI** - AWS automation
-- **TFLint, tfsec, Checkov** - Security scanners
-- **OPA** - Policy-as-code engine
-- **Pre-commit hooks** - Git workflow automation
-
----
+- **[AI-SETUP-GUIDE.md](docs/AI-SETUP-GUIDE.md)** - Complete step-by-step setup guide (3988 lines)
+- **[SECURITY.md](docs/SECURITY.md)** - Security policies and best practices
+- **[IMPLEMENTATION-SUMMARY.md](docs/IMPLEMENTATION-SUMMARY.md)** - Technical implementation details
 
 ## 🏗️ Architecture
 
 ```
-Pull Request → GitHub Actions → AI Review → Security Scans → Auto-Remediation → Deploy
-                    ↓                ↓              ↓                ↓
-                Local AI        TFLint/tfsec   OPA Policies   AWS Lambda (Free)
-               (LLaMA 3.1)
+┌─────────────────────────────────────────────────────────────┐
+│                      AWS Cloud (Free Tier)                  │
+│                                                             │
+│  ┌──────────────┐    ┌─────────────┐    ┌──────────────┐  │
+│  │  CloudTrail  │───▶│ EventBridge │───▶│   Lambda     │  │
+│  │  (API Logs)  │    │   (Events)  │    │ (Auto-Fix)   │  │
+│  └──────────────┘    └─────────────┘    └──────────────┘  │
+│                                                   │         │
+│  ┌──────────────┐    ┌─────────────┐            ▼         │
+│  │     VPC      │    │     KMS     │    ┌──────────────┐  │
+│  │  (Network)   │    │ (Encryption)│    │     SNS      │  │
+│  └──────────────┘    └─────────────┘    │(Notifications)│  │
+│                                          └──────────────┘  │
+└─────────────────────────────────────────────────────────────┘
+                            │
+                            ▼
+                    ┌───────────────┐
+                    │  Email Alert  │
+                    └───────────────┘
+
+┌─────────────────────────────────────────────────────────────┐
+│                      Local Environment                       │
+│                                                             │
+│  ┌──────────────┐    ┌─────────────┐    ┌──────────────┐  │
+│  │    Ollama    │───▶│  LLaMA 3.1  │───▶│  AI Review   │  │
+│  │  (AI Runtime)│    │  (8B Model) │    │  (PR Check)  │  │
+│  └──────────────┘    └─────────────┘    └──────────────┘  │
+│                                                             │
+│  ┌──────────────┐    ┌─────────────┐                       │
+│  │  Terraform   │    │     OPA     │                       │
+│  │    (IaC)     │    │  (Policies) │                       │
+│  └──────────────┘    └─────────────┘                       │
+└─────────────────────────────────────────────────────────────┘
 ```
 
-### Components
+## ✨ Key Features
 
-| Component | Technology | Cost |
-|-----------|-----------|------|
-| **AI Code Review** | Ollama (LLaMA 3.1) | FREE |
-| **CI/CD** | GitHub Actions | FREE (2000 min/month) |
-| **IaC** | Terraform | FREE |
-| **Auto-Remediation** | AWS Lambda | FREE (1M requests/month) |
-| **Notifications** | Discord/Slack Webhooks | FREE |
-| **Security Scanning** | TFLint, tfsec, Checkov, Trivy | FREE |
-| **Policy Engine** | OPA/Conftest | FREE |
+### 🛡️ Security Automation
+- **Real-time detection** of insecure security groups (0.0.0.0/0 SSH/RDP)
+- **Automatic remediation** via Lambda or detection-only mode
+- **CloudTrail integration** for complete audit trail
+- **KMS encryption** for all sensitive data
 
-**Total Monthly Cost: $0** 🎉
+### 🤖 AI-Powered Code Review
+- **Local AI** (Ollama LLaMA 3.1) - no cloud AI costs!
+- **Pull request reviews** with security recommendations
+- **Policy violations** detected before merge
+- **GitHub Actions** integration
+
+### 📊 Policy Enforcement
+- **OPA policies** for Terraform validation
+- **Pre-commit hooks** for local checks
+- **CI/CD pipeline** with automated security scans
+
+### 💰 Cost Optimization
+- **~$4.56/month** actual cost (real-world deployment)
+- **FREE AI** (local Ollama instead of $60-180/month cloud AI)
+- **AWS Free Tier eligible** for most resources
+- **Detailed cost breakdown** in documentation
+
+## 🛠️ Tech Stack
+
+| Component | Technology | Purpose |
+|-----------|-----------|---------|
+| **Infrastructure** | Terraform | Infrastructure as Code |
+| **Cloud Platform** | AWS | VPC, Lambda, CloudTrail, EventBridge, SNS, KMS |
+| **AI/ML** | Ollama + LLaMA 3.1 | Local AI for code review |
+| **Policy Engine** | OPA (Open Policy Agent) | Security policy enforcement |
+| **CI/CD** | GitHub Actions | Automated workflows |
+| **Languages** | Python, HCL, Bash | Lambda functions, IaC, scripts |
+
+## 📋 Prerequisites
+
+- **AWS Account** (Free tier eligible)
+- **GitHub Account**
+- **System Requirements:**
+  - 8GB+ RAM (16GB recommended for AI)
+  - 10GB free disk space
+  - Linux/macOS/Windows (WSL2 or Git Bash)
+
+## 🎓 Learning Outcomes
+
+By completing this project, you'll learn:
+
+- ✅ Building production DevSecOps pipelines
+- ✅ Terraform infrastructure automation
+- ✅ AWS Lambda serverless functions
+- ✅ CloudTrail + EventBridge event-driven architecture
+- ✅ AI-powered code review with local LLMs
+- ✅ OPA policy enforcement
+- ✅ Security automation and auto-remediation
+- ✅ Cost optimization strategies
+
+## 📊 Real-World Results
+
+**After Deployment:**
+- 25 AWS resources created automatically
+- Lambda auto-remediation working in <2 minutes
+- AI code review on every pull request
+- Email alerts for all security events
+- Complete audit trail via CloudTrail
+- **Total cost: $4.56/month** ✅
+
+## 🤝 Contributing
+
+Contributions are welcome! Please read [SECURITY.md](docs/SECURITY.md) for security guidelines.
+
+## 📝 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## 🙏 Acknowledgments
+
+- **Ollama** for making local AI accessible
+- **HashiCorp** for Terraform
+- **AWS** for comprehensive cloud services
+- **Open Policy Agent** for policy engine
+
+## 📧 Contact
+
+- **GitHub:** [@omade88](https://github.com/omade88)
+- **Repository:** [agentic-devsecops-aws](https://github.com/omade88/agentic-devsecops-aws)
 
 ---
 
-## 📁 Project Structure
+**⭐ If this project helped you, please consider giving it a star!**
 
-```
-agentic-devsecops-aws
-├── terraform                # Terraform configurations
-│   ├── modules              # Reusable Terraform modules
-│   │   ├── vpc              # VPC module
-│   │   ├── ec2              # EC2 module
-│   │   └── security         # Security module
-│   ├── environments         # Environment-specific configurations
-│   │   ├── dev              # Development environment
-│   │   ├── staging          # Staging environment
-│   │   └── prod             # Production environment
-│   ├── backend.tf           # Backend configuration for state management
-│   └── versions.tf          # Terraform and provider versions
-├── .github                  # GitHub Actions workflows
-│   └── workflows
-│       ├── terraform-plan.yml
-│       ├── terraform-apply.yml
-│       ├── security-scan.yml
-│       └── pr-validation.yml
-├── scripts                  # Scripts for setup and validation
-│   ├── setup.sh
-│   └── validate.sh
-├── policies                 # Policy definitions
-│   ├── sentinel
-│   │   └── policy.sentinel
-│   └── opa
-│       └── policy.rego
-├── workloads                # Workload configurations
-│   └── linux
-│       ├── user-data.sh
-│       └── config.yaml
-├── .gitignore               # Git ignore file
-├── .pre-commit-config.yaml   # Pre-commit hooks configuration
-└── README.md                # Project documentation
-```
+**🎥 Watch the YouTube tutorial:** [Coming Soon]
 
-## Getting Started
+---
 
-### Prerequisites
-- AWS account
-- Terraform installed
-- GitHub account for CI/CD
-
-### Setup Instructions
-1. Clone the repository:
-   ```
-   git clone https://github.com/yourusername/agentic-devsecops-aws.git
-   cd agentic-devsecops-aws
-   ```
-
-2. Configure AWS credentials:
-   Ensure your AWS credentials are set up in your environment. You can use the AWS CLI to configure them:
-   ```
-   aws configure
-   ```
-
-3. Initialize Terraform:
-   Navigate to the desired environment directory (e.g., `terraform/environments/dev`) and run:
-   ```
-   terraform init
-   ```
-
-4. Plan and apply Terraform changes:
-   To see what changes will be made:
-   ```
-   terraform plan
-   ```
-   To apply the changes:
-   ```
-   terraform apply
-   ```
-
-5. Set up the Linux workload:
-   Run the setup script to install necessary packages and apply hardening steps:
-   ```
-   ./scripts/setup.sh
-   ```
-
-## CI/CD Workflows
-This project includes GitHub Actions workflows for:
-- Terraform plan and apply
-- Security scanning
-- Pull request validation
-
-## Policies
-Policies are defined using Sentinel and OPA to enforce compliance and security guardrails.
-
-## License
-This project is licensed under the MIT License. See the LICENSE file for more details.
-
-## Acknowledgments
-- Terraform documentation
-- AWS documentation
-- Open Policy Agent documentation
-
-For more information, please refer to the respective documentation of the tools used in this project.
+*Built with ❤️ for the DevOps community*

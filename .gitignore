@@ -21,11 +21,7 @@ config.json
 # ========================================
 # Personal/Local Files - Keep Private
 # ========================================
-LINKEDIN_POST.md
-INTERVIEW_SUCCESS_STORY.md
-YOUTUBE_VIDEO_SCRIPT.md
-YOUTUBE_VIDEO_SCRIPT_COMPREHENSIVE.md
-step_by_step.md
+personal-notes/
 opa
 fix_encoding.py
 fix_all_emojis.py
